@@ -20,17 +20,14 @@
             #print-report-area { position: absolute; left: 0; top: 0; width: 210mm; min-height: 297mm; background: white; color: black; padding: 20mm; box-sizing: border-box; }
             .no-print { display: none !important; }
         }
-        .flash-effect { animation: flash 0.2s ease-out; }
-        @keyframes flash { 0% { opacity: 1; background: white; } 100% { opacity: 0; background: transparent; } }
-        /* สปินเนอร์ตอนโหลดข้อมูลออนไลน์ */
-        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; flex-col: column; justify-content: center; align-items: center; z-index: 9999; color: white; font-weight: bold; }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; font-weight: bold; }
     </style>
 </head>
 <body class="bg-gray-100">
 
     <div id="loading-screen" class="loading-overlay">
         <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white mb-4"></div>
-        <p class="text-lg">กำลังเชื่อมต่อฐานข้อมูล Google Sheets ออนไลน์...</p>
+        <p class="text-lg" id="loading-text">กำลังเชื่อมต่อฐานข้อมูล Google Sheets ออนไลน์...</p>
     </div>
 
     <nav class="theme-bg-dark text-white p-4 sticky top-0 z-50 shadow-md no-print">
@@ -157,7 +154,7 @@
                                 <th class="p-3 w-20 text-center">รูปถ่าย</th>
                                 <th class="p-3">ชื่อ-นามสกุล (ชื่อเล่น)</th>
                                 <th class="p-3 w-24">รุ่น</th>
-                                <th class="p-3 text-center w-96">สถานะการเข้าซ้อม</th>
+                                <th class="p-3 text-center w-96">暗สถานะการเข้าซ้อม</th>
                                 <th class="p-3">หมายเหตุ / เหตุผล</th>
                             </tr>
                         </thead>
@@ -175,51 +172,62 @@
 
         <section id="tab-players" class="tab-content hidden space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-5 rounded-xl shadow-sm h-fit">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-user-plus theme-text-red"></i> ลงทะเบียนเพิ่มนักกีฬา</h3>
-                    <form id="add-player-form" onsubmit="addPlayer(event)" class="space-y-4">
-                        <div class="flex flex-col items-center justify-center p-3 border-2 border-dashed rounded-xl bg-gray-50">
-                            <div id="image-preview-container" class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-gray-400 mb-2 border relative shadow-inner">
-                                <i class="fa-solid fa-user text-3xl" id="avatar-placeholder-icon"></i>
-                                <img id="player-avatar-preview" src="" class="w-full h-full object-cover hidden">
-                            </div>
-                            <label class="bg-white border text-gray-700 px-3 py-1 rounded-md text-xs font-semibold shadow-sm cursor-pointer flex items-center space-x-1">
-                                <i class="fa-solid fa-camera"></i> <span>เพิ่มรูปภาพนักกีฬา</span>
-                                <input type="file" id="p-avatar" accept="image/*" class="hidden" onchange="previewPlayerImage(event)">
-                            </label>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล</label>
-                            <input type="text" id="p-fullname" required class="w-full p-2 border rounded-lg">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อเล่น</label>
-                                <input type="text" id="p-nickname" required class="w-full p-2 border rounded-lg">
+                <div class="bg-white p-5 rounded-xl shadow-sm h-fit space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-4"><i class="fa-solid fa-user-plus theme-text-red"></i> ลงทะเบียนเพิ่มนักกีฬา</h3>
+                        <form id="add-player-form" onsubmit="addPlayer(event)" class="space-y-4">
+                            <div class="flex flex-col items-center justify-center p-3 border-2 border-dashed rounded-xl bg-gray-50">
+                                <div id="image-preview-container" class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center text-gray-400 mb-2 border relative shadow-inner">
+                                    <i class="fa-solid fa-user text-3xl" id="avatar-placeholder-icon"></i>
+                                    <img id="player-avatar-preview" src="" class="w-full h-full object-cover hidden">
+                                </div>
+                                <label class="bg-white border text-gray-700 px-3 py-1 rounded-md text-xs font-semibold shadow-sm cursor-pointer flex items-center space-x-1">
+                                    <i class="fa-solid fa-camera"></i> <span>เพิ่มรูปภาพนักกีฬา</span>
+                                    <input type="file" id="p-avatar" accept="image/*" class="hidden" onchange="previewPlayerImage(event)">
+                                </label>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">หมายเลขเสื้อ (No.)</label>
-                                <input type="number" id="p-number" class="w-full p-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                                <input type="text" id="p-fullname" required class="w-full p-2 border rounded-lg text-sm">
                             </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">รุ่นอายุ (U)</label>
-                                <select id="p-u" class="w-full p-2 border rounded-lg">
-                                    <option value="12">U12</option><option value="13">U13</option><option value="14">U14</option>
-                                    <option value="15">U15</option><option value="16">U16</option><option value="17">U17</option>
-                                    <option value="18">U18</option><option value="New">นักกีฬาใหม่</option>
-                                </select>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อเล่น</label>
+                                    <input type="text" id="p-nickname" required class="w-full p-2 border rounded-lg text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">หมายเลขเสื้อ (No.)</label>
+                                    <input type="number" id="p-number" class="w-full p-2 border rounded-lg text-sm">
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">วันเกิด</label>
-                                <input type="date" id="p-birth" class="w-full p-2 border rounded-lg">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">รุ่นอายุ (U)</label>
+                                    <select id="p-u" class="w-full p-2 border rounded-lg text-sm">
+                                        <option value="12">U12</option><option value="13">U13</option><option value="14">U14</option>
+                                        <option value="15">U15</option><option value="16">U16</option><option value="17">U17</option>
+                                        <option value="18">U18</option><option value="New">นักกีฬาใหม่</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">วันเกิด</label>
+                                    <input type="date" id="p-birth" class="w-full p-2 border rounded-lg text-sm">
+                                </div>
                             </div>
-                        </div>
-                        <button type="submit" class="w-full theme-bg-red hover:bg-red-700 text-white p-2 rounded-lg font-bold transition cursor-pointer">
-                            <i class="fa-solid fa-plus"></i> เพิ่มข้อมูลนักกีฬาเข้าคลาวด์
-                        </button>
-                    </form>
+                            <button type="submit" class="w-full theme-bg-red hover:bg-red-700 text-white p-2.5 rounded-lg font-bold transition cursor-pointer text-sm">
+                                <i class="fa-solid fa-plus"></i> เพิ่มข้อมูลรายบุคคลเข้าคลาวด์
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <h3 class="text-md font-bold text-gray-800 mb-2"><i class="fa-solid fa-file-csv text-blue-500"></i> นำเข้าข้อมูลด้วยไฟล์ CSV (ทีละหลายคน)</h3>
+                        <p class="text-xs text-gray-500 mb-3">โครงสร้างไฟล์: ชื่อ-นามสกุล, ชื่อเล่น, เบอร์เสื้อ, รุ่นอายุ(เลข), วันเกิด(ปปปป-ดด-วว)</p>
+                        <label class="w-full bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-lg font-bold transition cursor-pointer flex items-center justify-center space-x-2 text-sm shadow-sm">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> <span>เลือกไฟล์นักกีฬา (.CSV)</span>
+                            <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
+                        </label>
+                    </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-xl shadow-sm lg:col-span-2">
@@ -261,9 +269,7 @@
                 <div class="space-y-3">
                     <input type="text" id="qr-input-mock" placeholder="พิมพ์ชื่อเล่น หรือเลขเสื้อ..." class="w-full p-3 border rounded-xl font-semibold text-center">
                     <button onclick="handleQRCheckInWithPhoto()" class="w-full theme-bg-dark text-white p-3 rounded-xl font-bold">ถ่ายรูปบันทึกเช็คชื่อเข้าซ้อมออนไลน์</button>
-                    <p id="qr-success-msg" class="text-sm font-semibold hidden p-3 rounded-xl"></p>
                 </div>
-                <canvas id="hidden-photo-canvas" class="hidden"></canvas>
             </div>
         </section>
 
@@ -325,7 +331,8 @@
 
     <script>
         // ⚠️ สำคัญมาก: เอา URL ที่ได้จากการ Deploy ของ Google Sheets มาใส่ในช่องด้านล่างนี้ครับ
-        const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbz9lTMFuiP1Dp5rFwPDtU86wu0c38brPv1d3QqnaGYoQwdyC1lRSXGdZlhJVUx1Zj2TZg/exec";
+        const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbz9lTMFuiP1Dp5rFwPDtU86wu0c38brPv1d3QqnaGYoQwdyC1lRSXGdZlhJVUx1Zj2TZg/exec
+";
 
         let players = [];
         let attendanceDb = {};
@@ -339,12 +346,20 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('currentAttendanceDate').value = today;
             document.getElementById('currentAttendanceDateMobile').value = today;
-            syncDataFromCloud(); // ดึงข้อมูลจากคลาวด์อัตโนมัติเมื่อเปิดหน้าเว็บ
+            syncDataFromCloud();
         });
 
-        // ดึงข้อมูลออนไลน์มาเก็บไว้ที่หน้าเว็บ
-        function syncDataFromCloud() {
+        function showLoading(text) {
+            document.getElementById('loading-text').innerText = text;
             document.getElementById('loading-screen').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-screen').classList.add('hidden');
+        }
+
+        function syncDataFromCloud() {
+            showLoading("กำลังเชื่อมต่อฐานข้อมูล Google Sheets ออนไลน์...");
             fetch(`${CLOUD_API_URL}?action=getData`)
                 .then(res => res.json())
                 .then(data => {
@@ -354,17 +369,16 @@
                     
                     refreshAllViews();
                     if(!myChart) { initChart(); initWeeklyPieChart(); } else { updateChartData(); updateWeeklyPieChart(); }
-                    document.getElementById('loading-screen').classList.add('hidden');
+                    hideLoading();
                 })
                 .catch(err => {
-                    alert("ไม่สามารถโหลดข้อมูลออนไลน์ได้ กรุณาตรวจสอบการตั้งค่าสิทธิ์ Deployment ในกูเกิลชีต");
-                    document.getElementById('loading-screen').classList.add('hidden');
+                    alert("ไม่สามารถโหลดข้อมูลออนไลน์ได้ กรุณาตรวจสอบสิทธิ์ Deployment ในกูเกิลชีต");
+                    hideLoading();
                 });
         }
 
-        // ส่งข้อมูลทั้งหมดอัปเดตกลับไปเซฟที่คลาวด์กูเกิลชีต
-        function pushDataToCloud() {
-            document.getElementById('loading-screen').classList.remove('hidden');
+        function pushDataToCloud(silent = false) {
+            if(!silent) showLoading("กำลังส่งข้อมูลไปบันทึกบน Google Sheets...");
             const payload = {
                 action: "saveAll",
                 players: players,
@@ -378,14 +392,73 @@
             })
             .then(res => res.json())
             .then(res => {
-                document.getElementById('loading-screen').classList.add('hidden');
-                alert("ระบบอัปเดตข้อมูลและบันทึกลง Google Sheets ของคุณสำเร็จแล้ว!");
+                hideLoading();
+                if(!silent) alert("ระบบบันทึกและอัปเดตข้อมูลออนไลน์สำเร็จแล้ว!");
                 syncDataFromCloud();
             })
             .catch(err => {
                 alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลออนไลน์");
-                document.getElementById('loading-screen').classList.add('hidden');
+                hideLoading();
             });
+        }
+
+        // ฟังก์ชันอ่านและประมวลผลไฟล์ CSV ของนักกีฬา
+        function handleCSVImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            showLoading("กำลังอ่านไฟล์ CSV และเตรียมอัปโหลดข้อมูล...");
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const text = evt.target.result;
+                const lines = text.split(/\r?\n/);
+                let addedCount = 0;
+
+                // วนลูปอ่านข้อมูลทีละบรรทัด (เริ่มที่ i=0 หรือ i=1 หากแถวแรกเป็น Header)
+                // ตรวจสอบข้อมูลเพื่อไม่ให้บั๊ก
+                for (let i = 0; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    // แยกคอลัมน์ด้วยเครื่องหมายจุลภาค (Comma)
+                    const columns = lines[i].split(',');
+                    
+                    // ข้ามแถวแรกถ้าเป็นหัวตาราง (เช่น คำว่า ชื่อ, ชื่อเล่น, เบอร์)
+                    if (i === 0 && (columns[0].includes("ชื่อ") || columns[0].toLowerCase().includes("name"))) {
+                        continue; 
+                    }
+
+                    if (columns.length >= 2) {
+                        const fullName = columns[0].replace(/["']/g, "").trim();
+                        const nickname = columns[1].replace(/["']/g, "").trim();
+                        const jerseyNo = columns[2] ? columns[2].trim() : "";
+                        const uGroup = columns[3] ? columns[3].trim().replace(/[uU]/g, "") : "New";
+                        const birthDate = columns[4] ? columns[4].trim() : "";
+
+                        // เพิ่มเข้าอาร์เรย์ฐานข้อมูล
+                        players.push({
+                            id: "P_" + (Date.now() + Math.floor(Math.random() * 1000)), // หลีกเลี่ยง ID ซ้ำกันขณะอ่านลูปเร็วๆ
+                            name: fullName,
+                            nickname: nickname,
+                            no: jerseyNo,
+                            u: uGroup,
+                            birth: birthDate,
+                            avatar: "" // ไฟล์ CSV จะไม่มีรูปภาพเริ่มต้น
+                        });
+                        addedCount++;
+                    }
+                }
+
+                if (addedCount > 0) {
+                    showLoading(`กำลังบันทึกนักกีฬาใหม่ ${addedCount} คน ขึ้นกูเกิลชีต...`);
+                    pushDataToCloud(true);
+                    document.getElementById('csv-file-input').value = ""; // รีเซ็ตอินพุตไฟล์
+                    alert(`นำเข้าสำเร็จ! เพิ่มนักกีฬาใหม่ทั้งหมด ${addedCount} คน เข้าสู่ฐานข้อมูลคลาวด์เรียบร้อยครับ`);
+                } else {
+                    hideLoading();
+                    alert("ไม่พบข้อมูลที่ถูกต้องในไฟล์ CSV กรุณาตรวจสอบความถูกต้องอีกครั้ง");
+                }
+            };
+            reader.readAsText(file, "UTF-8");
         }
 
         function refreshAllViews() {
@@ -462,14 +535,14 @@
             if(!attendanceDb[date]) attendanceDb[date] = {};
             const noteInput = document.getElementById(`note-${pid}`);
             attendanceDb[date][pid] = { status: status, note: noteInput ? noteInput.value : '' };
-            loadAttendanceSheet(); // อัปเดตสีปุ่มให้สว่างวาบทันทีที่กดเลือก!
+            loadAttendanceSheet();
         }
 
         function openAttendanceEditModal(pid) {
-            const p = players.find(x => x.id === pid); if(!p) return;
+            const p = players.find(x => x.id === id || x.id === pid); if(!p) return;
             const date = getSelectedDate();
-            const rec = (attendanceDb[date] && attendanceDb[date][pid]) ? attendanceDb[date][pid] : { status: '', note: '' };
-            document.getElementById('edit-att-pid').value = pid;
+            const rec = (attendanceDb[date] && attendanceDb[date][p.id]) ? attendanceDb[date][p.id] : { status: '', note: '' };
+            document.getElementById('edit-att-pid').value = p.id;
             document.getElementById('edit-att-player-name').innerText = p.name;
             document.getElementById('edit-att-date-label').innerText = date;
             document.getElementById('edit-att-note').value = rec.note || '';
@@ -488,7 +561,7 @@
             if(!attendanceDb[date]) attendanceDb[date] = {};
             attendanceDb[date][pid] = { status: status, note: document.getElementById('edit-att-note').value };
             closeAttendanceEditModal();
-            pushDataToCloud(); // บันทึกออนไลน์และรีเฟรชกราฟบอร์ดแบบ Real-time ทันที!
+            pushDataToCloud();
         }
 
         function submitAttendanceSheet() {
@@ -577,7 +650,7 @@
         }
 
         function deletePlayer(id) {
-            if(!confirm("ลบนักกีฬาคนนี้?")) return;
+            if(!confirm("ลบนักกีฬาคนนี้ออกจากระบบคลาวด์?")) return;
             players = players.filter(x => x.id !== id);
             pushDataToCloud();
         }
