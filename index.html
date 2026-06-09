@@ -809,7 +809,7 @@
                 }
 
                 // ตัดเวลาออก แสดงเฉพาะ YYYY-MM-DD
-                const cleanBirth = p.birth ? p.birth.split('T')[0] : 'ไม่ระบุ';
+                const cleanBirth = p.birth ? String(p.birth).split('T')[0] : 'ไม่ระบุ';
                 const stats = getPlayerWeeklyStats(p.id, workingDays);
                 const totalChecked = stats.m + stats.k + stats.l + stats.h;
 
@@ -910,7 +910,7 @@
             document.getElementById('edit-profile-number').value = p.no || '';
             document.getElementById('edit-profile-u').value = p.u;
             
-            const cleanBirth = p.birth ? p.birth.split('T')[0] : '';
+            const cleanBirth = p.birth ? String (p.birth).split('T')[0] : '';
             document.getElementById('edit-profile-birth').value = cleanBirth;
             
             const previewImg = document.getElementById('edit-profile-preview');
