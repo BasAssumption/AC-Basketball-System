@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- นำเข้าไลบรารีสแกน QR Code -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght=300;400;600;700&display=swap');
@@ -29,7 +28,6 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <!-- ส่วนหัว (Navbar) -->
     <header class="theme-bg-dark text-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -52,7 +50,6 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-6">
-        <!-- แถบเลือกเมนูหลัก -->
         <div class="flex border-b border-gray-200 mb-6 overflow-x-auto whitespace-nowrap bg-white rounded-t shadow-sm">
             <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">แผงควบคุมหลัก</button>
             <button onclick="switchTab('players')" id="tab-btn-players" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">ฐานข้อมูลนักกีฬา</button>
@@ -61,7 +58,6 @@
             <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">สรุปรายงานประจำวัน</button>
         </div>
 
-        <!-- หน้าที่ 1: Dashboard -->
         <section id="page-dashboard" class="tab-content hidden space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500">
@@ -93,8 +89,12 @@
             </div>
         </section>
 
-        <!-- หน้าที่ 2: ฐานข้อมูลนักกีฬา -->
         <section id="page-players" class="tab-content hidden space-y-4">
+            <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border border-gray-200">
+                <button onclick="switchPlayerSubTab('active')" id="sub-player-btn-active" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white">ปัจจุบัน (นักกีฬาในทีม)</button>
+                <button onclick="switchPlayerSubTab('excluded')" id="sub-player-btn-excluded" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">ไม่ผ่าน / ลาออก</button>
+            </div>
+
             <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
                 <div class="flex flex-wrap gap-2 items-center w-full md:w-auto">
                     <input type="text" id="search-player-input" oninput="refreshPlayersTable()" placeholder="ค้นชื่อ, ชื่อเล่น, เบอร์เสื้อ..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -126,7 +126,6 @@
             </div>
         </section>
 
-        <!-- หน้าที่ 3: เช็คชื่อหน้าสนาม -->
         <section id="page-checkin" class="tab-content hidden space-y-4">
             <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
                 <div class="flex items-center space-x-2">
@@ -141,7 +140,6 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="attendance-grid-layout"></div>
         </section>
 
-        <!-- หน้าสแกน QR Code -->
         <section id="page-qr-scan" class="tab-content hidden space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm space-y-4">
@@ -162,15 +160,12 @@
             </div>
         </section>
 
-        <!-- หน้าที่ 4: สรุปรายงาน (อัปเกรดเวอร์ชันใหม่ มีรายวัน/รายสัปดาห์) -->
         <section id="page-reports" class="tab-content hidden space-y-4">
-            <!-- เมนูย่อยรายงาน -->
             <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border">
                 <button onclick="switchReportSubTab('daily')" id="sub-btn-daily" class="px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white">รายงานรายวัน</button>
                 <button onclick="switchReportSubTab('weekly')" id="sub-btn-weekly" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานรายสัปดาห์</button>
             </div>
 
-            <!-- ส่วนรายงานรายวัน -->
             <div id="report-daily-section" class="space-y-4">
                 <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center print:hidden">
                     <span class="text-sm font-semibold text-gray-600">เลือกวันที่ต้องการพิมพ์ข้อมูล</span>
@@ -202,7 +197,7 @@
                                 <th class="p-3 border border-gray-300">ชื่อ-นามสกุล</th>
                                 <th class="p-3 border border-gray-300">ชื่อเล่น</th>
                                 <th class="p-3 border border-gray-300">รุ่นอายุ</th>
-                                <th class="p-3 border border-gray-300">สถานะการมา</th>
+                                <th class="p-3 border border-gray-300">Visual สถานะ</th>
                                 <th class="p-3 border border-gray-300">หมายเหตุ</th>
                             </tr>
                         </thead>
@@ -211,7 +206,6 @@
                 </div>
             </div>
 
-            <!-- ส่วนรายงานรายสัปดาห์ -->
             <div id="report-weekly-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
                 <div class="text-center space-y-1 border-b pb-4">
                     <h2 class="text-xl font-bold text-gray-800">รายงานสรุปประวัติการฝึกซ้อมรอบสัปดาห์ (7 วันย้อนหลัง)</h2>
@@ -231,7 +225,6 @@
         </section>
     </main>
 
-    <!-- Modal Form (อัปเกรด Dropdown และ ปุ่มสถานะพิเศษ) -->
     <div id="profile-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
             <div class="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -279,7 +272,6 @@
                     <input type="date" id="edit-profile-birth" class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm outline-none">
                 </div>
 
-                <!-- ปุ่มการจัดการสถานะพิเศษภายในหน้าต่าง Popup -->
                 <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100">
                     <button type="button" onclick="setSpecialStatus('failed')" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-1.5 rounded text-xs shadow flex items-center justify-center space-x-1">
                         <i class="fa-solid fa-user-xmark"></i> <span>คัดตัวไม่ผ่าน</span>
@@ -297,7 +289,6 @@
         </div>
     </div>
 
-    <!-- Spinner -->
     <div id="loading-spinner" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center hidden">
         <div class="bg-white p-5 rounded-xl shadow-lg flex items-center space-x-3">
             <svg class="animate-spin h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24">
@@ -309,15 +300,14 @@
     </div>
 
     <script>
-        // 🔹 นำลิงก์ URL Web App จากหน้าสคริปต์มาใส่ตรงนี้เหมือนเดิมครับ
         const CONFIG = {
-            API_URL: "https://script.google.com/macros/s/AKfycbxwcYjjUFot818XBetEbyHJL4wNiZk7CapX5dKP1_1IBhCUjUiUTyA2M65Y6p_8GxB3hA/exec
-"
+            API_URL: "https://script.google.com/macros/s/AKfycbxwcYjjUFot818XBetEbyHJL4wNiZk7CapX5dKP1_1IBhCUjUiUTyA2M65Y6p_8GxB3hA/exec"
         };
 
         let players = [];
         let attendanceDb = {};
-        let specialStatusDb = {}; // เก็บข้อมูลสถานะพิเศษเช่น failed (คัดตัวไม่ผ่าน) หรือ resigned (ลาออก)
+        let specialStatusDb = {}; 
+        let currentPlayerTabMode = 'active'; // 'active' = ปัจจุบัน, 'excluded' = ไม่ผ่าน/ลาออก
         
         let chartInstanceAge = null;
         let chartInstanceAtt = null;
@@ -353,6 +343,22 @@
             if (tabId !== 'qr-scan') stopQRScanner();
         }
 
+        // ฟังก์ชันสลับเมนูย่อยหน้าฐานข้อมูลนักกีฬา
+        function switchPlayerSubTab(mode) {
+            currentPlayerTabMode = mode;
+            const btnActive = document.getElementById('sub-player-btn-active');
+            const btnExcluded = document.getElementById('sub-player-btn-excluded');
+            
+            if (mode === 'active') {
+                btnActive.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white";
+                btnExcluded.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
+            } else {
+                btnActive.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
+                btnExcluded.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white";
+            }
+            refreshPlayersTable();
+        }
+
         function switchReportSubTab(mode) {
             if (mode === 'daily') {
                 document.getElementById('report-daily-section').classList.remove('hidden');
@@ -372,7 +378,6 @@
             return document.getElementById('attendance-date-picker').value;
         }
 
-        // นำเข้าไฟล์ CSV
         function handleCSVImport(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -408,31 +413,41 @@
             reader.readAsText(file, "UTF-8");
         }
 
-        // แก้ไขโปรไฟล์และเบอร์เสื้อตามเงื่อนไข
+        // ระบบบันทึกโปรไฟล์นักกีฬาพร้อมดึงค่าวันเดือนปีเกิดเดิมมาใช้ถ้าไม่มีการแก้ไขซ้ำ
         function savePlayerProfile(e) {
             e.preventDefault();
             const pid = document.getElementById('edit-profile-pid').value;
             let jerseyNo = document.getElementById('edit-profile-number').value.trim();
-            if (!jerseyNo) jerseyNo = "-"; // 💡 เงื่อนไขข้อที่ 2.1: ถ้าไม่มีการแก้ไขหรือว่างให้ใส่ -
+            if (!jerseyNo) jerseyNo = "-";
+
+            let inputBirth = document.getElementById('edit-profile-birth').value;
 
             if(!pid) {
+                // กรณีเพิ่มคนใหม่
                 players.push({
                     id: "P_" + Date.now(),
                     name: document.getElementById('edit-profile-fullname').value,
                     nickname: document.getElementById('edit-profile-nickname').value,
                     no: jerseyNo,
                     u: document.getElementById('edit-profile-u').value,
-                    birth: document.getElementById('edit-profile-birth').value,
+                    birth: inputBirth || "",
                     avatar: document.getElementById('edit-profile-preview').src.startsWith('data:image') ? document.getElementById('edit-profile-preview').src : ""
                 });
             } else {
+                // กรณีแก้ไขคนเดิม
                 const idx = players.findIndex(x => x.id === pid);
                 if(idx !== -1) {
                     players[idx].name = document.getElementById('edit-profile-fullname').value;
                     players[idx].nickname = document.getElementById('edit-profile-nickname').value;
                     players[idx].no = jerseyNo;
                     players[idx].u = document.getElementById('edit-profile-u').value;
-                    players[idx].birth = document.getElementById('edit-profile-birth').value;
+                    
+                    // 💡 แก้ไข Bug จุดสำคัญ: ถ้าในฟอร์มไม่มีการป้อนค่าวันเกิดใหม่ ให้กลับไปใช้ค่าเดิมในระบบ ไม่เปลี่ยนเป็น "ไม่ระบุ"
+                    if (inputBirth) {
+                        players[idx].birth = inputBirth;
+                    } 
+                    // ถ้า inputBirth ว่างเปล่า ไม่ต้องอัปเดตหรือทับค่าเดิม (ปล่อยให้ใช้ค่าเดิมใน players[idx].birth ต่อไป)
+
                     if(document.getElementById('edit-profile-preview').src.startsWith('data:image')) {
                         players[idx].avatar = document.getElementById('edit-profile-preview').src;
                     }
@@ -444,7 +459,6 @@
             refreshAllViews();
         }
 
-        // ตั้งค่าสถานะพิเศษ (คัดตัวไม่ผ่าน / ลาออก)
         function setSpecialStatus(statusType) {
             const pid = document.getElementById('edit-profile-pid').value;
             if(!pid) { alert("กรุณาเลือกบันทึกรายชื่อนักกีฬาก่อนกดตั้งสถานะ"); return; }
@@ -462,7 +476,6 @@
             refreshAllViews();
         }
 
-        // รีเซ็ตล้างสถานะพิเศษให้กลับมาเป็นนักกีฬาปกติ
         function clearSpecialStatus(pid) {
             if(confirm("ต้องการยกเลิกสถานะพิเศษให้คนนี้กลับมาเป็นนักกีฬาปกติใช่ไหม?")) {
                 delete specialStatusDb[pid];
@@ -494,6 +507,7 @@
             updateDashboardCharts();
         }
 
+        // หน้าตารางฐานข้อมูลนักกีฬา กรองข้อมูลผ่านเมนูย่อยอัจฉริยะ (ปัจจุบัน / ไม่ผ่าน-ลาออก)
         function refreshPlayersTable() {
             const tbody = document.getElementById('players-table-body');
             tbody.innerHTML = '';
@@ -501,12 +515,16 @@
             const filterU = document.getElementById('filter-u-select').value;
 
             players.forEach(p => {
+                // 💡 ตรวจเช็กคัดแยกประเภทนักกีฬาตามเมนูย่อยที่กดเลือกไว้
+                const hasSpecialStatus = specialStatusDb[p.id] ? true : false;
+                if (currentPlayerTabMode === 'active' && hasSpecialStatus) return; // เมนูย่อย "ปัจจุบัน" ไม่แสดงกลุ่มพิเศษ
+                if (currentPlayerTabMode === 'excluded' && !hasSpecialStatus) return; // เมนูย่อย "ไม่ผ่าน/ลาออก" แสดงเฉพาะกลุ่มพิเศษ
+
                 if(filterU && p.u !== filterU) return;
                 if(search && !p.name.toLowerCase().includes(search) && !p.nickname.toLowerCase().includes(search) && !p.no.includes(search)) return;
 
                 const avatarImg = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
                 
-                // คำนวณเอฟเฟกต์ CSS คลาสตามดีไซน์ข้อ 2
                 let statusClass = "";
                 let badgeOverlay = "";
                 if(specialStatusDb[p.id] === 'failed') {
@@ -553,7 +571,6 @@
             let countPresent = 0, countLeave = 0, countAbsent = 0;
 
             players.forEach(p => {
-                // ข้ามรายชื่อที่ไม่ใช่นักกีฬาปัจจุบันในหน้าเช็คชื่อ
                 if(specialStatusDb[p.id]) return;
                 if(attFilterU && p.u !== attFilterU) return;
 
@@ -603,7 +620,6 @@
             document.getElementById('rep-count-leave').innerText = countLeave;
             document.getElementById('rep-count-absent').innerText = countAbsent;
 
-            // วาดแผนภูมิวงกลมรายงานรายวัน
             if(chartReportDailyPie) chartReportDailyPie.destroy();
             chartReportDailyPie = new Chart(document.getElementById('chart-report-daily-pie').getContext('2d'), {
                 type: 'pie',
@@ -634,7 +650,6 @@
             refreshAttendanceView();
         }
 
-        // ระบบสแกนคิวอาร์โค้ดสากลทำงานเต็มระบบ
         function startQRScanner() {
             document.getElementById('qr-scan-result-box').innerHTML = `<div class="text-blue-600 font-bold animate-pulse">ระบบสแกนเนอร์กำลังโหลดกล้อง...</div>`;
             html5QrScanner = new Html5Qrcode("qr-reader");
@@ -672,7 +687,6 @@
             }
         }
 
-        // ระบบคำนวณและวาดแผนภูมิสถิติรายสัปดาห์ (กราฟเส้นและกราฟแท่ง)
         function renderWeeklyCharts() {
             const last7Days = [];
             const presentCounts = [];
@@ -701,7 +715,6 @@
 
             document.getElementById('report-weekly-range-text').innerText = `ระหว่างวันที่ ${last7Days[0]} ถึง ${last7Days[6]}`;
 
-            // 1. กราฟเส้นแสดงแนวโน้ม
             if(chartWeeklyLine) chartWeeklyLine.destroy();
             chartWeeklyLine = new Chart(document.getElementById('chart-weekly-line').getContext('2d'), {
                 type: 'line',
@@ -719,7 +732,6 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // 2. กราฟแท่งเปรียบเทียบยอดสะสม
             if(chartWeeklyBar) chartWeeklyBar.destroy();
             chartWeeklyBar = new Chart(document.getElementById('chart-weekly-bar').getContext('2d'), {
                 type: 'bar',
@@ -735,7 +747,6 @@
             });
         }
 
-        // ยิงข้อมูลบันทึกลงคลาวด์ Google Sheet ด้วยโหมดไร้แจ้งเตือนภัย
         async function pushDataToCloud() {
             showLoadingSpinner(true);
             const encodedData = encodeURIComponent(JSON.stringify({ players: players, attendance: attendanceDb }));
@@ -793,6 +804,7 @@
         }
 
         function showLoadingSpinner(val) { document.getElementById('loading-spinner').classList.toggle('hidden', !val); }
+        
         function openAddPlayerModal() {
             document.getElementById('modal-title-text').innerText = "เพิ่มนักกีฬาใหม่";
             document.getElementById('edit-profile-pid').value = "";
@@ -814,7 +826,10 @@
             document.getElementById('edit-profile-nickname').value = p.nickname || '';
             document.getElementById('edit-profile-number').value = p.no === '-' ? '' : p.no;
             document.getElementById('edit-profile-u').value = p.u || '12';
+            
+            // 💡 โหลดวันเกิดเดิมขึ้นมาแสดงใน Input Date ของฟอร์มตอนเปิด Popup
             document.getElementById('edit-profile-birth').value = p.birth || '';
+            
             document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
