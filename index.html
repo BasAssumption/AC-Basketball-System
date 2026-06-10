@@ -978,27 +978,46 @@
         }
 
         function savePlayerProfile(e) {
-            e.preventDefault();
-            const pid = document.getElementById('edit-profile-pid').value;
-            const pIndex = players.findIndex(x => x.id === pid);
-            
-            if (pIndex !== -1) {
-                players[pIndex].name = document.getElementById('edit-profile-fullname').value;
-                players[pIndex].nickname = document.getElementById('edit-profile-nickname').value;
-                players[pIndex].no = document.getElementById('edit-profile-number').value;
-                players[pIndex].u = document.getElementById('edit-profile-u').value;
-                players[pIndex].birth = document.getElementById('edit-profile-birth').value;
-                
-                const previewSrc = document.getElementById('edit-profile-preview').src;
-                if (previewSrc.startsWith('data:image')) {
-                    players[pIndex].avatar = previewSrc;
-                }
-                
-                closeProfileEditModal();
-                pushDataToCloud(); 
-                refreshAllViews();
-            }
+    e.preventDefault();
+    const pid = document.getElementById('edit-profile-pid').value; //
+    const pIndex = players.findIndex(x => x.id === pid); //
+    
+    if (pIndex !== -1) {
+        // สำรองข้อมูลเดิมของนักกีฬาคนนี้ไว้ก่อน
+        const oldPlayerData = players[pIndex];
+
+        // ดึงค่าที่กรอกจากหน้าฟอร์มแก้ไข
+        const newName = document.getElementById('edit-profile-fullname').value; //
+        const newNickname = document.getElementById('edit-profile-nickname').value; //
+        const newNo = document.getElementById('edit-profile-number').value; //
+        const newU = document.getElementById('edit-profile-u').value; //
+        let newBirth = document.getElementById('edit-profile-birth').value; //
+
+        // ⭐ [จุดแก้ไขสำคัญ] ป้องกันวันเกิดหาย: 
+        // ถ้าช่อง input วันเกิดว่างเปล่า แต่ในฐานข้อมูลเก่าเคยมีวันเกิดอยู่แล้ว ให้ใช้ค่าเดิม
+        if (!newBirth && oldPlayerData.birth && oldPlayerData.birth !== "ไม่ระบุ") {
+            newBirth = String(oldPlayerData.birth).split('T')[0]; // ดึงค่าวันเกิดเดิมมาใช้
         }
+
+        // อัปเดตข้อมูลลงในอาร์เรย์ระบบ
+        players[pIndex].name = newName;
+        players[pIndex].nickname = newNickname;
+        players[pIndex].no = newNo;
+        players[pIndex].u = newU;
+        players[pIndex].birth = newBirth; // นำวันที่ที่ผ่านการตรวจสอบแล้วไปใช้
+
+        // จัดการรูปภาพโปรไฟล์ (ถ้ามีการอัปโหลดใหม่)
+        const previewSrc = document.getElementById('edit-profile-preview').src; //
+        if (previewSrc.startsWith('data:image')) { //
+            players[pIndex].avatar = previewSrc; //
+        }
+
+        // ปิดป๊อปอัปและสั่งบันทึกขึ้น Cloud ออนไลน์ทันที
+        closeProfileEditModal(); //
+        pushDataToCloud(); //
+        refreshAllViews(); //
+    }
+}
 
         function updateReportDropdown() {
             const select = document.getElementById('report-player-select'); if(!select) return; select.innerHTML = '<option value="">-- เลือกรายชื่อนักกีฬา --</option>';
