@@ -486,32 +486,37 @@
         }
 
         function pushDataToCloud(silent = false) {
-            if(!silent) showLoading("กำลังส่งข้อมูลไปบันทึกบน Google Sheets...");
-            const payload = {
-                action: "saveAll",
-                players: players,
-                attendance: attendanceDb,
-                exclusion: exclusionDb
-            };
+    if(!silent) showLoading("กำลังส่งข้อมูลไปบันทึกบน Google Sheets...");
+    const payload = {
+        action: "saveAll",
+        players: players,
+        attendance: attendanceDb,
+        exclusion: exclusionDb
+    };
 
-            fetch(CLOUD_API_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(res => {
-                // บันทึกสำเร็จ อัปเดต Cache ทันทีโดยไม่ต้องรอดึงข้อมูลย้อนกลับซ้ำซ้อนให้หมุนนานอีกรอบ
-                const currentData = { players, attendance: attendanceDb, exclusion: exclusionDb };
-                localStorage.setItem('ac_basketball_cache', JSON.stringify(currentData));
-                
-                hideLoading();
-                if(!silent) alert("ระบบบันทึกและอัปเดตข้อมูลออนไลน์สำเร็จแล้ว!");
-            })
-            .catch(err => {
-                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลออนไลน์");
-                hideLoading();
-            });
-        }
+    // อัปเดต Cache ในเครื่องไว้ก่อนทันทีเพื่อความรวดเร็วและไม่ให้ข้อมูลสูญหาย
+    const currentData = { players, attendance: attendanceDb, exclusion: exclusionDb };
+    localStorage.setItem('ac_basketball_cache', JSON.stringify(currentData));
+
+    fetch(CLOUD_API_URL, {
+        method: "POST",
+        mode: "no-cors", // ปลดล็อกปัญหา CORS Redirect ของ Google Script
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(res => {
+        // ในโหมด no-cors เราจะไม่สามารถอ่าน response body ได้ แต่ถ้าส่งผ่านจะถือว่าสำเร็จ
+        hideLoading();
+        if(!silent) alert("ระบบบันทึกและอัปเดตข้อมูลออนไลน์สำเร็จแล้ว!");
+    })
+    .catch(err => {
+        console.error("Cloud Save Error:", err);
+        hideLoading();
+        alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลออนไลน์ (กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต)");
+    });
+}
 
         function handleCSVImport(e) {
     const file = e.target.files[0];
