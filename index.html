@@ -58,11 +58,11 @@
             <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">สรุปรายงานประจำวัน</button>
         </div>
 
-        <section id="page-dashboard" class="tab-content hidden space-y-6">
-            <div id="db-status-banner" class="bg-white px-5 py-3 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+        <section id="page-dashboard" class="tab-content space-y-6">
+            <div id="db-status-banner" class="bg-white px-5 py-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-database text-gray-400 text-lg"></i>
-                    <span class="text-sm font-semibold text-gray-600">สถานะการเชื่อมต่อ Google Sheets:</span>
+                    <i class="fa-solid fa-database text-blue-600 text-lg"></i>
+                    <span class="text-sm font-semibold text-gray-700">สถานะการเชื่อมต่อ Google Sheets:</span>
                 </div>
                 <div id="db-status-badge" class="flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200">
                     <span class="relative flex h-2 w-2">
@@ -314,7 +314,6 @@
     </div>
 
     <script>
-        // 🔒 URL ของ API ในการเชื่อมต่อ Google Sheets 
         const CONFIG = {
             API_URL: "https://script.google.com/macros/s/AKfycbxwcYjjUFot818XBetEbyHJL4wNiZk7CapX5dKP1_1IBhCUjUiUTyA2M65Y6p_8GxB3hA/exec"
         };
@@ -339,6 +338,7 @@
             attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
             specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
             
+            // เรียกฟังก์ชัน switchTab เป็น 'dashboard' เพื่อเซ็ตค่า Active คลาสปุ่มให้ถูกต้อง
             switchTab('dashboard');
             refreshAllViews();
         });
