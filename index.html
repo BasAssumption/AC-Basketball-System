@@ -300,9 +300,11 @@
     </div>
 
     <script>
-       const CONFIG = {
-    API_URL: "https://script.google.com/macros/s/AKfycbxwcYjjUFot818XBetEbyHJL4wNiZk7CapX5dKP1_1IBhCUjUiUTyA2M65Y6p_8GxB3hA/exec"
-};
+        // 🔒 อัปเดตผูก API URL ชุดล่าสุดของคุณ Kittichon ให้ทำงานเชื่อมโยงกันสมบูรณ์ทุกฟังก์ชัน
+        const CONFIG = {
+            API_URL: "https://script.google.com/macros/s/AKfycbxwcYjjUFot818XBetEbyHJL4wNiZk7CapX5dKP1_1IBhCUjUiUTyA2M65Y6p_8GxB3hA/exec"
+        };
+
         let players = [];
         let attendanceDb = {};
         let specialStatusDb = {}; 
@@ -342,7 +344,6 @@
             if (tabId !== 'qr-scan') stopQRScanner();
         }
 
-        // ฟังก์ชันสลับเมนูย่อยหน้าฐานข้อมูลนักกีฬา
         function switchPlayerSubTab(mode) {
             currentPlayerTabMode = mode;
             const btnActive = document.getElementById('sub-player-btn-active');
@@ -377,6 +378,7 @@
             return document.getElementById('attendance-date-picker').value;
         }
 
+        // 🚀 ปรับปรุงระบบ Import CSV: เมื่ออ่านเสร็จแล้วสั่ง Push ซิงค์ขึ้น Google Sheet ทันที
         function handleCSVImport(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -404,15 +406,14 @@
                 }
                 if (addedCount > 0) {
                     saveToLocalStorage();
-                    pushDataToCloud();
-                    alert(`🎉 นำเข้าสำเร็จ ${addedCount} คน`);
                     refreshAllViews();
+                    pushDataToCloud(); // ส่งขึ้นระบบคลาวด์ Google Sheet ทันทีหลังอัปโหลด
+                    alert(`🎉 นำเข้าข้อมูลนักกีฬาสำเร็จ ${addedCount} คน และกำลังซิงค์ข้อมูลลง Google Sheets...`);
                 }
             };
             reader.readAsText(file, "UTF-8");
         }
 
-        // ระบบบันทึกโปรไฟล์นักกีฬาพร้อมดึงค่าวันเดือนปีเกิดเดิมมาใช้ถ้าไม่มีการแก้ไขซ้ำ
         function savePlayerProfile(e) {
             e.preventDefault();
             const pid = document.getElementById('edit-profile-pid').value;
@@ -422,7 +423,6 @@
             let inputBirth = document.getElementById('edit-profile-birth').value;
 
             if(!pid) {
-                // กรณีเพิ่มคนใหม่
                 players.push({
                     id: "P_" + Date.now(),
                     name: document.getElementById('edit-profile-fullname').value,
@@ -433,20 +433,15 @@
                     avatar: document.getElementById('edit-profile-preview').src.startsWith('data:image') ? document.getElementById('edit-profile-preview').src : ""
                 });
             } else {
-                // กรณีแก้ไขคนเดิม
                 const idx = players.findIndex(x => x.id === pid);
                 if(idx !== -1) {
                     players[idx].name = document.getElementById('edit-profile-fullname').value;
                     players[idx].nickname = document.getElementById('edit-profile-nickname').value;
                     players[idx].no = jerseyNo;
                     players[idx].u = document.getElementById('edit-profile-u').value;
-                    
-                    // 💡 แก้ไข Bug จุดสำคัญ: ถ้าในฟอร์มไม่มีการป้อนค่าวันเกิดใหม่ ให้กลับไปใช้ค่าเดิมในระบบ ไม่เปลี่ยนเป็น "ไม่ระบุ"
                     if (inputBirth) {
                         players[idx].birth = inputBirth;
                     } 
-                    // ถ้า inputBirth ว่างเปล่า ไม่ต้องอัปเดตหรือทับค่าเดิม (ปล่อยให้ใช้ค่าเดิมใน players[idx].birth ต่อไป)
-
                     if(document.getElementById('edit-profile-preview').src.startsWith('data:image')) {
                         players[idx].avatar = document.getElementById('edit-profile-preview').src;
                     }
@@ -454,8 +449,8 @@
             }
             closeProfileEditModal();
             saveToLocalStorage();
-            pushDataToCloud();
             refreshAllViews();
+            pushDataToCloud();
         }
 
         function setSpecialStatus(statusType) {
@@ -471,16 +466,16 @@
             }
             closeProfileEditModal();
             saveToLocalStorage();
-            pushDataToCloud();
             refreshAllViews();
+            pushDataToCloud();
         }
 
         function clearSpecialStatus(pid) {
             if(confirm("ต้องการยกเลิกสถานะพิเศษให้คนนี้กลับมาเป็นนักกีฬาปกติใช่ไหม?")) {
                 delete specialStatusDb[pid];
                 saveToLocalStorage();
-                pushDataToCloud();
                 refreshAllViews();
+                pushDataToCloud();
             }
         }
 
@@ -506,7 +501,6 @@
             updateDashboardCharts();
         }
 
-        // หน้าตารางฐานข้อมูลนักกีฬา กรองข้อมูลผ่านเมนูย่อยอัจฉริยะ (ปัจจุบัน / ไม่ผ่าน-ลาออก)
         function refreshPlayersTable() {
             const tbody = document.getElementById('players-table-body');
             tbody.innerHTML = '';
@@ -514,10 +508,9 @@
             const filterU = document.getElementById('filter-u-select').value;
 
             players.forEach(p => {
-                // 💡 ตรวจเช็กคัดแยกประเภทนักกีฬาตามเมนูย่อยที่กดเลือกไว้
                 const hasSpecialStatus = specialStatusDb[p.id] ? true : false;
-                if (currentPlayerTabMode === 'active' && hasSpecialStatus) return; // เมนูย่อย "ปัจจุบัน" ไม่แสดงกลุ่มพิเศษ
-                if (currentPlayerTabMode === 'excluded' && !hasSpecialStatus) return; // เมนูย่อย "ไม่ผ่าน/ลาออก" แสดงเฉพาะกลุ่มพิเศษ
+                if (currentPlayerTabMode === 'active' && hasSpecialStatus) return; 
+                if (currentPlayerTabMode === 'excluded' && !hasSpecialStatus) return; 
 
                 if(filterU && p.u !== filterU) return;
                 if(search && !p.name.toLowerCase().includes(search) && !p.nickname.toLowerCase().includes(search) && !p.no.includes(search)) return;
@@ -635,9 +628,9 @@
             if(!attendanceDb[date][pid]) attendanceDb[date][pid] = { status: '', note: '' };
             attendanceDb[date][pid].status = (attendanceDb[date][pid].status === status) ? '-' : status;
             saveToLocalStorage();
-            pushDataToCloud();
             refreshAttendanceView();
             updateDashboardCharts();
+            pushDataToCloud();
         }
 
         function updateAttendanceNote(pid, noteValue) {
@@ -645,8 +638,8 @@
             if(!attendanceDb[date][pid]) attendanceDb[date][pid] = { status: '-', note: '' };
             attendanceDb[date][pid].note = noteValue;
             saveToLocalStorage();
-            pushDataToCloud();
             refreshAttendanceView();
+            pushDataToCloud();
         }
 
         function startQRScanner() {
@@ -746,14 +739,16 @@
             });
         }
 
+        // 🔒 ฟังก์ชันบันทึกข้อมูลหลัก: ตรวจสอบและบังคับส่งลิงก์ชุดใหม่ CONFIG.API_URL ไปยังเซิร์ฟเวอร์โดยตรง
         async function pushDataToCloud() {
             showLoadingSpinner(true);
             const encodedData = encodeURIComponent(JSON.stringify({ players: players, attendance: attendanceDb }));
             try {
+                // ใช้ตัวแปร CONFIG.API_URL ล่าสุดที่ถูกต้องเสมอ
                 const response = await fetch(`${CONFIG.API_URL}?action=sync_all&data=${encodedData}`, { method: "GET" });
                 await response.json();
             } catch (e) {
-                console.error(e);
+                console.error("Cloud Sync Error:", e);
             } finally {
                 showLoadingSpinner(false);
             }
@@ -825,10 +820,7 @@
             document.getElementById('edit-profile-nickname').value = p.nickname || '';
             document.getElementById('edit-profile-number').value = p.no === '-' ? '' : p.no;
             document.getElementById('edit-profile-u').value = p.u || '12';
-            
-            // 💡 โหลดวันเกิดเดิมขึ้นมาแสดงใน Input Date ของฟอร์มตอนเปิด Popup
             document.getElementById('edit-profile-birth').value = p.birth || '';
-            
             document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
