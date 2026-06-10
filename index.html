@@ -969,27 +969,49 @@
         }
 
         function savePlayerProfile(e) {
-            e.preventDefault();
-            const pid = document.getElementById('edit-profile-pid').value;
-            const pIndex = players.findIndex(x => x.id === pid);
-            
-            if (pIndex !== -1) {
-                players[pIndex].name = document.getElementById('edit-profile-fullname').value;
-                players[pIndex].nickname = document.getElementById('edit-profile-nickname').value;
-                players[pIndex].no = document.getElementById('edit-profile-number').value;
-                players[pIndex].u = document.getElementById('edit-profile-u').value;
-                players[pIndex].birth = document.getElementById('edit-profile-birth').value;
-                
-                const previewSrc = document.getElementById('edit-profile-preview').src;
-                if (previewSrc.startsWith('data:image')) {
-                    players[pIndex].avatar = previewSrc;
-                }
-                
-                closeProfileEditModal();
-                pushDataToCloud(); 
-                refreshAllViews();
-            }
+    e.preventDefault();
+    const pid = document.getElementById('edit-profile-pid').value;
+    const pIndex = players.findIndex(x => x.id === pid);
+    
+    if (pIndex !== -1) {
+        // 1. ดึงข้อมูลเดิมของนักกีฬาคนนี้ขึ้นมาสำรองไว้ก่อน
+        const oldPlayerData = players[pIndex];
+
+        // 2. อ่านค่าใหม่จากช่องกรอกในฟอร์ม Popup
+        const newName = document.getElementById('edit-profile-fullname').value;
+        const newNickname = document.getElementById('edit-profile-nickname').value;
+        const newNo = document.getElementById('edit-profile-number').value;
+        const newU = document.getElementById('edit-profile-u').value;
+        let newBirth = document.getElementById('edit-profile-birth').value;
+
+        // 3. 🔹 [จุดแก้ไขสำคัญ] ตรวจสอบเงื่อนไขวันเกิดหาย
+        // ถ้าช่อง input วันเกิดว่างเปล่า แต่ข้อมูลเดิมในระบบเคยมีวันเกิดอยู่แล้ว -> ให้ดึงวันเกิดเดิมมาใช้ทันที
+        if (!newBirth && oldPlayerData.birth && oldPlayerData.birth !== "ไม่ระบุ") {
+            // ตัดเศษข้อความเวลา ISO (ถ้ามี) ให้เหลือเฉพาะ YYYY-MM-DD เพื่อความถูกต้อง
+            newBirth = String(oldPlayerData.birth).split('T')[0]; 
+        } else if (!newBirth) {
+            newBirth = ""; // ถ้าไม่มีข้อมูลเดิมอยู่เลย ให้เซฟเป็นค่าว่างเพื่อไปแสดงผลเป็น "ไม่ระบุ"
         }
+
+        // 4. บันทึกค่าทั้งหมดกลับลงฐานข้อมูลของระบบ
+        players[pIndex].name = newName;
+        players[pIndex].nickname = newNickname;
+        players[pIndex].no = newNo;
+        players[pIndex].u = newU;
+        players[pIndex].birth = newBirth; // นำวันที่ที่ตรวจสอบเสร็จแล้วไปใช้งาน
+
+        // จัดการรูปภาพโปรไฟล์ (ถ้ามีการอัปโหลดใหม่)
+        const previewSrc = document.getElementById('edit-profile-preview').src;
+        if (previewSrc.startsWith('data:image')) {
+            players[pIndex].avatar = previewSrc;
+        }
+        
+        // ปิด Popup และบันทึกขึ้นระบบคลาวด์
+        closeProfileEditModal();
+        pushDataToCloud(); 
+        refreshAllViews();
+    }
+}
 
         function updateReportDropdown() {
             const select = document.getElementById('report-player-select'); if(!select) return; select.innerHTML = '<option value="">-- เลือกรายชื่อนักกีฬา --</option>';
