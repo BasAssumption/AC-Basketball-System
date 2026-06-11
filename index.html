@@ -18,6 +18,15 @@
         .status-failed { filter: grayscale(100%) brightness(80%); opacity: 0.7; }
         .status-resigned { filter: grayscale(100%) contrast(120%); }
 
+        /* CSS สำหรับไอคอน Refresh ตอนกดรีโหลด */
+        @keyframes custom-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .refresh-spinning {
+            animation: custom-spin 0.6s ease-in-out;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #print-report-area, #print-report-area * { visibility: visible; }
@@ -109,13 +118,29 @@
                     <h3 class="text-3xl font-bold mt-1 text-red-600" id="dash-excluded-players">0 คน</h3>
                 </div>
             </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-gray-700 mb-4 flex items-center"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i> สัดส่วนนักกีฬาแยกตามรุ่นอายุ (U)</h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-gray-700 flex items-center">
+                            <i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i> สัดส่วนนักกีฬาแยกตามรุ่นอายุ (U)
+                        </h4>
+                        <button onclick="triggerChartRefresh('pie-refresh-icon')" class="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-blue-600 transition shadow-sm bg-gray-50 border border-gray-100" title="ดึงข้อมูลใหม่เพื่อความถูกต้อง">
+                            <i id="pie-refresh-icon" class="fa-solid fa-arrows-rotate text-sm"></i>
+                        </button>
+                    </div>
                     <div class="h-64 flex items-center justify-center"><canvas id="chart-age-groups"></canvas></div>
                 </div>
+                
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-gray-700 mb-4 flex items-center"><i class="fa-solid fa-chart-bar mr-2 text-emerald-500"></i> สถิติการมาฝึกซ้อมวันนี้</h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-bold text-gray-700 flex items-center">
+                            <i class="fa-solid fa-chart-bar mr-2 text-emerald-500"></i> สถิติการมาฝึกซ้อมวันนี้
+                        </h4>
+                        <button onclick="triggerChartRefresh('bar-refresh-icon')" class="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-emerald-600 transition shadow-sm bg-gray-50 border border-gray-100" title="ดึงข้อมูลใหม่เพื่อความถูกต้อง">
+                            <i id="bar-refresh-icon" class="fa-solid fa-arrows-rotate text-sm"></i>
+                        </button>
+                    </div>
                     <div class="h-64 flex items-center justify-center"><canvas id="chart-attendance"></canvas></div>
                 </div>
             </div>
@@ -371,6 +396,28 @@
             
             updateCloudStatusUI(true);
         });
+
+        // ฟังก์ชันสั่งให้ไอคอนหมุนอนิเมชันและบังคับโหลดคำนวณกราฟ Dashboard ใหม่ทันที
+        function triggerChartRefresh(iconId) {
+            const iconElement = document.getElementById(iconId);
+            if (iconElement) {
+                // เติมอนิเมชันหมุนเข้าไปในตัวไอคอน
+                iconElement.classList.add('refresh-spinning');
+                
+                // ดึงข้อมูลล่าสุดจาก LocalStorage (เผื่อมีการอัปเดตจากหน้าอื่น)
+                players = JSON.parse(localStorage.getItem('players') || '[]');
+                attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
+                specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
+                
+                // สั่งคำนวณวาดชาร์ตใหม่
+                updateDashboardCharts();
+                
+                // ลบคลาสเมื่อหมุนครบรอบ (ตามเวลา CSS 0.6 วินาที) เผื่อให้ผู้ใช้กดซ้ำได้รอบหน้า
+                setTimeout(() => {
+                    iconElement.classList.remove('refresh-spinning');
+                }, 600);
+            }
+        }
 
         function syncDashboardFilterDate(val) {
             const dashFilter = document.getElementById('dashboard-date-filter');
