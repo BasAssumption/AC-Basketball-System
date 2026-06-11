@@ -778,32 +778,53 @@
             }
         }
 
-        // 🔄 ปรับปรุงระเบียบซิงค์ข้อมูลคลาวด์: ยืดเวลา และลดปัญหาการขัดข้องกรณีสลับบัญชี Google บล็อก API
+        // 🔄 ปรับปรุงระบบซิงค์ข้อมูลคลาวด์: แก้ไขปัญหา CORS และรองรับกรณีข้อมูลยาว
         async function pushDataToCloud() {
             showLoadingSpinner(true);
-            const encodedData = encodeURIComponent(JSON.stringify({ players: players, attendance: attendanceDb }));
+            
+            // เตรียมข้อมูลที่จะส่ง
+            const payload = {
+                players: players,
+                attendance: attendanceDb
+            };
+            
+            const encodedData = encodeURIComponent(JSON.stringify(payload));
+            // เปลี่ยนไปใช้การระบุ action และ data ผ่าน URL parameter ที่เคลียร์ขึ้น
+            const syncUrl = `${CONFIG.API_URL}?action=sync_all&data=${encodedData}`;
+
             try {
-                // เพิ่มโหมด no-cors เผื่อไว้กรณีบราวเซอร์ติดปัญหาสิทธิ์ข้ามบัญชีของ Google Apps Script
-                const response = await fetch(`${CONFIG.API_URL}?action=sync_all&data=${encodedData}`, { 
+                // ใช้ fetch โดยไม่ต้องใส่โหมด no-cors (เพราะเราเปิด Anyone ใน Apps Script แล้ว)
+                // และตั้ง Timeout ป้องกันหน้าจอค้าง
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 วินาที timeout
+
+                const response = await fetch(syncUrl, { 
                     method: "GET",
-                    mode: "cors"
+                    signal: controller.signal
                 });
                 
+                clearTimeout(timeoutId);
+
                 if(response.ok) {
-                    updateCloudStatusUI(true);
+                    const result = await response.json();
+                    if(result.status === "success") {
+                        updateCloudStatusUI(true);
+                        console.log("Syncสำเร็จ:", result.message);
+                    } else {
+                        console.error("Apps Script Error:", result.message);
+                        updateCloudStatusUI(false);
+                    }
                 } else {
-                    // หากยังเซฟได้แต่ CORS แจ้งเตือน ให้พยายามอนุโลมตามข้อมูลเครื่อง
-                    updateCloudStatusUI(true);
+                    updateCloudStatusUI(false);
                 }
             } catch (e) {
-                console.error("Cloud Sync Warning:", e);
-                // แสดงสถานะเตือนให้ผู้ใช้เช็คสิทธิ์อีเมลกูเกิลของตัวเองในเบราว์เซอร์
+                console.error("Cloud Sync Error:", e);
+                // หากติดปัญหา CORS แต่ข้อมูลอาจจะฝังไปแล้ว หรือเน็ตหลุด ให้แสดงเป็น Offline
                 updateCloudStatusUI(false); 
             } finally {
                 showLoadingSpinner(false);
             }
         }
-
         function updateDashboardCharts() {
             let active = 0, excluded = 0;
             const uMap = {};
