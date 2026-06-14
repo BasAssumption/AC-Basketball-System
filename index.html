@@ -20,8 +20,28 @@
 
         @media print {
             body * { visibility: hidden; }
-            #print-report-area, #print-report-area * { visibility: visible; }
+            #print-report-area, #print-report-area *,
+            #personal-report-pdf-area, #personal-report-pdf-area * { visibility: visible; }
             #print-report-area { position: absolute; left: 0; top: 0; width: 100%; }
+            
+            /* ตั้งค่าหน้ากระดาษ A4 แนวตั้งสำหรับรายงานส่วนบุคคล */
+            #personal-report-pdf-area { 
+                position: absolute; left: 0; top: 0; width: 210mm; min-height: 297mm; 
+                background: white !important; padding: 20mm !important; box-shadow: none !important;
+            }
+            /* ซ่อนไอคอน Edit และปุ่มบันทึกเวลาสั่งพิมพ์ */
+            .print-hide { display: none !important; }
+        }
+
+        /* จำลองขนาดหน้าจอ A4 บนเบราว์เซอร์ */
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -172,9 +192,10 @@
         </section>
 
         <section id="page-reports" class="tab-content hidden space-y-4">
-            <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border">
+            <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border print:hidden">
                 <button onclick="switchReportSubTab('daily')" id="sub-btn-daily" class="px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white">รายงานรายวัน</button>
                 <button onclick="switchReportSubTab('weekly')" id="sub-btn-weekly" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานรายสัปดาห์</button>
+                <button onclick="switchReportSubTab('personal')" id="sub-btn-personal" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานส่วนบุคคล</button>
             </div>
 
             <div id="report-daily-section" class="space-y-4">
@@ -230,6 +251,69 @@
                     <div class="p-4 bg-gray-50 rounded-xl">
                         <h4 class="font-bold text-sm text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-emerald-500"></i> สรุปยอดสะสม มา/ลา/ขาด รายสัปดาห์ (กราฟแท่ง)</h4>
                         <div class="h-64"><canvas id="chart-weekly-bar"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="report-personal-section" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-4 items-center print:hidden border border-gray-200">
+                    <div class="flex flex-col">
+                        <label class="text-xs font-bold text-gray-600 mb-1">เลือกนักกีฬา</label>
+                        <select id="rpt-pers-player-select" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none bg-white w-56"></select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-xs font-bold text-gray-600 mb-1">เลือกสัปดาห์ที่ต้องการดูข้อมูล</label>
+                        <input type="week" id="rpt-pers-week-picker" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none font-semibold">
+                    </div>
+                    <div class="flex items-end h-full pt-5 ml-auto">
+                        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
+                            <i class="fa-solid fa-print"></i> <span>พิมพ์รายงาน A4</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="personal-report-pdf-area" class="a4-container">
+                    <div class="text-center space-y-1 border-b-2 border-gray-800 pb-4 mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">รายงานสรุปผลการประเมินและการเข้าซ้อมรายบุคคล</h2>
+                        <p class="text-sm text-gray-500 font-medium" id="rpt-pers-week-title">ประจำสัปดาห์ที่ --</p>
+                    </div>
+
+                    <div class="flex items-start gap-6 bg-gray-50 p-4 rounded-xl border mb-6" id="rpt-pers-profile-card">
+                        <img id="rpt-pers-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 bg-white">
+                        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm w-full">
+                            <div><span class="text-gray-500 font-medium">ชื่อ-นามสกุล:</span> <span id="rpt-pers-fullname" class="font-bold text-gray-800">-</span></div>
+                            <div><span class="text-gray-500 font-medium">ชื่อเล่น:</span> <span id="rpt-pers-nickname" class="font-bold text-blue-600">-</span></div>
+                            <div><span class="text-gray-500 font-medium">เบอร์เสื้อ:</span> <span id="rpt-pers-no" class="font-bold text-gray-800">-</span></div>
+                            <div><span class="text-gray-500 font-medium">รุ่นอายุ:</span> <span id="rpt-pers-u" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+                        <div class="md:col-span-3 border p-4 rounded-xl bg-white">
+                            <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-blue-500"></i> รายละเอียดสถานะการมาซ้อมประจำวัน (จันทร์ - ศุกร์)</h4>
+                            <div class="h-48"><canvas id="chart-pers-weekly-bar"></canvas></div>
+                        </div>
+                        <div class="md:col-span-2 border p-4 rounded-xl bg-white">
+                            <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-pie mr-1 text-emerald-500"></i> สัดส่วนร้อยละ (%) การเข้าซ้อม</h4>
+                            <div class="h-48 flex items-center justify-center"><canvas id="chart-pers-weekly-pie"></canvas></div>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-300 rounded-xl p-4 bg-gray-50 relative mt-4">
+                        <div class="flex justify-between items-center border-b pb-2 mb-2">
+                            <h4 class="font-bold text-sm text-gray-800 flex items-center"><i class="fa-solid fa-comment-dots mr-2 text-blue-600"></i> บันทึกความคิดเห็นของโค้ช/ข้อมูลเพิ่มเติม</h4>
+                            <button onclick="toggleEditComment()" id="comment-edit-btn" class="text-blue-600 hover:text-blue-800 transition text-sm font-semibold print-hide">
+                                <i class="fa-solid fa-pen-to-square"></i> แก้ไขคอมเม้นท์
+                            </button>
+                        </div>
+                        
+                        <div id="comment-text-display" class="text-sm text-gray-700 min-h-[100px] whitespace-pre-line leading-relaxed">ยังไม่มีข้อมูลบันทึกข้อคิดเห็น...</div>
+                        <div id="comment-input-area" class="hidden space-y-2 print-hide">
+                            <textarea id="comment-textarea" rows="4" placeholder="พิมพ์ประเมินฟอร์มผู้เล่น, จุดเด่น หรือสิ่งควรพัฒนาที่นี่..." class="w-full text-sm p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                            <button onclick="savePlayerComment()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1 rounded text-xs font-bold shadow transition flex items-center gap-1">
+                                <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อความ
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -327,6 +411,11 @@
         let chartWeeklyBar = null;
         let html5QrScanner = null;
 
+        // ตัวแปรเก็บกราฟและข้อความสำหรับ รายงานส่วนบุคคล
+        let chartPersBar = null;
+        let chartPersPie = null;
+        let commentDb = JSON.parse(localStorage.getItem('playerComments') || '{}');
+
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('attendance-date-picker').value = today;
@@ -370,17 +459,44 @@
         }
 
         function switchReportSubTab(mode) {
+            document.getElementById('report-daily-section').classList.add('hidden');
+            document.getElementById('report-weekly-section').classList.add('hidden');
+            document.getElementById('report-personal-section').classList.add('hidden');
+            
+            document.getElementById('sub-btn-daily').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
+            document.getElementById('sub-btn-weekly').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
+            document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
+
             if (mode === 'daily') {
                 document.getElementById('report-daily-section').classList.remove('hidden');
-                document.getElementById('report-weekly-section').classList.add('hidden');
                 document.getElementById('sub-btn-daily').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
-                document.getElementById('sub-btn-weekly').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
-            } else {
-                document.getElementById('report-daily-section').classList.add('hidden');
+            } else if (mode === 'weekly') {
                 document.getElementById('report-weekly-section').classList.remove('hidden');
-                document.getElementById('sub-btn-daily').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
                 document.getElementById('sub-btn-weekly').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
                 renderWeeklyCharts();
+            } else if (mode === 'personal') {
+                document.getElementById('report-personal-section').classList.remove('hidden');
+                document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
+                
+                // ตั้งค่าเริ่มต้นของกล่องระบุสัปดาห์ปัจจุบัน
+                if(!document.getElementById('rpt-pers-week-picker').value) {
+                    const now = new Date();
+                    const oneJan = new Date(now.getFullYear(), 0, 1);
+                    const numberOfDays = Math.floor((now - oneJan) / (24 * 60 * 60 * 1000));
+                    const weekResult = Math.ceil(( numberOfDays + oneJan.getDay() + 1) / 7);
+                    document.getElementById('rpt-pers-week-picker').value = `${now.getFullYear()}-W${String(weekResult).padStart(2, '0')}`;
+                }
+                
+                // โหลดรายชื่อผู้เล่นลง Dropdown
+                const pSelect = document.getElementById('rpt-pers-player-select');
+                pSelect.innerHTML = '';
+                players.forEach(p => {
+                    if(!specialStatusDb[p.id]) {
+                        pSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.nickname})</option>`;
+                    }
+                });
+                
+                renderPersonalReport();
             }
         }
 
@@ -497,17 +613,18 @@
             players.forEach(p => { if(p.u) uSet.add(p.u); });
             const filterSelect = document.getElementById('filter-u-select');
             const attSelect = document.getElementById('attendance-u-filter');
-            const prevFilterVal = filterSelect.value;
-            const prevAttVal = attSelect.value;
+            const prevFilterVal = filterSelect?.value || '';
+            const prevAttVal = attSelect?.value || '';
             
-            filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
-            attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
+            if (filterSelect) filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
+            if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
+            
             Array.from(uSet).forEach(u => {
-                filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
-                attSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+                if (filterSelect) filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+                if (attSelect) attSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
             });
-            filterSelect.value = prevFilterVal;
-            attSelect.value = prevAttVal;
+            if (filterSelect) filterSelect.value = prevFilterVal;
+            if (attSelect) attSelect.value = prevAttVal;
 
             refreshPlayersTable();
             refreshAttendanceView();
@@ -516,6 +633,7 @@
 
         function refreshPlayersTable() {
             const tbody = document.getElementById('players-table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
             const search = document.getElementById('search-player-input').value.toLowerCase();
             const filterU = document.getElementById('filter-u-select').value;
@@ -571,7 +689,8 @@
             
             const date = getSelectedDate();
             document.getElementById('report-date-title').innerText = "ประจำวันที่ " + date;
-            const attFilterU = document.getElementById('attendance-u-filter').value;
+            const rUFilter = document.getElementById('attendance-u-filter');
+            const attFilterU = rUFilter ? rUFilter.value : '';
             if(!attendanceDb[date]) attendanceDb[date] = {};
 
             let countPresent = 0, countLeave = 0, countAbsent = 0;
@@ -753,7 +872,128 @@
             });
         }
 
-        // 🔄 ฟังก์ชันปรับปรุงใหม่: แสดงผลสถานะแบบมินิมอลบนแถบ Header
+        // 📊 ฟังก์ชันใหม่: แสดงผลรายงานส่วนบุคคลขนาด A4 และจัดการกราฟ/คอมเม้นท์
+        function renderPersonalReport() {
+            const pid = document.getElementById('rpt-pers-player-select').value;
+            const weekStr = document.getElementById('rpt-pers-week-picker').value; 
+            if(!pid || !weekStr) return;
+
+            const player = players.find(x => x.id === pid);
+            if(!player) return;
+
+            // 1. ผูกข้อมูลประวัติผู้เล่น
+            document.getElementById('rpt-pers-avatar').src = player.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+            document.getElementById('rpt-pers-fullname').innerText = player.name;
+            document.getElementById('rpt-pers-nickname').innerText = player.nickname;
+            document.getElementById('rpt-pers-no').innerText = `#${player.no || '-'}`;
+            document.getElementById('rpt-pers-u').innerText = `รุ่น U${player.u}`;
+            document.getElementById('rpt-pers-week-title').innerText = `สรุปผลการประเมินประจำสัปดาห์: ${weekStr}`;
+
+            // 2. คำนวณหาวันจันทร์ - ศุกร์ ของสัปดาห์ที่ถูกระบุ เพื่อนำไปค้นหาสถิติเช็คชื่อย้อนหลัง
+            const [year, week] = weekStr.split('-W');
+            const simple = new Date(year, 0, 1 + (week - 1) * 7);
+            const dow = simple.getDay();
+            const ISOweekStart = simple;
+            if (dow <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+
+            const weekDays = []; 
+            for(let i=0; i<5; i++) {
+                const d = new Date(ISOweekStart);
+                d.setDate(ISOweekStart.getDate() + i);
+                weekDays.push(d.toISOString().split('T')[0]);
+            }
+
+            let countP = 0, countL = 0, countA = 0;
+            const dailyStatusScore = []; 
+
+            weekDays.forEach(dateStr => {
+                const status = attendanceDb[dateStr]?.[pid]?.status || '-';
+                if(status === '✓') { countP++; dailyStatusScore.push(3); }
+                else if(status === 'ล') { countL++; dailyStatusScore.push(2); }
+                else if(status === '✕') { countA++; dailyStatusScore.push(1); }
+                else { dailyStatusScore.push(0); }
+            });
+
+            // 3. Render กราฟแท่ง รายวัน จ-ศ
+            if(chartPersBar) chartPersBar.destroy();
+            chartPersBar = new Chart(document.getElementById('chart-pers-weekly-bar').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสฯ', 'ศุกร์'],
+                    datasets: [{
+                        label: 'สถานะเช็คชื่อ',
+                        data: dailyStatusScore,
+                        backgroundColor: dailyStatusScore.map(val => val===3?'#10B981':val===2?'#F59E0B':val===1?'#EF4444':'#9CA3AF'),
+                        barThickness: 25
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0, max: 3,
+                            ticks: {
+                                callback: function(value) {
+                                    if(value===3) return 'มาซ้อม';
+                                    if(value===2) return 'ลากิจ/ป่วย';
+                                    if(value===1) return 'ขาดซ้อม';
+                                    return 'ไม่มีข้อมูล';
+                                }
+                            }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // 4. Render Pie Chart ร้อยละความสม่ำเสมอ
+            if(chartPersPie) chartPersPie.destroy();
+            chartPersPie = new Chart(document.getElementById('chart-pers-weekly-pie').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['มาซ้อม', 'ลากิจ/ป่วย', 'ขาดซ้อม'],
+                    datasets: [{
+                        data: [countP, countL, countA],
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 5. แสดงกล่องคอมเม้นท์/ข้อเสนอแนะประจำตัวผู้เล่น
+            const commentKey = `${pid}_${weekStr}`;
+            const savedComment = commentDb[commentKey] || '';
+            document.getElementById('comment-text-display').innerText = savedComment || 'ยังไม่มีข้อมูลบันทึกข้อคิดเห็นของสัปดาห์นี้...';
+            document.getElementById('comment-textarea').value = savedComment;
+            
+            document.getElementById('comment-text-display').classList.remove('hidden');
+            document.getElementById('comment-input-area').classList.add('hidden');
+            document.getElementById('comment-edit-btn').classList.remove('hidden');
+        }
+
+        function toggleEditComment() {
+            document.getElementById('comment-text-display').classList.add('hidden');
+            document.getElementById('comment-edit-btn').classList.add('hidden');
+            document.getElementById('comment-input-area').classList.remove('hidden');
+        }
+
+        function savePlayerComment() {
+            const pid = document.getElementById('rpt-pers-player-select').value;
+            const weekStr = document.getElementById('rpt-pers-week-picker').value;
+            if(!pid || !weekStr) return;
+
+            const textVal = document.getElementById('comment-textarea').value.trim();
+            const commentKey = `${pid}_${weekStr}`;
+            
+            commentDb[commentKey] = textVal;
+            localStorage.setItem('playerComments', JSON.stringify(commentDb));
+            
+            alert('บันทึกข้อมูลความคิดเห็นเสร็จสมบูรณ์!');
+            renderPersonalReport();
+        }
+
         function updateCloudStatusUI(isOnline) {
             const dot = document.getElementById('status-dot');
             const text = document.getElementById('status-text');
@@ -761,11 +1001,11 @@
             if(!dot || !text) return;
             
             if(isOnline) {
-                badge.className = "flex items-center space-x-1.5 bg-gray-800/60 border border-gray-700 px-2 py-0.5 rounded-full text-[11px] font-medium text-gray-300";
+                if (badge) badge.className = "flex items-center space-x-1.5 bg-gray-800/60 border border-gray-700 px-2 py-0.5 rounded-full text-[11px] font-medium text-gray-300";
                 dot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10B981]";
                 text.innerText = "Database Online";
             } else {
-                badge.className = "flex items-center space-x-1.5 bg-red-950/40 border border-red-900 px-2 py-0.5 rounded-full text-[11px] font-medium text-red-300 animate-pulse";
+                if (badge) badge.className = "flex items-center space-x-1.5 bg-red-950/40 border border-red-900 px-2 py-0.5 rounded-full text-[11px] font-medium text-red-300 animate-pulse";
                 dot.className = "h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_6px_#EF4444]";
                 text.innerText = "Database Offline";
             }
@@ -935,6 +1175,7 @@
         }
 
         function closeProfileEditModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+        
         function previewAvatarImage(e) {
             const file = e.target.files[0];
             if(!file) return;
