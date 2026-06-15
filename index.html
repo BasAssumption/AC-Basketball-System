@@ -1200,20 +1200,32 @@
                     const result = await response.json();
                     if (result.status === "success") {
                         updateCloudStatusUI(true);
-                        alert("🎉 ซิงค์ข้อมูลนักกีฬาทั้งหมดขึ้น Google Sheets สำเร็จเรียบร้อยแล้ว!");
+                        
+                        // 🌟 ส่วนที่เพิ่ม: หากคลาวด์ส่งลิงก์รูปภาพจาก Google Drive กลับมา ให้หน้าเว็บอัปเดตรูปตามทันที
+                        if (result.driveImages) {
+                            players.forEach(p => {
+                                if (p.no && result.driveImages[p.no.toString()]) {
+                                    p.avatar = result.driveImages[p.no.toString()];
+                                }
+                            });
+                            saveToLocalStorage();
+                        }
+
+                        alert("🎉 ซิงค์ข้อมูลและดึงรูปภาพจาก Google Drive ลงฐานข้อมูลสำเร็จ!");
+                        refreshAllViews();
                     } else {
                         console.error("Apps Script Error:", result.message);
                         updateCloudStatusUI(false);
-                        alert("เกิดข้อผิดพลาดจากฝั่ง Google Sheet: " + result.message);
+                        alert("เกิดข้อผิดพลาด: " + result.message);
                     }
                 } else {
                     updateCloudStatusUI(false);
-                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ของ Google ได้ (Response Not OK)");
+                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
                 }
             } catch (e) {
                 console.error("Cloud Sync Error:", e);
                 updateCloudStatusUI(false); 
-                alert("❌ บันทึกไม่สำเร็จ: ข้อมูลอาจจะยาวเกินไป หรือตั้งค่าสิทธิ์ Apps Script ไม่ถูกต้อง");
+                alert("❌ บันทึกไม่สำเร็จ: การเชื่อมต่อขัดข้องหรือสิทธิ์สคริปต์ไม่ถูกต้อง");
             } finally {
                 showLoadingSpinner(false);
             }
