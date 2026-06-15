@@ -43,282 +43,314 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
+
+        /* เพิ่ม CSS สำหรับการควบคุมหน้า Login */
+        #main-app-container { display: none; }
+        .login-screen { display: flex; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <header class="theme-bg-dark text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 theme-bg-red rounded-full flex items-center justify-center font-bold text-xl tracking-wider shadow">AC</div>
+    <div id="login-container" class="login-screen min-h-screen items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-2xl">
+            <div class="text-center">
+                <div class="w-16 h-16 theme-bg-red text-white rounded-full flex items-center justify-center font-bold text-3xl mx-auto shadow-lg">AC</div>
+                <h2 class="mt-4 text-2xl font-extrabold text-gray-950">AC Basketball System</h2>
+                <p class="mt-1 text-sm text-gray-500">กรุณาเข้าสู่ระบบตามสิทธิ์ผู้ใช้งานเพื่อเข้าถึงระบบ</p>
+            </div>
+            <div class="space-y-4 mt-6">
                 <div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <h1 class="text-lg font-bold leading-tight">AC Basketball System</h1>
-                        
-                        <div id="db-status-badge" class="flex items-center space-x-1.5 bg-gray-800/60 border border-gray-700 px-2 py-0.5 rounded-full text-[11px] font-medium text-gray-300">
-                            <span id="status-dot" class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                            <span id="status-text">Database Online</span>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">ชื่อผู้ใช้งาน (Username)</label>
+                    <input id="login-user" type="text" placeholder="กรอกชื่อผู้ใช้..." class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">รหัสผ่าน (Password)</label>
+                    <input id="login-pass" type="password" placeholder="••••••••" class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm">
+                </div>
+                <div id="login-error-msg" class="text-red-600 text-xs font-semibold hidden text-center animate-pulse">
+                    ❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!
+                </div>
+                <button onclick="handleSystemLogin()" class="w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-bold rounded-lg text-white theme-bg-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-md transition duration-200">
+                    <i class="fa-solid fa-right-to-bracket mr-2 self-center"></i> เข้าสู่ระบบ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app-container">
+        <header class="theme-bg-dark text-white shadow-md sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 theme-bg-red rounded-full flex items-center justify-center font-bold text-xl tracking-wider shadow">AC</div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="text-lg font-bold leading-tight">AC Basketball System</h1>
+                            
+                            <div id="db-status-badge" class="flex items-center space-x-1.5 bg-gray-800/60 border border-gray-700 px-2 py-0.5 rounded-full text-[11px] font-medium text-gray-300">
+                                <span id="status-dot" class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                <span id="status-text">Database Online</span>
+                            </div>
                         </div>
-                    </div>
-                    <p class="text-xs text-gray-400">ระบบจัดการฐานข้อมูลและเช็คชื่อนักกีฬาออนไลน์</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-2 mt-2 sm:mt-0">
-                <button onclick="pushDataToCloud()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> <span>บันทึกขึ้นคลาวด์</span>
-                </button>
-                <label class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow cursor-pointer transition">
-                    <i class="fa-solid fa-file-import"></i> <span>นำเข้า CSV</span>
-                    <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
-                </label>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 py-6">
-        <div class="flex border-b border-gray-200 mb-6 overflow-x-auto whitespace-nowrap bg-white rounded-t shadow-sm">
-            <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">แผงควบคุมหลัก</button>
-            <button onclick="switchTab('players')" id="tab-btn-players" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">ฐานข้อมูลนักกีฬา</button>
-            <button onclick="switchTab('checkin')" id="tab-btn-checkin" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">เช็คชื่อหน้าสนาม</button>
-            <button onclick="switchTab('qr-scan')" id="tab-btn-qr-scan" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-qrcode mr-1"></i> สแกน QR เช็คชื่อ</button>
-            <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">สรุปรายงานประจำวัน</button>
-        </div>
-
-        <section id="page-dashboard" class="tab-content space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500">
-                    <p class="text-sm text-gray-500 font-medium">นักกีฬาทั้งหมดในระบบ</p>
-                    <h3 class="text-3xl font-bold mt-1 text-gray-800" id="dash-total-players">0 คน</h3>
-                </div>
-                <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
-                    <p class="text-sm text-gray-500 font-medium">มาซ้อมวันนี้</p>
-                    <h3 class="text-3xl font-bold mt-1 text-emerald-600" id="dash-present-players">0 คน</h3>
-                </div>
-                <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-amber-500">
-                    <p class="text-sm text-gray-500 font-medium">ลา / ขาดซ้อมวันนี้</p>
-                    <h3 class="text-3xl font-bold mt-1 text-amber-600" id="dash-absent-players">0 คน</h3>
-                </div>
-                <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500">
-                    <p class="text-sm text-gray-500 font-medium">คัดออก / ลาออก</p>
-                    <h3 class="text-3xl font-bold mt-1 text-red-600" id="dash-excluded-players">0 คน</h3>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-bold text-gray-700 flex items-center"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i> สัดส่วนนักกีฬาแยกตามรุ่นอายุ (U)</h4>
-                        <button onclick="updateDashboardCharts()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded border border-gray-200 shadow-sm transition flex items-center space-x-1">
-                            <i class="fa-solid fa-rotate"></i> <span>รีเฟรชกราฟ</span>
-                        </button>
-                    </div>
-                    <div class="h-64 flex items-center justify-center"><canvas id="chart-age-groups"></canvas></div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-gray-700 mb-4 flex items-center"><i class="fa-solid fa-chart-bar mr-2 text-emerald-500"></i> สถิติการมาฝึกซ้อมวันนี้</h4>
-                    <div class="h-64 flex items-center justify-center"><canvas id="chart-attendance"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-players" class="tab-content hidden space-y-4">
-            <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border border-gray-200">
-                <button onclick="switchPlayerSubTab('active')" id="sub-player-btn-active" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white">ปัจจุบัน (นักกีฬาในทีม)</button>
-                <button onclick="switchPlayerSubTab('excluded')" id="sub-player-btn-excluded" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">ไม่ผ่าน / ลาออก</button>
-            </div>
-
-            <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
-                <div class="flex flex-wrap gap-2 items-center w-full md:w-auto">
-                    <input type="text" id="search-player-input" oninput="refreshPlayersTable()" placeholder="ค้นชื่อ, ชื่อเล่น, เบอร์เสื้อ..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <select id="filter-u-select" onchange="refreshPlayersTable()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">ทุกรุ่นอายุ (All U)</option>
-                    </select>
-                </div>
-                <button onclick="openAddPlayerModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition w-full md:w-auto justify-center">
-                    <i class="fa-solid fa-user-plus"></i> <span>เพิ่มนักกีฬาใหม่</span>
-                </button>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs uppercase tracking-wider font-semibold">
-                                <th class="px-6 py-3">รูปภาพ</th>
-                                <th class="px-6 py-3">เบอร์เสื้อ</th>
-                                <th class="px-6 py-3">ชื่อ-นามสกุล</th>
-                                <th class="px-6 py-3">ชื่อเล่น</th>
-                                <th class="px-6 py-3">รุ่นอายุ</th>
-                                <th class="px-6 py-3">วันเดือนปีเกิด</th>
-                                <th class="px-6 py-3 text-right">การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="players-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-checkin" class="tab-content hidden space-y-4">
-            <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-calendar-days text-gray-400"></i>
-                    <input type="date" id="attendance-date-picker" onchange="refreshAttendanceView()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold">
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs text-gray-500">กรองตามรุ่น:</span>
-                    <select id="attendance-u-filter" onchange="refreshAttendanceView()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="attendance-grid-layout"></div>
-        </section>
-
-        <section id="page-qr-scan" class="tab-content hidden space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm space-y-4">
-                    <h3 class="font-bold text-lg text-gray-800 flex items-center"><i class="fa-solid fa-camera mr-2 text-red-600"></i> กล้องสแกนคิวอาร์โค้ดหน้าสนาม</h3>
-                    <div id="qr-reader" class="w-full bg-black rounded-lg overflow-hidden" style="min-height: 300px;"></div>
-                    <div class="flex space-x-2">
-                        <button onclick="startQRScanner()" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm shadow hover:bg-blue-700">เปิดกล้องสแกน</button>
-                        <button onclick="stopQRScanner()" class="bg-gray-500 text-white px-4 py-2 rounded font-semibold text-sm shadow hover:bg-gray-600">ปิดกล้อง</button>
+                        <p class="text-xs text-gray-400">ระบบจัดการฐานข้อมูลและเช็คชื่อนักกีฬาออนไลน์</p>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-                    <h3 class="font-bold text-lg text-gray-800">ผลการสแกนล่าสุด</h3>
-                    <div id="qr-scan-result-box" class="p-6 bg-gray-50 rounded-xl text-center flex flex-col items-center justify-center min-h-[250px] border border-dashed">
-                        <i class="fa-solid fa-qrcode text-5xl text-gray-300 mb-2"></i>
-                        <p class="text-sm text-gray-500">พร้อมเปิดกล้องสแกนเช็คชื่อนักกีฬา</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-reports" class="tab-content hidden space-y-4">
-            <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border print:hidden">
-                <button onclick="switchReportSubTab('daily')" id="sub-btn-daily" class="px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white">รายงานรายวัน</button>
-                <button onclick="switchReportSubTab('weekly')" id="sub-btn-weekly" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานรายสัปดาห์</button>
-                <button onclick="switchReportSubTab('personal')" id="sub-btn-personal" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานส่วนบุคคล</button>
-            </div>
-
-            <div id="report-daily-section" class="space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center print:hidden">
-                    <span class="text-sm font-semibold text-gray-600">เลือกวันที่ต้องการพิมพ์ข้อมูล</span>
-                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
-                        <i class="fa-solid fa-print"></i> <span>พิมพ์รายงานประจำวัน</span>
+                <div class="flex items-center space-x-2 mt-2 sm:mt-0">
+                    <button onclick="pushDataToCloud()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> <span>บันทึกขึ้นคลาวด์</span>
                     </button>
-                </div>
-                <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 min-h-[500px]" id="print-report-area">
-                    <div class="text-center space-y-1 border-b pb-4 mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">รายงานสรุปผลการเข้าฝึกซ้อมสโมสรบาสเกตบอล AC (รายวัน)</h2>
-                        <p class="text-sm text-gray-500 font-medium" id="report-date-title">ประจำวันที่ -</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="grid grid-cols-3 gap-2 text-center text-sm items-center">
-                            <div class="p-3 bg-green-50 rounded text-green-700 font-bold">มาซ้อม: <span id="rep-count-present">0</span> คน</div>
-                            <div class="p-3 bg-amber-50 rounded text-amber-700 font-bold">ลากิจ/ป่วย: <span id="rep-count-leave">0</span> คน</div>
-                            <div class="p-3 bg-red-50 rounded text-red-700 font-bold">ขาดซ้อม: <span id="rep-count-absent">0</span> คน</div>
-                        </div>
-                        <div class="h-44 flex items-center justify-center">
-                            <canvas id="chart-report-daily-pie"></canvas>
-                        </div>
-                    </div>
-
-                    <table class="w-full text-left text-sm border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 font-bold border-b border-gray-300">
-                                <th class="p-3 border border-gray-300">เบอร์เสื้อ</th>
-                                <th class="p-3 border border-gray-300">ชื่อ-นามสกุล</th>
-                                <th class="p-3 border border-gray-300">ชื่อเล่น</th>
-                                <th class="p-3 border border-gray-300">รุ่นอายุ</th>
-                                <th class="p-3 border border-gray-300">Visual Status</th>
-                                <th class="p-3 border border-gray-300">หมายเหตุ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="report-table-body" class="divide-y divide-gray-200"></tbody>
-                    </table>
+                    <label id="csv-import-btn-label" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow cursor-pointer transition">
+                        <i class="fa-solid fa-file-import"></i> <span>นำเข้า CSV</span>
+                        <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
+                    </label>
                 </div>
             </div>
+        </header>
 
-            <div id="report-weekly-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-                <div class="text-center space-y-1 border-b pb-4">
-                    <h2 class="text-xl font-bold text-gray-800">รายงานสรุปประวัติการฝึกซ้อมรอบสัปดาห์ (7 วันย้อนหลัง)</h2>
-                    <p class="text-sm text-gray-500 font-medium" id="report-weekly-range-text">รอบสัปดาห์ข้อมูลปัจจุบัน</p>
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex border-b border-gray-200 mb-6 overflow-x-auto whitespace-nowrap bg-white rounded-t shadow-sm">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">แผงควบคุมหลัก</button>
+                <button onclick="switchTab('players')" id="tab-btn-players" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">ฐานข้อมูลนักกีฬา</button>
+                <button onclick="switchTab('checkin')" id="tab-btn-checkin" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">เช็คชื่อหน้าสนาม</button>
+                <button onclick="switchTab('qr-scan')" id="tab-btn-qr-scan" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-qrcode mr-1"></i> สแกน QR เช็คชื่อ</button>
+                <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">สรุปรายงานประจำวัน</button>
+            </div>
+
+            <section id="page-dashboard" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500">
+                        <p class="text-sm text-gray-500 font-medium">นักกีฬาทั้งหมดในระบบ</p>
+                        <h3 class="text-3xl font-bold mt-1 text-gray-800" id="dash-total-players">0 คน</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
+                        <p class="text-sm text-gray-500 font-medium">มาซ้อมวันนี้</p>
+                        <h3 class="text-3xl font-bold mt-1 text-emerald-600" id="dash-present-players">0 คน</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-amber-500">
+                        <p class="text-sm text-gray-500 font-medium">ลา / ขาดซ้อมวันนี้</p>
+                        <h3 class="text-3xl font-bold mt-1 text-amber-600" id="dash-absent-players">0 คน</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500">
+                        <p class="text-sm text-gray-500 font-medium">คัดออก / ลาออก</p>
+                        <h3 class="text-3xl font-bold mt-1 text-red-600" id="dash-excluded-players">0 คน</h3>
+                    </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-4 bg-gray-50 rounded-xl">
-                        <h4 class="font-bold text-sm text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-line mr-1 text-blue-500"></i> แนวโน้มอัตราการเข้าซ้อมประจำวัน (กราฟเส้น)</h4>
-                        <div class="h-64"><canvas id="chart-weekly-line"></canvas></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-gray-700 flex items-center"><i class="fa-solid fa-chart-pie mr-2 text-blue-500"></i> สัดส่วนนักกีฬาแยกตามรุ่นอายุ (U)</h4>
+                            <button onclick="updateDashboardCharts()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded border border-gray-200 shadow-sm transition flex items-center space-x-1">
+                                <i class="fa-solid fa-rotate"></i> <span>รีเฟรชกราฟ</span>
+                            </button>
+                        </div>
+                        <div class="h-64 flex items-center justify-center"><canvas id="chart-age-groups"></canvas></div>
                     </div>
-                    <div class="p-4 bg-gray-50 rounded-xl">
-                        <h4 class="font-bold text-sm text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-emerald-500"></i> สรุปยอดสะสม มา/ลา/ขาด รายสัปดาห์ (กราฟแท่ง)</h4>
-                        <div class="h-64"><canvas id="chart-weekly-bar"></canvas></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-gray-700 mb-4 flex items-center"><i class="fa-solid fa-chart-bar mr-2 text-emerald-500"></i> สถิติการมาฝึกซ้อมวันนี้</h4>
+                        <div class="h-64 flex items-center justify-center"><canvas id="chart-attendance"></canvas></div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div id="report-personal-section" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-4 items-center print:hidden border border-gray-200">
-                    <div class="flex flex-col">
-                        <label class="text-xs font-bold text-gray-600 mb-1">เลือกนักกีฬา</label>
-                        <select id="rpt-pers-player-select" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none bg-white w-56"></select>
+            <section id="page-players" class="tab-content hidden space-y-4">
+                <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border border-gray-200">
+                    <button onclick="switchPlayerSubTab('active')" id="sub-player-btn-active" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white">ปัจจุบัน (นักกีฬาในทีม)</button>
+                    <button onclick="switchPlayerSubTab('excluded')" id="sub-player-btn-excluded" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">ไม่ผ่าน / ลาออก</button>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
+                    <div class="flex flex-wrap gap-2 items-center w-full md:w-auto">
+                        <input type="text" id="search-player-input" oninput="refreshPlayersTable()" placeholder="ค้นชื่อ, ชื่อเล่น, เบอร์เสื้อ..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="filter-u-select" onchange="refreshPlayersTable()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">ทุกรุ่นอายุ (All U)</option>
+                        </select>
                     </div>
-                    <div class="flex flex-col">
-                        <label class="text-xs font-bold text-gray-600 mb-1">เลือกสัปดาห์ที่ต้องการดูข้อมูล</label>
-                        <input type="week" id="rpt-pers-week-picker" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none font-semibold">
+                    <button id="add-player-btn-el" onclick="openAddPlayerModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition w-full md:w-auto justify-center">
+                        <i class="fa-solid fa-user-plus"></i> <span>เพิ่มนักกีฬาใหม่</span>
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs uppercase tracking-wider font-semibold">
+                                    <th class="px-6 py-3">รูปภาพ</th>
+                                    <th class="px-6 py-3">เบอร์เสื้อ</th>
+                                    <th class="px-6 py-3">ชื่อ-นามสกุล</th>
+                                    <th class="px-6 py-3">ชื่อเล่น</th>
+                                    <th class="px-6 py-3">รุ่นอายุ</th>
+                                    <th class="px-6 py-3">วันเดือนปีเกิด</th>
+                                    <th class="px-6 py-3 text-right">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="players-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
                     </div>
-                    <div class="flex items-end h-full pt-5 ml-auto">
-                        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
-                            <i class="fa-solid fa-print"></i> <span>พิมพ์รายงาน A4</span>
+                </div>
+            </section>
+
+            <section id="page-checkin" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-3 justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-calendar-days text-gray-400"></i>
+                        <input type="date" id="attendance-date-picker" onchange="refreshAttendanceView()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold">
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-gray-500">กรองตามรุ่น:</span>
+                        <select id="attendance-u-filter" onchange="refreshAttendanceView()" class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="attendance-grid-layout"></div>
+            </section>
+
+            <section id="page-qr-scan" class="tab-content hidden space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm space-y-4">
+                        <h3 class="font-bold text-lg text-gray-800 flex items-center"><i class="fa-solid fa-camera mr-2 text-red-600"></i> กล้องสแกนคิวอาร์โค้ดหน้าสนาม</h3>
+                        <div id="qr-reader" class="w-full bg-black rounded-lg overflow-hidden" style="min-height: 300px;"></div>
+                        <div class="flex space-x-2">
+                            <button onclick="startQRScanner()" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm shadow hover:bg-blue-700">เปิดกล้องสแกน</button>
+                            <button onclick="stopQRScanner()" class="bg-gray-500 text-white px-4 py-2 rounded font-semibold text-sm shadow hover:bg-gray-600">ปิดกล้อง</button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+                        <h3 class="font-bold text-lg text-gray-800">ผลการสแกนล่าสุด</h3>
+                        <div id="qr-scan-result-box" class="p-6 bg-gray-50 rounded-xl text-center flex flex-col items-center justify-center min-h-[250px] border border-dashed">
+                            <i class="fa-solid fa-qrcode text-5xl text-gray-300 mb-2"></i>
+                            <p class="text-sm text-gray-500">พร้อมเปิดกล้องสแกนเช็คชื่อนักกีฬา</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-reports" class="tab-content hidden space-y-4">
+                <div class="bg-white p-2 rounded-xl shadow-sm flex space-x-2 border print:hidden">
+                    <button onclick="switchReportSubTab('daily')" id="sub-btn-daily" class="px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white">รายงานรายวัน</button>
+                    <button onclick="switchReportSubTab('weekly')" id="sub-btn-weekly" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานรายสัปดาห์</button>
+                    <button onclick="switchReportSubTab('personal')" id="sub-btn-personal" class="px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">รายงานส่วนบุคคล</button>
+                </div>
+
+                <div id="report-daily-section" class="space-y-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center print:hidden">
+                        <span class="text-sm font-semibold text-gray-600">เลือกวันที่ต้องการพิมพ์ข้อมูล</span>
+                        <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
+                            <i class="fa-solid fa-print"></i> <span>พิมพ์รายงานประจำวัน</span>
                         </button>
                     </div>
-                </div>
-
-                <div id="personal-report-pdf-area" class="a4-container">
-                    <div class="text-center space-y-1 border-b-2 border-gray-800 pb-4 mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">รายงานสรุปผลการประเมินและการเข้าซ้อมรายบุคคล</h2>
-                        <p class="text-sm text-gray-500 font-medium" id="rpt-pers-week-title">ประจำสัปดาห์ที่ --</p>
-                    </div>
-
-                    <div class="flex items-start gap-6 bg-gray-50 p-4 rounded-xl border mb-6" id="rpt-pers-profile-card">
-                        <img id="rpt-pers-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 bg-white">
-                        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm w-full">
-                            <div><span class="text-gray-500 font-medium">ชื่อ-นามสกุล:</span> <span id="rpt-pers-fullname" class="font-bold text-gray-800">-</span></div>
-                            <div><span class="text-gray-500 font-medium">ชื่อเล่น:</span> <span id="rpt-pers-nickname" class="font-bold text-blue-600">-</span></div>
-                            <div><span class="text-gray-500 font-medium">เบอร์เสื้อ:</span> <span id="rpt-pers-no" class="font-bold text-gray-800">-</span></div>
-                            <div><span class="text-gray-500 font-medium">รุ่นอายุ:</span> <span id="rpt-pers-u" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">-</span></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
-                        <div class="md:col-span-3 border p-4 rounded-xl bg-white">
-                            <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-blue-500"></i> รายละเอียดสถานะการมาซ้อมประจำวัน (จันทร์ - ศุกร์)</h4>
-                            <div class="h-48"><canvas id="chart-pers-weekly-bar"></canvas></div>
-                        </div>
-                        <div class="md:col-span-2 border p-4 rounded-xl bg-white">
-                            <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-pie mr-1 text-emerald-500"></i> สัดส่วนร้อยละ (%) การเข้าซ้อม</h4>
-                            <div class="h-48 flex items-center justify-center"><canvas id="chart-pers-weekly-pie"></canvas></div>
-                        </div>
-                    </div>
-
-                    <div class="border border-gray-300 rounded-xl p-4 bg-gray-50 relative mt-4">
-                        <div class="flex justify-between items-center border-b pb-2 mb-2">
-                            <h4 class="font-bold text-sm text-gray-800 flex items-center"><i class="fa-solid fa-comment-dots mr-2 text-blue-600"></i> บันทึกความคิดเห็นของโค้ช/ข้อมูลเพิ่มเติม</h4>
-                            <button onclick="toggleEditComment()" id="comment-edit-btn" class="text-blue-600 hover:text-blue-800 transition text-sm font-semibold print-hide">
-                                <i class="fa-solid fa-pen-to-square"></i> แก้ไขคอมเม้นท์
-                            </button>
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 min-h-[500px]" id="print-report-area">
+                        <div class="text-center space-y-1 border-b pb-4 mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">รายงานสรุปผลการเข้าฝึกซ้อมสโมสรบาสเกตบอล AC (รายวัน)</h2>
+                            <p class="text-sm text-gray-500 font-medium" id="report-date-title">ประจำวันที่ -</p>
                         </div>
                         
-                        <div id="comment-text-display" class="text-sm text-gray-700 min-h-[100px] whitespace-pre-line leading-relaxed">ยังไม่มีข้อมูลบันทึกข้อคิดเห็น...</div>
-                        <div id="comment-input-area" class="hidden space-y-2 print-hide">
-                            <textarea id="comment-textarea" rows="4" placeholder="พิมพ์ประเมินฟอร์มผู้เล่น, จุดเด่น หรือสิ่งควรพัฒนาที่นี่..." class="w-full text-sm p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
-                            <button onclick="savePlayerComment()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1 rounded text-xs font-bold shadow transition flex items-center gap-1">
-                                <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อความ
-                            </button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="grid grid-cols-3 gap-2 text-center text-sm items-center">
+                                <div class="p-3 bg-green-50 rounded text-green-700 font-bold">มาซ้อม: <span id="rep-count-present">0</span> คน</div>
+                                <div class="p-3 bg-amber-50 rounded text-amber-700 font-bold">ลากิจ/ป่วย: <span id="rep-count-leave">0</span> คน</div>
+                                <div class="p-3 bg-red-50 rounded text-red-700 font-bold">ขาดซ้อม: <span id="rep-count-absent">0</span> คน</div>
+                            </div>
+                            <div class="h-44 flex items-center justify-center">
+                                <canvas id="chart-report-daily-pie"></canvas>
+                            </div>
+                        </div>
+
+                        <table class="w-full text-left text-sm border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-700 font-bold border-b border-gray-300">
+                                    <th class="p-3 border border-gray-300">เบอร์เสื้อ</th>
+                                    <th class="p-3 border border-gray-300">ชื่อ-นามสกุล</th>
+                                    <th class="p-3 border border-gray-300">ชื่อเล่น</th>
+                                    <th class="p-3 border border-gray-300">รุ่นอายุ</th>
+                                    <th class="p-3 border border-gray-300">Visual Status</th>
+                                    <th class="p-3 border border-gray-300">หมายเหตุ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-table-body" class="divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="report-weekly-section" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
+                    <div class="text-center space-y-1 border-b pb-4">
+                        <h2 class="text-xl font-bold text-gray-800">รายงานสรุปประวัติการฝึกซ้อมรอบสัปดาห์ (7 วันย้อนหลัง)</h2>
+                        <p class="text-sm text-gray-500 font-medium" id="report-weekly-range-text">รอบสัปดาห์ข้อมูลปัจจุบัน</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <h4 class="font-bold text-sm text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-line mr-1 text-blue-500"></i> แนวโน้มอัตราการเข้าซ้อมประจำวัน (กราฟเส้น)</h4>
+                            <div class="h-64"><canvas id="chart-weekly-line"></canvas></div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <h4 class="font-bold text-sm text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-emerald-500"></i> สรุปยอดสะสม มา/ลา/ขาด รายสัปดาห์ (กราฟแท่ง)</h4>
+                            <div class="h-64"><canvas id="chart-weekly-bar"></canvas></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+
+                <div id="report-personal-section" class="hidden space-y-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-4 items-center print:hidden border border-gray-200">
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold text-gray-600 mb-1">เลือกนักกีฬา</label>
+                            <select id="rpt-pers-player-select" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none bg-white w-56"></select>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-xs font-bold text-gray-600 mb-1">เลือกสัปดาห์ที่ต้องการดูข้อมูล</label>
+                            <input type="week" id="rpt-pers-week-picker" onchange="renderPersonalReport()" class="border border-gray-300 rounded px-3 py-1.5 text-sm outline-none font-semibold">
+                        </div>
+                        <div class="flex items-end h-full pt-5 ml-auto">
+                            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-1.5 rounded text-sm font-semibold flex items-center space-x-1 shadow transition">
+                                <i class="fa-solid fa-print"></i> <span>พิมพ์รายงาน A4</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="personal-report-pdf-area" class="a4-container">
+                        <div class="text-center space-y-1 border-b-2 border-gray-800 pb-4 mb-6">
+                            <h2 class="text-xl font-bold text-gray-800">รายงานสรุปผลการประเมินและการเข้าซ้อมรายบุคคล</h2>
+                            <p class="text-sm text-gray-500 font-medium" id="rpt-pers-week-title">ประจำสัปดาห์ที่ --</p>
+                        </div>
+
+                        <div class="flex items-start gap-6 bg-gray-50 p-4 rounded-xl border mb-6" id="rpt-pers-profile-card">
+                            <img id="rpt-pers-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-24 h-24 rounded-full object-cover border-2 border-gray-300 bg-white">
+                            <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm w-full">
+                                <div><span class="text-gray-500 font-medium">ชื่อ-นามสกุล:</span> <span id="rpt-pers-fullname" class="font-bold text-gray-800">-</span></div>
+                                <div><span class="text-gray-500 font-medium">ชื่อเล่น:</span> <span id="rpt-pers-nickname" class="font-bold text-blue-600">-</span></div>
+                                <div><span class="text-gray-500 font-medium">เบอร์เสื้อ:</span> <span id="rpt-pers-no" class="font-bold text-gray-800">-</span></div>
+                                <div><span class="text-gray-500 font-medium">รุ่นอายุ:</span> <span id="rpt-pers-u" class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">-</span></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+                            <div class="md:col-span-3 border p-4 rounded-xl bg-white">
+                                <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-bar mr-1 text-blue-500"></i> รายละเอียดสถานะการมาซ้อมประจำวัน (จันทร์ - ศุกร์)</h4>
+                                <div class="h-48"><canvas id="chart-pers-weekly-bar"></canvas></div>
+                            </div>
+                            <div class="md:col-span-2 border p-4 rounded-xl bg-white">
+                                <h4 class="font-bold text-xs text-gray-700 mb-3 text-center"><i class="fa-solid fa-chart-pie mr-1 text-emerald-500"></i> สัดส่วนร้อยละ (%) การเข้าซ้อม</h4>
+                                <div class="h-48 flex items-center justify-center"><canvas id="chart-pers-weekly-pie"></canvas></div>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-300 rounded-xl p-4 bg-gray-50 relative mt-4">
+                            <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                <h4 class="font-bold text-sm text-gray-800 flex items-center"><i class="fa-solid fa-comment-dots mr-2 text-blue-600"></i> บันทึกความคิดเห็นของโค้ช/ข้อมูลเพิ่มเติม</h4>
+                                <button onclick="toggleEditComment()" id="comment-edit-btn" class="text-blue-600 hover:text-blue-800 transition text-sm font-semibold print-hide">
+                                    <i class="fa-solid fa-pen-to-square"></i> แก้ไขคอมเม้นท์
+                                </button>
+                            </div>
+                            
+                            <div id="comment-text-display" class="text-sm text-gray-700 min-h-[100px] whitespace-pre-line leading-relaxed">ยังไม่มีข้อมูลบันทึกข้อคิดเห็น...</div>
+                            <div id="comment-input-area" class="hidden space-y-2 print-hide">
+                                <textarea id="comment-textarea" rows="4" placeholder="พิมพ์ประเมินฟอร์มผู้เล่น, จุดเด่น หรือสิ่งควรพัฒนาที่นี่..." class="w-full text-sm p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+                                <button onclick="savePlayerComment()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1 rounded text-xs font-bold shadow transition flex items-center gap-1">
+                                    <i class="fa-solid fa-floppy-disk"></i> บันทึกข้อความ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <div id="profile-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
@@ -416,6 +448,9 @@
         let chartPersPie = null;
         let commentDb = JSON.parse(localStorage.getItem('playerComments') || '{}');
 
+        // ตัวแปรเก็บสิทธิ์ผู้ใช้งานปัจจุบัน
+        let currentUserRole = null;
+
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('attendance-date-picker').value = today;
@@ -424,9 +459,120 @@
             attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
             specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
             
-            switchTab('dashboard');
-            refreshAllViews();
+            // หมายเหตุ: หน้าหลักจะไม่โหลดจนกว่าฟังก์ชัน handleSystemLogin() จะทำงานผ่าน
+            updateDashboardCharts();
         });
+
+        // ==================== ฟังก์ชันระบบสิทธิ์การเข้าใช้งาน (แทรกใหม่) ====================
+        function handleSystemLogin() {
+            const userInp = document.getElementById('login-user').value.trim();
+            const passInp = document.getElementById('login-pass').value.trim();
+            const errorMsg = document.getElementById('login-error-msg');
+
+            errorMsg.classList.add('hidden');
+
+            // ตรวจสอบเงื่อนไขกลุ่มบัญชีผู้ใช้
+            if (userInp === 'admin' && passInp === 'admin123') {
+                currentUserRole = 'admin';
+            } else if (userInp === 'master' && passInp === 'master123') {
+                currentUserRole = 'master';
+            } else if (userInp === 'coach12' && passInp === 'pass12') {
+                currentUserRole = 'coach_u12_14';
+            } else if (userInp === 'coach15' && passInp === 'pass15') {
+                currentUserRole = 'coach_u15_18';
+            } else {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // ซ่อนล็อกอินและเปิดแสดงแอปหลัก
+            document.getElementById('login-container').style.setProperty('display', 'none', 'important');
+            document.getElementById('main-app-container').style.setProperty('display', 'block', 'important');
+            
+            // บังคับจำกัดการใช้งานตาม Role สิทธิ์
+            applyRoleRestrictions();
+        }
+
+        function applyRoleRestrictions() {
+            const tabDash = document.getElementById('tab-btn-dashboard');
+            const tabPlayers = document.getElementById('tab-btn-players');
+            const tabCheckin = document.getElementById('tab-btn-checkin');
+            const tabQr = document.getElementById('tab-btn-qr-scan');
+            const tabReports = document.getElementById('tab-btn-reports');
+
+            // ล้างค่าสถานะการซ่อนปุ่มเดิม (ถ้ามี)
+            if(tabDash) tabDash.classList.remove('hidden');
+            if(tabPlayers) tabPlayers.classList.remove('hidden');
+            if(tabCheckin) tabCheckin.classList.remove('hidden');
+            if(tabQr) tabQr.classList.remove('hidden');
+            if(tabReports) tabReports.classList.remove('hidden');
+            document.getElementById('csv-import-btn-label')?.classList.remove('hidden');
+            document.getElementById('add-player-btn-el')?.classList.remove('hidden');
+
+            if (currentUserRole === 'admin') {
+                switchTab('dashboard');
+                refreshAllViews();
+            } 
+            else if (currentUserRole === 'master') {
+                switchTab('dashboard');
+                refreshAllViews();
+                // มาสเตอร์ล็อกปุ่มนำเข้า CSV เพื่อป้องกันข้อมูลหลักคลาดเคลื่อน
+                document.getElementById('csv-import-btn-label')?.classList.add('hidden');
+            } 
+            else if (currentUserRole === 'coach_u12_14') {
+                // โค้ชรุ่น U12-14: ปิดสิทธิ์แผงควบคุมหลัก, รายชื่อนักกีฬา และหน้าสรุปรายงานออก
+                if(tabDash) tabDash.classList.add('hidden');
+                if(tabPlayers) tabPlayers.classList.add('hidden');
+                if(tabReports) tabReports.classList.add('hidden');
+                
+                // สลับไปหน้าเช็คชื่อทันที
+                switchTab('checkin');
+                
+                // ประมวลผลสร้างตัวกรองเฉพาะรุ่น U12-U14
+                setTimeout(() => {
+                    const attFilter = document.getElementById('attendance-u-filter');
+                    if (attFilter) {
+                        Array.from(attFilter.options).forEach(opt => {
+                            if(opt.value !== '12' && opt.value !== '13' && opt.value !== '14') {
+                                opt.remove();
+                            }
+                        });
+                        // เลือกค่ารุ่นแรกอัตโนมัติ
+                        if (attFilter.options.length > 0) {
+                            attFilter.selectedIndex = 0;
+                        }
+                        refreshAttendanceView();
+                        updateDashboardCharts();
+                    }
+                }, 100);
+            } 
+            else if (currentUserRole === 'coach_u15_18') {
+                // โค้ชรุ่น U15-18: ปิดสิทธิ์เมนูหลัก, ข้อมูลระบบ และการดูประวัติย้อนหลังภาพรวม
+                if(tabDash) tabDash.classList.add('hidden');
+                if(tabPlayers) tabPlayers.classList.add('hidden');
+                if(tabReports) tabReports.classList.add('hidden');
+                
+                switchTab('checkin');
+                
+                // ประมวลผลสร้างตัวกรองเฉพาะรุ่น U15-U18
+                setTimeout(() => {
+                    const attFilter = document.getElementById('attendance-u-filter');
+                    if (attFilter) {
+                        Array.from(attFilter.options).forEach(opt => {
+                            if(opt.value !== '15' && opt.value !== '16' && opt.value !== '17' && opt.value !== '18') {
+                                opt.remove();
+                            }
+                        });
+                        if (attFilter.options.length > 0) {
+                            attFilter.selectedIndex = 0;
+                        }
+                        refreshAttendanceView();
+                        updateDashboardCharts();
+                    }
+                }, 100);
+            }
+        }
+        // ==============================================================================
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.add('hidden'));
@@ -478,7 +624,6 @@
                 document.getElementById('report-personal-section').classList.remove('hidden');
                 document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
                 
-                // ตั้งค่าเริ่มต้นของกล่องระบุสัปดาห์ปัจจุบัน
                 if(!document.getElementById('rpt-pers-week-picker').value) {
                     const now = new Date();
                     const oneJan = new Date(now.getFullYear(), 0, 1);
@@ -487,7 +632,6 @@
                     document.getElementById('rpt-pers-week-picker').value = `${now.getFullYear()}-W${String(weekResult).padStart(2, '0')}`;
                 }
                 
-                // โหลดรายชื่อผู้เล่นลง Dropdown
                 const pSelect = document.getElementById('rpt-pers-player-select');
                 pSelect.innerHTML = '';
                 players.forEach(p => {
@@ -577,6 +721,11 @@
         }
 
         function deletePlayer(pid, name) {
+            // ดักเงื่อนไข Master ห้ามใช้ฟังก์ชันลบผู้เล่นในระบบ
+            if (currentUserRole === 'master') {
+                alert("🚫 บัญชีระดับ Master ไม่มีสิทธิ์ลบข้อมูลนักกีฬาออกจากระบบถาวร");
+                return;
+            }
             if (confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลของ "${name}" ออกจากระบบถาวร?`)) {
                 players = players.filter(p => p.id !== pid);
                 if (specialStatusDb[pid]) delete specialStatusDb[pid];
@@ -617,14 +766,22 @@
             const prevAttVal = attSelect?.value || '';
             
             if (filterSelect) filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
-            if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
             
-            Array.from(uSet).forEach(u => {
-                if (filterSelect) filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
-                if (attSelect) attSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
-            });
+            // ป้องกันโค้ชกลุ่มย่อยโดนเขียนทับข้อมูลใน Dropdown ตัวเลือกคัดกรองรุ่นอายุ
+            if (currentUserRole === 'admin' || currentUserRole === 'master') {
+                if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
+                Array.from(uSet).forEach(u => {
+                    if (filterSelect) filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+                    if (attSelect) attSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+                });
+                if (attSelect) attSelect.value = prevAttVal;
+            } else {
+                Array.from(uSet).forEach(u => {
+                    if (filterSelect) filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+                });
+            }
+            
             if (filterSelect) filterSelect.value = prevFilterVal;
-            if (attSelect) attSelect.value = prevAttVal;
 
             refreshPlayersTable();
             refreshAttendanceView();
@@ -697,6 +854,11 @@
 
             players.forEach(p => {
                 if(specialStatusDb[p.id]) return;
+                
+                // ตรวจเช็คการกรองตามเงื่อนไขสิทธิ์ของโค้ชแต่ละรุ่น
+                if(currentUserRole === 'coach_u12_14' && p.u !== '12' && p.u !== '13' && p.u !== '14') return;
+                if(currentUserRole === 'coach_u15_18' && p.u !== '15' && p.u !== '16' && p.u !== '17' && p.u !== '18') return;
+                
                 if(attFilterU && p.u !== attFilterU) return;
 
                 const currentAtt = attendanceDb[date][p.id] || { status: '-', note: '' };
@@ -785,6 +947,17 @@
                     const matchedPlayer = players.find(x => x.id === decodedText || x.name === decodedText);
                     const resBox = document.getElementById('qr-scan-result-box');
                     if(matchedPlayer) {
+                        
+                        // กรองไม่ให้โค้ชข้ามรุ่นสแกนชื่อนักกีฬารุ่นอื่น
+                        if(currentUserRole === 'coach_u12_14' && matchedPlayer.u !== '12' && matchedPlayer.u !== '13' && matchedPlayer.u !== '14') {
+                            resBox.innerHTML = `<div class="text-amber-500 font-bold"><i class="fa-solid fa-ban text-2xl"></i><br>นักกีฬาไม่อยู่ในรุ่น U12-14 ของคุณ</div>`;
+                            return;
+                        }
+                        if(currentUserRole === 'coach_u15_18' && matchedPlayer.u !== '15' && matchedPlayer.u !== '16' && matchedPlayer.u !== '17' && matchedPlayer.u !== '18') {
+                            resBox.innerHTML = `<div class="text-amber-500 font-bold"><i class="fa-solid fa-ban text-2xl"></i><br>นักกีฬาไม่อยู่ในรุ่น U15-18 ของคุณ</div>`;
+                            return;
+                        }
+
                         markAttendance(matchedPlayer.id, '✓');
                         resBox.innerHTML = `
                             <div class="text-center space-y-2">
@@ -808,7 +981,7 @@
             if(html5QrScanner) {
                 html5QrScanner.stop().then(() => {
                     document.getElementById('qr-scan-result-box').innerHTML = `<p class="text-sm text-gray-500">กล้องถูกปิดการทำงานแล้ว</p>`;
-                });
+                }).catch(() => {});
             }
         }
 
@@ -872,7 +1045,6 @@
             });
         }
 
-        // 📊 ฟังก์ชันใหม่: แสดงผลรายงานส่วนบุคคลขนาด A4 และจัดการกราฟ/คอมเม้นท์
         function renderPersonalReport() {
             const pid = document.getElementById('rpt-pers-player-select').value;
             const weekStr = document.getElementById('rpt-pers-week-picker').value; 
@@ -881,7 +1053,6 @@
             const player = players.find(x => x.id === pid);
             if(!player) return;
 
-            // 1. ผูกข้อมูลประวัติผู้เล่น
             document.getElementById('rpt-pers-avatar').src = player.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('rpt-pers-fullname').innerText = player.name;
             document.getElementById('rpt-pers-nickname').innerText = player.nickname;
@@ -889,7 +1060,6 @@
             document.getElementById('rpt-pers-u').innerText = `รุ่น U${player.u}`;
             document.getElementById('rpt-pers-week-title').innerText = `สรุปผลการประเมินประจำสัปดาห์: ${weekStr}`;
 
-            // 2. คำนวณหาวันจันทร์ - ศุกร์ ของสัปดาห์ที่ถูกระบุ เพื่อนำไปค้นหาสถิติเช็คชื่อย้อนหลัง
             const [year, week] = weekStr.split('-W');
             const simple = new Date(year, 0, 1 + (week - 1) * 7);
             const dow = simple.getDay();
@@ -915,7 +1085,6 @@
                 else { dailyStatusScore.push(0); }
             });
 
-            // 3. Render กราฟแท่ง รายวัน จ-ศ
             if(chartPersBar) chartPersBar.destroy();
             chartPersBar = new Chart(document.getElementById('chart-pers-weekly-bar').getContext('2d'), {
                 type: 'bar',
@@ -948,7 +1117,6 @@
                 }
             });
 
-            // 4. Render Pie Chart ร้อยละความสม่ำเสมอ
             if(chartPersPie) chartPersPie.destroy();
             chartPersPie = new Chart(document.getElementById('chart-pers-weekly-pie').getContext('2d'), {
                 type: 'pie',
@@ -962,7 +1130,6 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // 5. แสดงกล่องคอมเม้นท์/ข้อเสนอแนะประจำตัวผู้เล่น
             const commentKey = `${pid}_${weekStr}`;
             const savedComment = commentDb[commentKey] || '';
             document.getElementById('comment-text-display').innerText = savedComment || 'ยังไม่มีข้อมูลบันทึกข้อคิดเห็นของสัปดาห์นี้...';
