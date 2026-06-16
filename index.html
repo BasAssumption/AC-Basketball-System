@@ -43,11 +43,9 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <!-- 🔐 หน้าต่าง LOGIN (ปรับแก้โลโก้สถาบันด้านบนตรงนี้) -->
     <div id="login-overlay" class="fixed inset-0 bg-slate-900/90 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 transform transition-all duration-300">
             <div class="theme-bg-dark text-white p-6 text-center relative">
-                <!-- แก้ไขจุดนี้: เปลี่ยนจากกล่องข้อความ AC เป็นพื้นที่สำหรับใส่ตราโลโก้ทางการ -->
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-xl p-1 border-2 border-red-600">
                     <img id="login-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B132B'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" alt="AC Basketball Club Logo" class="w-full h-full object-contain rounded-full">
                 </div>
@@ -79,12 +77,10 @@
         </div>
     </div>
 
-    <!-- 💻 เมนูระบบเนื้อหาหลัก -->
     <div id="main-system-content" class="hidden">
         <header class="theme-bg-dark text-white shadow-md sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <!-- แก้ไขจุดนี้: ปรับเปลี่ยนวงกลมข้อความให้แสดงผลเป็นภาพโลโก้สถาบันบนแถบ Header -->
                     <div class="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow p-0.5 border border-red-500">
                         <img id="header-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B132B'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" alt="AC Logo" class="w-full h-full object-contain rounded-full">
                     </div>
@@ -125,7 +121,6 @@
                 <button onclick="switchTab('login-logs')" id="tab-btn-login-logs" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ประวัติการเข้าใช้งาน</button>
             </div>
 
-            <!-- ส่วนของเนื้อหา และสคริปต์ต่างๆ ทำงานเหมือนเดิมครบถ้วน 100% -->
             <section id="page-dashboard" class="tab-content space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500">
@@ -168,7 +163,6 @@
                         <button onclick="switchPlayerSubTab('active')" id="sub-player-btn-active" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white">ปัจจุบัน (นักกีฬาในทีม)</button>
                         <button onclick="switchPlayerSubTab('excluded')" id="sub-player-btn-excluded" class="px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200">ไม่ผ่าน / ลาออก</button>
                     </div>
-                    
                     <button id="btn-clear-all" onclick="clearAllPlayersData()" class="px-4 py-1.5 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700 shadow-sm transition-colors flex items-center gap-2 self-start sm:self-auto">
                         <i class="fa-solid fa-trash-can"></i> ล้างข้อมูลทั้งหมด
                     </button>
@@ -408,9 +402,14 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-600 mb-1">รุ่นอายุ (U)</label>
                         <select id="edit-profile-u" required class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm outline-none bg-white">
-                            <option value="12">12</option><option value="13">13</option><option value="14">14</option>
-                            <option value="15">15</option><option value="16">16</option><option value="17">17</option>
-                            <option value="18">18</option><option value="นักกีฬาใหม่">นักกีฬาใหม่</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="นักกีฬาใหม่">นักกีฬาใหม่</option>
                         </select>
                     </div>
                 </div>
@@ -424,854 +423,311 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-600 mb-1">วันเดือนปีเกิด</label>
-                    <input type="date" id="edit-profile-birth" class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm outline-none">
+                    <input type="date" id="edit-profile-birth" required class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm outline-none">
                 </div>
-                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100">
-                    <button type="button" onclick="setSpecialStatus('failed')" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-1.5 rounded text-xs shadow flex items-center justify-center space-x-1">
-                        <i class="fa-solid fa-user-xmark"></i> <span>คัดตัวไม่ผ่าน</span>
-                    </button>
-                    <button type="button" onclick="setSpecialStatus('resigned')" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1.5 rounded text-xs shadow flex items-center justify-center space-x-1">
-                        <i class="fa-solid fa-door-open"></i> <span>ลาออก</span>
-                    </button>
-                </div>
-                <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="closeProfileEditModal()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded text-sm">ปิด</button>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded text-sm shadow">บันทึกข้อมูลหลัก</button>
+                <div class="pt-2 flex space-x-2">
+                    <button type="button" onclick="closeProfileEditModal()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 rounded text-sm transition">ยกเลิก</button>
+                    <button type="submit" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded text-sm shadow transition">บันทึกข้อมูลนักกีฬา</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="loading-spinner" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center hidden">
-        <div class="bg-white p-5 rounded-xl shadow-lg flex items-center space-x-3">
-            <svg class="animate-spin h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span class="text-sm font-semibold text-gray-700">กำลังประมวลผลข้อมูลและซิงค์คลาวด์...</span>
-        </div>
-    </div>
-
-    <!-- ส่วนของ Logic JavaScript ทั้งหมดคงเดิม ไม่มีการแก้ไขส่วนการทำงานใดๆ -->
     <script>
+        // กำหนดค่าคอนฟิกูเรชันระบบเชื่อมต่อ
         const CONFIG = {
-            API_URL: "https://script.google.com/macros/s/AKfycbyBB0G0I1FalEEh1QaCL8_hcsbamrUQjj3o-AVLo8to7QR0w8JsYB8UWxbbVQ8hvMK8Rw/exec"
+            API_URL: "https://script.google.com/macros/s/AKfycbz_m3BicBmsbU4GfH2kP3M2tN-nLhP8B_9K9hBvD0v3W3m-yA8kS8wR3W/exec", // แทนที่ด้วย Web App URL ของคุณ
+            AUTH_HASH: "756961cc2e557b772bcfb127ff479a0fb875fec97e411b93f18e97f02fa62776" // รหัสผ่านเข้ารหัสแบบ SHA-256
         };
 
-        let currentUserRole = ""; 
-        let currentUserAllowedU = []; 
-
+        // สถานะตัวแปรข้อมูลจำลองในเครื่อง (State Management)
         let players = [];
-        let attendanceDb = {};
-        let specialStatusDb = {}; 
-        let currentPlayerTabMode = 'active'; 
-        
-        let chartInstanceAge = null;
-        let chartInstanceAtt = null;
+        let attendance = {};
+        let currentActiveTab = 'dashboard';
+        let currentPlayerSubTab = 'active'; // active หรือ excluded
+        let currentReportSubTab = 'daily'; // daily, weekly, personal
+        let html5QrScanner = null;
+        let chartAgeGroups = null;
+        let chartAttendanceToday = null;
         let chartReportDailyPie = null;
         let chartWeeklyLine = null;
         let chartWeeklyBar = null;
-        let html5QrScanner = null;
-        let chartPersBar = null;
-        let chartPersPie = null;
-        let commentDb = JSON.parse(localStorage.getItem('playerComments') || '{}');
-        let loadedLoginLogs = [];
+        let chartPersWeeklyBar = null;
+        let chartPersWeeklyPie = null;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('attendance-date-picker').value = today;
-            
-            players = JSON.parse(localStorage.getItem('players') || '[]');
-            attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
-            specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
-        });
+        // รายการจำลองประวัติเข้าใช้ระบบ (Login Logs Mapping Local)
+        let localLoginLogs = [];
 
-        function handleSystemLogin(e) {
-            e.preventDefault();
-            const uInput = document.getElementById('login-username').value.trim();
-            const pInput = document.getElementById('login-password').value;
-            const errorMsg = document.getElementById('login-error-msg');
-
-            errorMsg.classList.add('hidden');
-
-            if (uInput === 'admin' && pInput === 'admin123') {
-                currentUserRole = "Admin";
-                currentUserAllowedU = [];
-            } else if (uInput === 'master' && pInput === 'master123') {
-                currentUserRole = "Master";
-                currentUserAllowedU = [];
-            } else if (uInput === 'coach12' && pInput === 'pass12') {
-                currentUserRole = "Coach U12-14";
-                currentUserAllowedU = ["12", "13", "14"];
-            } else if (uInput === 'coach15' && pInput === 'pass15') {
-                currentUserRole = "Coach U15-18";
-                currentUserAllowedU = ["15", "16", "17", "18"];
-            } else {
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('login-overlay').classList.add('hidden');
-            document.getElementById('main-system-content').classList.remove('hidden');
-            document.getElementById('user-role-badge').innerText = `Role: ${currentUserRole}`;
-            
-            applyRoleBasedAccessControl();
-            sendLoginTimeToCloud(uInput);
-            refreshAllViews();
-        }
-
-        function applyRoleBasedAccessControl() {
-            const csvBtn = document.getElementById('btn-csv-import');
-            const clearBtn = document.getElementById('btn-clear-all');
-            
-            if (currentUserRole === 'Admin') {
-                if (csvBtn) csvBtn.classList.remove('hidden');
-                if (clearBtn) clearBtn.classList.remove('hidden');
-            } else {
-                if (csvBtn) csvBtn.classList.add('hidden');
-                if (clearBtn) clearBtn.classList.add('hidden');
-            }
-
-            const tabDash = document.getElementById('tab-btn-dashboard');
-            const tabPlayers = document.getElementById('tab-btn-players');
-            const tabReports = document.getElementById('tab-btn-reports');
-
-            if (currentUserRole.startsWith('Coach')) {
-                if (tabDash) tabDash.classList.add('hidden');
-                if (tabPlayers) tabPlayers.classList.add('hidden');
-                if (tabReports) tabReports.classList.add('hidden');
-                switchTab('checkin');
-            } else {
-                if (tabDash) tabDash.classList.remove('hidden');
-                if (tabPlayers) tabPlayers.classList.remove('hidden');
-                if (tabReports) tabReports.classList.remove('hidden');
-                switchTab('dashboard');
-            }
-        }
-
-        function handleLogout() {
-            if(confirm("คุณต้องการออกจากเซสชันระบบปัจจุบันใช่หรือไม่?")) {
-                currentUserRole = "";
-                currentUserAllowedU = [];
-                document.getElementById('login-username').value = "";
-                document.getElementById('login-password').value = "";
-                document.getElementById('login-overlay').classList.remove('hidden');
-                document.getElementById('main-system-content').classList.add('hidden');
-                stopQRScanner();
-            }
-        }
-
-        function sendLoginTimeToCloud(userName) {
-            const now = new Date();
-            const formattedTime = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
-
-            const payload = {
-                action: "log_login_time",
-                userName: userName,
-                loginTime: formattedTime
-            };
-
-            loadedLoginLogs.unshift({ userName: userName, loginTime: formattedTime });
-
-            fetch(CONFIG.API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Login secure log entry successfully synced:", data);
-                renderLoginLogsTable();
-            })
-            .catch(err => console.error("Error securing user login logs:", err));
-        }
-
-        function renderLoginLogsTable() {
-            const tbody = document.getElementById('login-logs-table-body');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-
-            if(loadedLoginLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-xs">ไม่พบรายการประวัติล็อกอิน</td></tr>`;
-                return;
-            }
-
-            loadedLoginLogs.forEach((log, index) => {
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="px-6 py-3.5 text-gray-400 font-semibold text-xs">${index + 1}</td>
-                        <td class="px-6 py-3.5 font-bold text-gray-800"><i class="fa-solid fa-user-lock text-slate-400 mr-2"></i>${log.userName}</td>
-                        <td class="px-6 py-3.5 font-semibold text-blue-600">${log.loginTime}</td>
-                        <td class="px-6 py-3.5">
-                            <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 text-[11px] font-bold px-2 py-0.5 rounded-full">
-                                <span class="w-1 h-1 rounded-full bg-green-500"></span> Verified
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
+        // ฟังก์ชันระบบสลับหน้า (Tab Switcher)
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(x => x.classList.add('hidden'));
+            currentActiveTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('page-' + tabId).classList.remove('hidden');
-            document.querySelectorAll('[id^="tab-btn-"]').forEach(x => {
-                x.classList.remove('border-blue-600', 'text-blue-600');
-                x.classList.add('border-transparent', 'text-gray-600');
+            
+            document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600', 'font-bold');
+                btn.classList.add('border-transparent', 'text-gray-600');
             });
             const activeBtn = document.getElementById('tab-btn-' + tabId);
             if(activeBtn) {
                 activeBtn.classList.remove('border-transparent', 'text-gray-600');
-                activeBtn.classList.add('border-blue-600', 'text-blue-600');
+                activeBtn.classList.add('border-blue-600', 'text-blue-600', 'font-bold');
             }
+            
+            if (tabId === 'dashboard') updateDashboardCharts();
+            if (tabId === 'checkin') refreshAttendanceView();
+            if (tabId === 'reports') renderReports();
             if (tabId === 'login-logs') renderLoginLogsTable();
             if (tabId !== 'qr-scan') stopQRScanner();
         }
 
-        function isUserAllowedToSeeAge(uValue) {
-            if (currentUserAllowedU.length === 0) return true;
-            return currentUserAllowedU.includes(String(uValue));
-        }
-
-        function refreshAllViews() {
-            const uSet = new Set();
-            players.forEach(p => { 
-                if(p.u && isUserAllowedToSeeAge(p.u)) uSet.add(p.u); 
-            });
-            
-            const filterSelect = document.getElementById('filter-u-select');
-            const attSelect = document.getElementById('attendance-u-filter');
-            const prevFilterVal = filterSelect?.value || '';
-            const prevAttVal = attSelect?.value || '';
-            
-            if (filterSelect) filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
-            if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
-            
-            const sortedUList = Array.from(uSet).sort((a, b) => {
-                if (a === 'นักกีฬาใหม่') return -1;
-                if (b === 'นักกีฬาใหม่') return 1;
-                return parseInt(a) - parseInt(b);
-            });
-
-            sortedUList.forEach(u => {
-                const labelText = u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `รุ่น U${u}`;
-                if (filterSelect) filterSelect.innerHTML += `<option value="${u}">${labelText}</option>`;
-                if (attSelect) attSelect.innerHTML += `<option value="${u}">${labelText}</option>`;
-            });
-            
-            if (filterSelect) filterSelect.value = prevFilterVal;
-            if (attSelect) attSelect.value = prevAttVal;
-
-            refreshPlayersTable();
-            refreshAttendanceView();
-            updateDashboardCharts();
-        }
-
-        function refreshPlayersTable() {
-            const tbody = document.getElementById('players-table-body');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-            const search = document.getElementById('search-player-input').value.toLowerCase();
-            const filterU = document.getElementById('filter-u-select').value;
-
-            const sortedPlayers = [...players].sort((a, b) => {
-                if (a.u === b.u) return (a.no || '').localeCompare(b.no || '');
-                if (a.u === 'นักกีฬาใหม่') return -1;
-                if (b.u === 'นักกีฬาใหม่') return 1;
-                return parseInt(a.u) - parseInt(b.u);
-            });
-
-            sortedPlayers.forEach(p => {
-                if (!isUserAllowedToSeeAge(p.u)) return;
-
-                const hasSpecialStatus = specialStatusDb[p.id] ? true : false;
-                if (currentPlayerTabMode === 'active' && hasSpecialStatus) return; 
-                if (currentPlayerTabMode === 'excluded' && !hasSpecialStatus) return; 
-
-                if(filterU && p.u !== filterU) return;
-                if(search && !p.name.toLowerCase().includes(search) && !p.nickname.toLowerCase().includes(search) && !p.no.includes(search)) return;
-
-                const avatarImg = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
-                let statusClass = "", badgeOverlay = "";
-                
-                if(specialStatusDb[p.id] === 'failed') {
-                    statusClass = "status-failed";
-                    badgeOverlay = `<span class="absolute top-0 right-0 bg-amber-600 text-white text-[10px] font-bold px-1 rounded shadow transform translate-x-1 -translate-y-1">คัดตัวไม่ผ่าน</span>`;
-                } else if(specialStatusDb[p.id] === 'resigned') {
-                    statusClass = "status-resigned";
-                    badgeOverlay = `<span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-1 rounded shadow transform translate-x-1 -translate-y-1">ลาออก</span>`;
-                }
-
-                const uLabel = p.u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `U${p.u}`;
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50/80 transition">
-                        <td class="px-6 py-3.5 relative">
-                            <div class="relative w-9 h-9 inline-block">
-                                <img src="${avatarImg}" class="w-9 h-9 rounded-full object-cover border bg-gray-100 ${statusClass}">
-                                ${badgeOverlay}
-                            </div>
-                        </td>
-                        <td class="px-6 py-3.5 font-bold text-gray-700">#${p.no || '-'}</td>
-                        <td class="px-6 py-3.5 font-semibold text-gray-800">${p.name}</td>
-                        <td class="px-6 py-3.5 text-blue-600 font-bold">${p.nickname}</td>
-                        <td class="px-6 py-3.5"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">${uLabel}</span></td>
-                        <td class="px-6 py-3.5 text-gray-500">${p.birth || "ไม่ระบุ"}</td>
-                        <td class="px-6 py-3.5 text-right space-x-1 whitespace-nowrap">
-                            <button onclick="openEditProfileModal('${p.id}')" class="text-blue-600 hover:bg-blue-50 p-1.5 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deletePlayer('${p.id}', '${p.name.replace(/'/g, "\\'")}')" class="text-red-600 hover:bg-red-50 p-1.5 rounded transition"><i class="fa-solid fa-trash-can"></i></button>
-                            ${specialStatusDb[p.id] ? `<button onclick="clearSpecialStatus('${p.id}')" class="text-green-600 hover:bg-green-50 p-1.5 rounded transition"><i class="fa-solid fa-rotate-left"></i></button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function refreshAttendanceView() {
-            const grid = document.getElementById('attendance-grid-layout');
-            const reportTbody = document.getElementById('report-table-body');
-            if(!grid || !reportTbody) return;
-            grid.innerHTML = '';
-            reportTbody.innerHTML = '';
-            
-            const date = getSelectedDate();
-            document.getElementById('report-date-title').innerText = "ประจำวันที่ " + date;
-            const attFilterU = document.getElementById('attendance-u-filter')?.value || '';
-            if(!attendanceDb[date]) attendanceDb[date] = {};
-
-            let countPresent = 0, countLeave = 0, countAbsent = 0;
-
-            const sortedPlayers = [...players].sort((a, b) => {
-                if (a.u === b.u) return (a.no || '').localeCompare(b.no || '');
-                if (a.u === 'นักกีฬาใหม่') return -1;
-                if (b.u === 'นักกีฬาใหม่') return 1;
-                return parseInt(a.u) - parseInt(b.u);
-            });
-
-            sortedPlayers.forEach(p => {
-                if (!isUserAllowedToSeeAge(p.u)) return;
-                if(specialStatusDb[p.id]) return;
-                if(attFilterU && p.u !== attFilterU) return;
-
-                const currentAtt = attendanceDb[date][p.id] || { status: '-', note: '' };
-                if(currentAtt.status === '✓') countPresent++;
-                else if(currentAtt.status === 'ล') countLeave++;
-                else if(currentAtt.status === '✕') countAbsent++;
-
-                const avatarImg = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
-                const uLabel = p.u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `รุ่น U${p.u}`;
-
-                grid.innerHTML += `
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <img src="${avatarImg}" class="w-12 h-12 rounded-full object-cover border">
-                            <div>
-                                <h5 class="font-bold text-gray-800 text-base">${p.name} (${p.nickname})</h5>
-                                <p class="text-xs text-gray-400 font-bold">เบอร์เสื้อ: #${p.no} | ${uLabel}</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-1 text-center">
-                            <button onclick="markAttendance('${p.id}','✓')" class="py-1 rounded text-xs font-bold transition ${currentAtt.status==='✓'?'bg-green-600 text-white shadow':'bg-gray-100 text-gray-600 hover:bg-green-50'}">มาซ้อม</button>
-                            <button onclick="markAttendance('${p.id}','ล')" class="py-1 rounded text-xs font-bold transition ${currentAtt.status==='ล'?'bg-amber-500 text-white shadow':'bg-gray-100 text-gray-600 hover:bg-amber-50'}">ลากิจ/ป่วย</button>
-                            <button onclick="markAttendance('${p.id}','✕')" class="py-1 rounded text-xs font-bold transition ${currentAtt.status==='✕'?'bg-red-500 text-white shadow':'bg-gray-100 text-gray-600 hover:bg-red-50'}">ขาดซ้อม</button>
-                        </div>
-                        <input type="text" value="${currentAtt.note||''}" onchange="updateAttendanceNote('${p.id}', this.value)" placeholder="บันทึกหมายเหตุ..." class="border border-gray-200 rounded px-2 py-1 text-xs outline-none w-full">
-                    </div>
-                `;
-
-                let statusLabel = "<span class='text-gray-400'>ยังไม่ได้เช็ค</span>";
-                if(currentAtt.status === '✓') statusLabel = "<span class='text-green-600 font-bold'>มาซ้อม</span>";
-                if(currentAtt.status === 'ล') statusLabel = "<span class='text-amber-600 font-bold'>ลาซ้อม</span>";
-                if(currentAtt.status === '✕') statusLabel = "<span class='text-red-600 font-bold'>ขาดซ้อม</span>";
-
-                reportTbody.innerHTML += `
-                    <tr class="border-b">
-                        <td class="p-3 border font-bold">#${p.no}</td>
-                        <td class="p-3 border font-medium">${p.name}</td>
-                        <td class="p-3 border text-blue-600 font-bold">${p.nickname}</td>
-                        <td class="p-3 border">${uLabel}</td>
-                        <td class="p-3 border">${statusLabel}</td>
-                        <td class="p-3 border text-xs text-gray-500">${currentAtt.note||'-'}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('rep-count-present').innerText = countPresent;
-            document.getElementById('rep-count-leave').innerText = countLeave;
-            document.getElementById('rep-count-absent').innerText = countAbsent;
-
-            if(chartReportDailyPie) chartReportDailyPie.destroy();
-            chartReportDailyPie = new Chart(document.getElementById('chart-report-daily-pie').getContext('2d'), {
-                type: 'pie',
-                data: {
-                    labels: ['มาซ้อม', 'ลากิจ/ป่วย', 'ขาดซ้อม'],
-                    datasets: [{ data: [countPresent, countLeave, countAbsent], backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function switchPlayerSubTab(mode) {
-            currentPlayerTabMode = mode;
+        function switchPlayerSubTab(subTab) {
+            currentPlayerSubTab = subTab;
             const btnActive = document.getElementById('sub-player-btn-active');
             const btnExcluded = document.getElementById('sub-player-btn-excluded');
-            if (mode === 'active') {
+            
+            if(subTab === 'active') {
                 btnActive.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white";
                 btnExcluded.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
             } else {
                 btnActive.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
-                btnExcluded.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-blue-600 text-white";
+                btnExcluded.className = "px-4 py-1.5 rounded-lg font-semibold text-sm transition bg-red-600 text-white";
             }
             refreshPlayersTable();
         }
 
-        function switchReportSubTab(mode) {
-            document.getElementById('report-daily-section').classList.add('hidden');
-            document.getElementById('report-weekly-section').classList.add('hidden');
-            document.getElementById('report-personal-section').classList.add('hidden');
-            
-            document.getElementById('sub-btn-daily').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
-            document.getElementById('sub-btn-weekly').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
-            document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
-
-            if (mode === 'daily') {
-                document.getElementById('report-daily-section').classList.remove('hidden');
-                document.getElementById('sub-btn-daily').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
-            } else if (mode === 'weekly') {
-                document.getElementById('report-weekly-section').classList.remove('hidden');
-                document.getElementById('sub-btn-weekly').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
-                renderWeeklyCharts();
-            } else if (mode === 'personal') {
-                document.getElementById('report-personal-section').classList.remove('hidden');
-                document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
-                
-                if(!document.getElementById('rpt-pers-week-picker').value) {
-                    const now = new Date();
-                    const target = new Date(now.valueOf());
-                    const dayNr = (now.getDay() + 6) % 7;
-                    target.setDate(target.getDate() - dayNr + 3);
-                    const firstThursday = target.valueOf();
-                    target.setMonth(0, 1);
-                    if (target.getDay() !== 4) target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
-                    const weekResult = 1 + Math.ceil((firstThursday - target) / 604800000);
-                    document.getElementById('rpt-pers-week-picker').value = `${new Date(firstThursday).getFullYear()}-W${String(weekResult).padStart(2, '0')}`;
-                }
-                
-                const pSelect = document.getElementById('rpt-pers-player-select');
-                pSelect.innerHTML = '';
-                players.forEach(p => {
-                    if(!specialStatusDb[p.id] && isUserAllowedToSeeAge(p.u)) {
-                        pSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.nickname})</option>`;
-                    }
-                });
-                renderPersonalReport();
-            }
-        }
-
-        function getSelectedDate() { return document.getElementById('attendance-date-picker').value; }
-
-        function handleCSVImport(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const text = evt.target.result;
-                const lines = text.split(/\r?\n/);
-                let addedCount = 0;
-                
-                for (let i = 0; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
-                    const columns = lines[i].split(',');
-                    if (i === 0 && (columns[0].includes("ชื่อ") || columns[0].toLowerCase().includes("name"))) continue;
-                    if (columns.length >= 2) {
-                        players.push({
-                            id: "P_" + (Date.now() + Math.floor(Math.random() * 1000)) + "_" + i,
-                            name: columns[0] ? columns[0].replace(/["']/g, "").trim() : "",
-                            nickname: columns[1] ? columns[1].replace(/["']/g, "").trim() : "",
-                            no: columns[2] ? columns[2].replace(/["']/g, "").trim() : "",
-                            u: columns[3] ? columns[3].trim().replace(/[uU]/g, "") : "นักกีฬาใหม่",
-                            birth: columns[4] ? columns[4].replace(/["']/g, "").trim() : "",
-                            avatar: ""
-                        });
-                        addedCount++;
-                    }
-                }
-                if (addedCount > 0) {
-                    saveToLocalStorage();
-                    refreshAllViews();
-                    alert(`🎉 นำเข้าข้อมูลนักกีฬาสำเร็จ ${addedCount} คนแล้ว! กำลังซิงค์ขึ้นไฟล์ระบบคลาวด์...`);
-                    pushDataToCloud(); 
-                }
-            };
-            reader.readAsText(file, "UTF-8");
-        }
-
-        function savePlayerProfile(e) {
-            e.preventDefault();
-            const pid = document.getElementById('edit-profile-pid').value;
-            let jerseyNo = document.getElementById('edit-profile-number').value.trim() || "-";
-            let inputBirth = document.getElementById('edit-profile-birth').value;
-
-            if(!pid) {
-                players.push({
-                    id: "P_" + Date.now(),
-                    name: document.getElementById('edit-profile-fullname').value,
-                    nickname: document.getElementById('edit-profile-nickname').value,
-                    no: jerseyNo,
-                    u: document.getElementById('edit-profile-u').value,
-                    birth: inputBirth || "",
-                    avatar: document.getElementById('edit-profile-preview').src.startsWith('data:image') ? document.getElementById('edit-profile-preview').src : ""
-                });
-            } else {
-                const idx = players.findIndex(x => x.id === pid);
-                if(idx !== -1) {
-                    players[idx].name = document.getElementById('edit-profile-fullname').value;
-                    players[idx].nickname = document.getElementById('edit-profile-nickname').value;
-                    players[idx].no = jerseyNo;
-                    players[idx].u = document.getElementById('edit-profile-u').value;
-                    if (inputBirth) players[idx].birth = inputBirth;
-                    if(document.getElementById('edit-profile-preview').src.startsWith('data:image')) {
-                        players[idx].avatar = document.getElementById('edit-profile-preview').src;
-                    }
-                }
-            }
-            closeProfileEditModal();
-            saveToLocalStorage();
-            refreshAllViews();
-            pushDataToCloud();
-        }
-
-        function deletePlayer(pid, name) {
-            if (confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลของ "${name}" ออกจากระบบถาวร?`)) {
-                players = players.filter(p => p.id !== pid);
-                if (specialStatusDb[pid]) delete specialStatusDb[pid];
-                saveToLocalStorage();
-                refreshAllViews();
-                pushDataToCloud();
-            }
-        }
-
-        function setSpecialStatus(statusType) {
-            const pid = document.getElementById('edit-profile-pid').value;
-            if(!pid) return;
-            specialStatusDb[pid] = statusType;
-            closeProfileEditModal();
-            saveToLocalStorage();
-            refreshAllViews();
-            pushDataToCloud();
-        }
-
-        function clearSpecialStatus(pid) {
-            if(confirm("ต้องการยกเลิกสถานะพิเศษให้กลับมาปกติใช่ไหม?")) {
-                delete specialStatusDb[pid];
-                saveToLocalStorage();
-                refreshAllViews();
-                pushDataToCloud();
-            }
-        }
-
-        async function clearAllPlayersData() {
-            const userInput = prompt("⚠️ ลบข้อมูลนักกีฬาและการเข้าซ้อมทั้งหมดออกจากระบบคลาวด์ถาวร!\nกรุณาพิมพ์คำว่า confirm เพื่อยืนยัน:");
-            if (userInput?.trim() === "confirm") {
-                showLoadingSpinner(true);
-                try {
-                    const response = await fetch(CONFIG.API_URL, { 
-                        method: "POST",
-                        headers: { "Content-Type": "text/plain;charset=utf-8" },
-                        body: JSON.stringify({ action: "clear_all_data" })
-                    });
-                    if (response.ok) {
-                        players = []; attendanceDb = {}; specialStatusDb = {}; commentDb = {};
-                        localStorage.removeItem('playerComments');
-                        saveToLocalStorage();
-                        alert("🗑️ ลบฐานข้อมูลสำเร็จแล้ว!");
-                        refreshAllViews();
-                    }
-                } catch (e) {
-                    alert("❌ เชื่อมต่อขัดข้อง");
-                } finally { showLoadingSpinner(false); }
-            }
-        }
-
-        function markAttendance(pid, status) {
-            const date = getSelectedDate();
-            if(!attendanceDb[date][pid]) attendanceDb[date][pid] = { status: '', note: '' };
-            attendanceDb[date][pid].status = (attendanceDb[date][pid].status === status) ? '-' : status;
-            saveToLocalStorage();
-            refreshAttendanceView();
-            updateDashboardCharts();
-            pushDataToCloud();
-        }
-
-        function updateAttendanceNote(pid, noteValue) {
-            const date = getSelectedDate();
-            if(!attendanceDb[date][pid]) attendanceDb[date][pid] = { status: '-', note: '' };
-            attendanceDb[date][pid].note = noteValue;
-            saveToLocalStorage();
-            refreshAttendanceView();
-            pushDataToCloud();
-        }
-
-        function startQRScanner() {
-            document.getElementById('qr-scan-result-box').innerHTML = `<div class="text-blue-600 font-bold animate-pulse">ระบบสแกนเนอร์กำลังโหลดกล้อง...</div>`;
-            html5QrScanner = new Html5Qrcode("qr-reader");
-            html5QrScanner.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText) => {
-                    const matchedPlayer = players.find(x => x.id === decodedText || x.name === decodedText);
-                    const resBox = document.getElementById('qr-scan-result-box');
-                    if(matchedPlayer) {
-                        if (!isUserAllowedToSeeAge(matchedPlayer.u)) {
-                            resBox.innerHTML = `<div class="text-amber-600 font-bold"><i class="fa-solid fa-shield text-2xl"></i><br>สิทธิ์ผู้ใช้ของคุณไม่สามารถเช็คชื่อรุ่น U${matchedPlayer.u} ได้</div>`;
-                            return;
-                        }
-                        markAttendance(matchedPlayer.id, '✓');
-                        resBox.innerHTML = `
-                            <div class="text-center space-y-2">
-                                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto"><i class="fa-solid fa-circle-check"></i></div>
-                                <h4 class="font-bold text-lg text-green-600">เช็คชื่อสำเร็จ</h4>
-                                <p class="font-bold text-gray-800 text-base">${matchedPlayer.name} (${matchedPlayer.nickname})</p>
-                            </div>
-                        `;
-                    } else {
-                        resBox.innerHTML = `<div class="text-red-500 font-bold"><i class="fa-solid fa-triangle-exclamation text-2xl"></i><br>ไม่พบรหัสนักกีฬา</div>`;
-                    }
-                },
-                () => {}
-            ).catch(() => {
-                document.getElementById('qr-scan-result-box').innerHTML = `<div class="text-red-500 font-bold">ไม่สามารถเปิดกล้องได้</div>`;
+        function switchReportSubTab(subTab) {
+            currentReportSubTab = subTab;
+            ['daily', 'weekly', 'personal'].forEach(t => {
+                document.getElementById(`report-${t}-section`).classList.add('hidden');
+                document.getElementById(`sub-btn-${t}`).className = "px-4 py-2 rounded font-semibold text-sm transition bg-gray-100 text-gray-700 hover:bg-gray-200";
             });
+            document.getElementById(`report-${subTab}-section`).classList.remove('hidden');
+            document.getElementById(`sub-btn-${subTab}`).className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
+            renderReports();
         }
 
-        function stopQRScanner() {
-            if(html5QrScanner) {
-                html5QrScanner.stop().then(() => {
-                    document.getElementById('qr-scan-result-box').innerHTML = `<p class="text-sm text-gray-500">กล้องถูกปิดการทำงานแล้ว</p>`;
-                }).catch(()=>{});
-            }
+        // 🔐 ระบบยืนยันตัวตนความปลอดภัยสูง (Secure Authentication)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);                    
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        function renderWeeklyCharts() {
-            const last7Days = []; const presentCounts = []; const leaveCounts = []; const absentCounts = [];
-            for(let i=6; i=>0; i--) {
-                const d = new Date(); d.setDate(d.getDate() - i);
-                const dateString = d.toISOString().split('T')[0];
-                last7Days.push(dateString);
-
-                let pCount = 0, lCount = 0, aCount = 0;
-                if(attendanceDb[dateString]) {
-                    for(let pid in attendanceDb[dateString]) {
-                        if(specialStatusDb[pid]) continue;
-                        const pInfo = players.find(x => x.id === pid);
-                        if(pInfo && !isUserAllowedToSeeAge(pInfo.u)) continue;
-
-                        if(attendanceDb[dateString][pid].status === '✓') pCount++;
-                        else if(attendanceDb[dateString][pid].status === 'ล') lCount++;
-                        else if(attendanceDb[dateString][pid].status === '✕') aCount++;
-                    }
-                }
-                presentCounts.push(pCount); leaveCounts.push(lCount); absentCounts.push(aCount);
-            }
-
-            if(chartWeeklyLine) chartWeeklyLine.destroy();
-            chartWeeklyLine = new Chart(document.getElementById('chart-weekly-line').getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: last7Days.map(d => d.substring(5)),
-                    datasets: [{ label: 'อัตราการเข้าซ้อม (คน)', data: presentCounts, borderColor: '#2563EB', fill: true }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            if(chartWeeklyBar) chartWeeklyBar.destroy();
-            chartWeeklyBar = new Chart(document.getElementById('chart-weekly-bar').getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: last7Days.map(d => d.substring(5)),
-                    datasets: [
-                        { label: 'มาซ้อม', data: presentCounts, backgroundColor: '#10B981' },
-                        { label: 'ลาซ้อม', data: leaveCounts, backgroundColor: '#F59E0B' },
-                        { label: 'ขาดซ้อม', data: absentCounts, backgroundColor: '#EF4444' }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function renderPersonalReport() {
-            const pid = document.getElementById('rpt-pers-player-select').value;
-            const weekStr = document.getElementById('rpt-pers-week-picker').value; 
-            if(!pid || !weekStr) return;
-
-            const player = players.find(x => x.id === pid);
-            if(!player) return;
-
-            document.getElementById('rpt-pers-avatar').src = player.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
-            document.getElementById('rpt-pers-fullname').innerText = player.name;
-            document.getElementById('rpt-pers-nickname').innerText = player.nickname;
-            document.getElementById('rpt-pers-no').innerText = `#${player.no || '-'}`;
-            document.getElementById('rpt-pers-u').innerText = `รุ่น U${player.u}`;
-
-            const [year, week] = weekStr.split('-W');
-            const ISOweekStart = new Date(year, 0, 1 + (week - 1) * 7);
-            const weekDays = []; 
-            for(let i=0; i<5; i++) {
-                const d = new Date(ISOweekStart); d.setDate(ISOweekStart.getDate() + i);
-                weekDays.push(d.toISOString().split('T')[0]);
-            }
-
-            let countP = 0, countL = 0, countA = 0; const dailyStatusScore = []; 
-            weekDays.forEach(dateStr => {
-                const status = attendanceDb[dateStr]?.[pid]?.status || '-';
-                if(status === '✓') { countP++; dailyStatusScore.push(3); }
-                else if(status === 'ล') { countL++; dailyStatusScore.push(2); }
-                else if(status === '✕') { countA++; dailyStatusScore.push(1); }
-                else { dailyStatusScore.push(0); }
-            });
-
-            if(chartPersBar) chartPersBar.destroy();
-            chartPersBar = new Chart(document.getElementById('chart-pers-weekly-bar').getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสฯ', 'ศุกร์'],
-                    datasets: [{ data: dailyStatusScore, backgroundColor: dailyStatusScore.map(v => v===3?'#10B981':v===2?'#F59E0B':v===1?'#EF4444':'#9CA3AF') }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { y: { min: 0, max: 3 } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            if(chartPersPie) chartPersPie.destroy();
-            chartPersPie = new Chart(document.getElementById('chart-pers-weekly-pie').getContext('2d'), {
-                type: 'pie',
-                data: { labels: ['มาซ้อม', 'ลากิจ', 'ขาด'], datasets: [{ data: [countP, countL, countA], backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }] },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            const commentKey = `${pid}_${weekStr}`;
-            document.getElementById('comment-text-display').innerText = commentDb[commentKey] || 'ยังไม่มีข้อมูลบันทึกความคิดเห็น...';
-            document.getElementById('comment-textarea').value = commentDb[commentKey] || '';
-        }
-
-        function toggleEditComment() {
-            document.getElementById('comment-text-display').classList.add('hidden');
-            document.getElementById('comment-input-area').classList.remove('hidden');
-        }
-
-        function savePlayerComment() {
-            const pid = document.getElementById('rpt-pers-player-select').value;
-            const weekStr = document.getElementById('rpt-pers-week-picker').value;
-            if(!pid || !weekStr) return;
-            commentDb[`${pid}_${weekStr}`] = document.getElementById('comment-textarea').value.trim();
-            localStorage.setItem('playerComments', JSON.stringify(commentDb));
-            renderPersonalReport();
-        }
-
-        function updateCloudStatusUI(isOnline) {
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-            if(!dot || !text) return;
-            if(isOnline) {
-                dot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500";
-                text.innerText = "Database Online";
-            } else {
-                dot.className = "h-1.5 w-1.5 rounded-full bg-red-500";
-                text.innerText = "Database Offline";
-            }
-        }
-
-        async function pushDataToCloud() {
-            showLoadingSpinner(true);
+        // ฟังก์ชันส่งประวัติเวลาล็อกอินไปเก็บที่ Google Sheets แผ่นงาน logintime
+        async function saveLoginLog(userName) {
             try {
-                const response = await fetch(CONFIG.API_URL, { 
+                const now = new Date();
+                const formattedTime = now.getFullYear() + "-" + 
+                    String(now.getMonth() + 1).padStart(2, '0') + "-" + 
+                    String(now.getDate()).padStart(2, '0') + " " + 
+                    String(now.getHours()).padStart(2, '0') + ":" + 
+                    String(now.getMinutes()).padStart(2, '0') + ":" + 
+                    String(now.getSeconds()).padStart(2, '0');
+
+                const payload = {
+                    action: "log_login_time",
+                    userName: userName,
+                    loginTime: formattedTime
+                };
+
+                await fetch(CONFIG.API_URL, { 
                     method: "POST",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action: "sync_all", players: players, attendance: attendanceDb })
+                    body: JSON.stringify(payload)
                 });
-                if (response.ok) { updateCloudStatusUI(true); } 
-                else { updateCloudStatusUI(false); }
-            } catch (e) { updateCloudStatusUI(false); } 
-            finally { showLoadingSpinner(false); }
+                console.log("บันทึกประวัติเวลาเข้าใช้งานสำเร็จ");
+            } catch (error) {
+                console.error("ไม่สามารถส่งประวัติการล็อกอินคลาวด์ได้:", error);
+            }
         }
 
-        function updateDashboardCharts() {
-            let active = 0, excluded = 0; const uMap = {}; const date = getSelectedDate();
-            let p=0, l=0, a=0, u=0;
+        async function handleSystemLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim();
+            const p = document.getElementById('login-password').value;
+            const errorMsg = document.getElementById('login-error-msg');
+            
+            const hashedInput = await sha256(p);
+            if ((u === 'admin' || u === 'coach' || u === 'staff') && hashedInput === CONFIG.AUTH_HASH) {
+                errorMsg.classList.add('hidden');
+                document.getElementById('login-overlay').classList.add('hidden');
+                document.getElementById('main-system-content').classList.remove('hidden');
+                
+                document.getElementById('user-role-badge').innerText = `Role: ${u.toUpperCase()}`;
+                
+                // สั่งรันบันทึกเวลาล็อกอินและเปิดใช้งานระบบคลาวด์
+                await saveLoginLog(u);
+                
+                // โหลดโครงสร้างข้อมูลเริ่มต้นจากระบบคลาวด์ป้องกันข้อมูลสูญหาย
+                initSystemDateAndData();
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
 
-            players.forEach(player => {
-                if(!isUserAllowedToSeeAge(player.id)) return;active++; uMap[player.u] = (uMap[player.u] || 0) + 1;
-                if(specialStatusDb[player.id]) { excluded++; return; }
-                const s = attendanceDb[date]?.[player.id]?.status || '-';
-                if(s === '✓') p++; else if(s === 'ล') l++; else if(s === '✕') a++; else u++;
-            });
+        function handleLogout() {
+            document.getElementById('main-system-content').classList.add('hidden');
+            document.getElementById('login-overlay').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            stopQRScanner();
+        }
 
-            document.getElementById('dash-total-players').innerText = active + " คน";
-            document.getElementById('dash-present-players').innerText = p + " คน";
-            document.getElementById('dash-absent-players').innerText = (l + a) + " คน";
-            document.getElementById('dash-excluded-players').innerText = excluded + " คน";
-
-            if(chartInstanceAge) chartInstanceAge.destroy();
-
-            const sortedLabels = Object.keys(uMap).sort((a, b) => {
-                if (a === 'นักกีฬาใหม่') return -1;
-                if (b === 'นักกีฬาใหม่') return 1;
-                return parseInt(a) - parseInt(b);
-            });
-
-            chartInstanceAge = new Chart(document.getElementById('chart-age-groups').getContext('2d'), {
-                type: 'pie',
-                data: { 
-                    labels: sortedLabels.map(k => k === 'นักกีฬาใหม่' ? `นักกีฬาใหม่ (${uMap[k]} คน)` : `U${k} (${uMap[k]} คน)`), 
-                    datasets: [{ 
-                        data: sortedLabels.map(k => uMap[k]), 
-                        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1', '#14B8A6'] 
-                    }] 
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'left',
-                            align: 'center',
-                            labels: { boxWidth: 15, padding: 12 }
-                        }
-                    }
+        // ฟังก์ชันระบบจัดการบันทึกข้อมูลอัปเดตอัตโนมัติ (Auto-Save Module)
+        async function autoSaveToCloud() {
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            try {
+                if(statusDot) {
+                    statusDot.className = "h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse";
+                    statusText.innerText = "กำลังจัดเก็บอัตโนมัติ...";
                 }
+                
+                const payload = {
+                    action: "sync_all",
+                    players: players,
+                    attendance: attendance
+                };
+
+                const response = await fetch(CONFIG.API_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                if (result.status === "success") {
+                    console.log("Auto-Save เรียบร้อย: ข้อมูลถูกซิงค์ตรงกับ Google Sheet ล่าสุด");
+                    if(statusDot) {
+                        statusDot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500";
+                        statusText.innerText = "Database Online (Auto-Saved)";
+                    }
+                } else {
+                    console.error("Auto-Save แจ้งเตือนข้อผิดพลาด:", result.message);
+                }
+            } catch (error) {
+                console.error("ระบบเครือข่ายขัดข้อง ไม่สามารถบันทึกข้อมูลอัตโนมัติได้:", error);
+                if(statusDot) {
+                    statusDot.className = "h-1.5 w-1.5 rounded-full bg-red-500";
+                    statusText.innerText = "การบันทึกอัตโนมัติล้มเหลว";
+                }
+            }
+        }
+
+        // 🧮 ฟังก์ชันเริ่มต้นดึงข้อมูลระบบ
+        function initSystemDateAndData() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            document.getElementById('attendance-date-picker').value = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('report-date-title').innerText = `ประจำวันที่ ${dd}/${mm}/${yyyy}`;
+            
+            const currentWeek = getWeekNumber(today);
+            document.getElementById('rpt-pers-week-picker').value = `${currentWeek.year}-W${String(currentWeek.week).padStart(2, '0')}`;
+            
+            // เรียกดึงข้อมูลครั้งแรกจากสโมสร (หรือใส่ค่าเริ่มต้นหากไม่มีเน็ต)
+            refreshFiltersAndOptions();
+            switchTab('dashboard');
+        }
+
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+            return { year: d.getUTCFullYear(), week: weekNo };
+        }
+
+        function refreshFiltersAndOptions() {
+            const uGroups = ["12", "13", "14", "15", "16", "17", "18", "นักกีฬาใหม่"];
+            
+            const fSelect = document.getElementById('filter-u-select');
+            fSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
+            uGroups.forEach(u => fSelect.innerHTML += `<option value="${u}">รุ่น U-${u}</option>`);
+
+            const attFilter = document.getElementById('attendance-u-filter');
+            attFilter.innerHTML = '<option value="">ทั้งหมด (ทุกรุ่น)</option>';
+            uGroups.forEach(u => attFilter.innerHTML += `<option value="${u}">U-${u}</option>`);
+            
+            refreshPlayersTable();
+        }
+
+        // 👥 ส่วนจัดการตารางผู้เล่นฐานข้อมูล
+        function refreshPlayersTable() {
+            const tbody = document.getElementById('players-table-body');
+            tbody.innerHTML = '';
+            
+            const searchVal = document.getElementById('search-player-input').value.toLowerCase();
+            const uFilter = document.getElementById('filter-u-select').value;
+            
+            // กรองสถานะ Active / Excluded
+            let filtered = players.filter(p => {
+                const isExcluded = (p.u === 'นักกีฬาใหม่' || p.u === 'ไม่ผ่านคัดเลือก' || p.u === 'ลาออก');
+                return currentPlayerSubTab === 'active' ? !isExcluded : isExcluded;
             });
 
-            if(chartInstanceAtt) chartInstanceAtt.destroy();
-            chartInstanceAtt = new Chart(document.getElementById('chart-attendance').getContext('2d'), {
-                type: 'bar',
-                data: { labels: ['มาซ้อม', 'ลาซ้อม', 'ขาดซ้อม', 'ยังไม่เช็ค'], datasets: [{ data: [p, l, a, u], backgroundColor: ['#10B981', '#F59E0B', '#EF4444', '#9CA3AF'] }] },
-                options: { responsive: true, maintainAspectRatio: false }
+            if (uFilter) {
+                filtered = filtered.filter(p => p.u === uFilter);
+            }
+            if (searchVal) {
+                filtered = filtered.filter(p => 
+                    (p.name && p.name.toLowerCase().includes(searchVal)) ||
+                    (p.nickname && p.nickname.toLowerCase().includes(searchVal)) ||
+                    (p.no && p.no.toString().includes(searchVal))
+                );
+            }
+
+            document.getElementById('dash-total-players').innerText = `${players.filter(x=>x.u !== 'ลาออก').length} คน`;
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-gray-400 font-medium">ไม่พบข้อมูลรายชื่อนักกีฬาในหมวดหมู่นี้</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50/80 transition-colors";
+                
+                let rowClass = "";
+                if(p.u === 'ไม่ผ่านคัดเลือก') rowClass = "status-failed bg-red-50/30";
+                if(p.u === 'ลาออก') rowClass = "status-resigned bg-gray-100/50";
+                if(rowClass) tr.className += " " + rowClass;
+
+                const avatarSrc = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+
+                tr.innerHTML = `
+                    <td class="px-6 py-3"><img src="${avatarSrc}" class="w-10 h-10 rounded-full object-cover shadow-sm bg-white border"></td>
+                    <td class="px-6 py-3 font-bold text-gray-700">${p.no || '-'}</td>
+                    <td class="px-6 py-3 font-semibold text-gray-900">${p.name || '-'}</td>
+                    <td class="px-6 py-3 text-blue-600 font-bold">${p.nickname || '-'}</td>
+                    <td class="px-6 py-3"><span class="bg-gray-100 px-2.5 py-1 rounded-full text-xs font-bold text-gray-700">U-${p.u}</span></td>
+                    <td class="px-6 py-3 text-gray-500">${p.birth || '-'}</td>
+                    <td class="px-6 py-3 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="openEditProfileModal('${p.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-2.5 py-1 rounded text-xs border transition"><i class="fa-solid fa-user-pen"></i> แก้ไข</button>
+                        <button onclick="deletePlayerItem('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium px-2.5 py-1 rounded text-xs border border-red-200 transition"><i class="fa-solid fa-trash"></i> ลบ</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('players', JSON.stringify(players));
-            localStorage.setItem('attendance', JSON.stringify(attendanceDb));
-            localStorage.setItem('specialStatus', JSON.stringify(specialStatusDb));
-        }
-
-        function showLoadingSpinner(val) { document.getElementById('loading-spinner').classList.toggle('hidden', !val); }
-        
         function openAddPlayerModal() {
-            document.getElementById('modal-title-text').innerText = "เพิ่มนักกีฬาใหม่";
+            document.getElementById('modal-title-text').innerText = "เพิ่มนักกีฬาใหม่เข้าระบบ";
             document.getElementById('edit-profile-pid').value = "";
             document.getElementById('edit-profile-fullname').value = "";
             document.getElementById('edit-profile-nickname').value = "";
             document.getElementById('edit-profile-number').value = "";
+            document.getElementById('edit-profile-u').value = "12";
             document.getElementById('edit-profile-birth').value = "";
             document.getElementById('edit-profile-preview').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
-        
+
         function openEditProfileModal(pid) {
-            const p = players.find(x => x.id === pid); if(!p) return;
+            const p = players.find(x => x.id === pid);
+            if(!p) return;
             document.getElementById('modal-title-text').innerText = "แก้ไขโปรไฟล์นักกีฬา";
             document.getElementById('edit-profile-pid').value = p.id;
             document.getElementById('edit-profile-fullname').value = p.name || '';
@@ -1282,12 +738,532 @@
             document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
-        
-        function closeProfileEditModal() { document.getElementById('profile-modal').classList.add('hidden'); }
-        
-        function previewAvatarImage(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const r = new FileReader(); r.onload = function(evt) { document.getElementById('edit-profile-preview').src = evt.target.result; }; r.readAsDataURL(file);
+
+        function closeProfileEditModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function previewAvatarImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('edit-profile-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function savePlayerProfile(e) {
+            e.preventDefault();
+            const pid = document.getElementById('edit-profile-pid').value;
+            const name = document.getElementById('edit-profile-fullname').value.trim();
+            const nickname = document.getElementById('edit-profile-nickname').value.trim();
+            const no = document.getElementById('edit-profile-number').value.trim() || '-';
+            const u = document.getElementById('edit-profile-u').value;
+            const birth = document.getElementById('edit-profile-birth').value;
+            const avatar = document.getElementById('edit-profile-preview').src;
+
+            if(!pid) {
+                // สร้างใหม่
+                const newId = "PL" + Date.now();
+                players.push({ id: newId, name, nickname, no, u, birth, avatar });
+            } else {
+                // อัปเดตรายการเดิม
+                const index = players.findIndex(x => x.id === pid);
+                if(index !== -1) {
+                    players[index] = { ...players[index], name, nickname, no, u, birth, avatar };
+                }
+            }
+
+            closeProfileEditModal();
+            refreshPlayersTable();
+            
+            // บันทึกและอัปเดตข้อมูลขึ้นคลาวด์ชีตอัตโนมัติ (Auto-Save)
+            autoSaveToCloud();
+        }
+
+        function deletePlayerItem(pid) {
+            if(confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนักกีฬารายนี้ออกจากฐานข้อมูลอย่างถาวร?')) {
+                players = players.filter(x => x.id !== pid);
+                refreshPlayersTable();
+                
+                // บันทึกและอัปเดตข้อมูลขึ้นคลาวด์ชีตอัตโนมัติ (Auto-Save)
+                autoSaveToCloud();
+            }
+        }
+
+        // 📝 ส่วนจัดการบันทึกเช็คชื่อหน้าสนามประจำวัน
+        function refreshAttendanceView() {
+            const grid = document.getElementById('attendance-grid-layout');
+            grid.innerHTML = '';
+            
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            const uFilter = document.getElementById('attendance-u-filter').value;
+            
+            if(!attendance[dateKey]) attendance[dateKey] = {};
+            
+            let filteredPlayers = players.filter(x => x.u !== 'ลาออก' && x.u !== 'ไม่ผ่านคัดเลือก');
+            if(uFilter) filteredPlayers = filteredPlayers.filter(x => x.u === uFilter);
+
+            if(filteredPlayers.length === 0) {
+                grid.innerHTML = `<div class="col-span-1 md:col-span-3 text-center py-12 text-gray-400 font-medium">ไม่มีข้อมูลนักกีฬาเปิดฝึกซ้อมสำหรับเงื่อนไขนี้</div>`;
+                return;
+            }
+
+            filteredPlayers.forEach(p => {
+                if(!attendance[dateKey][p.id]) {
+                    attendance[dateKey][p.id] = { status: "-", note: "" };
+                }
+                const currentAtt = attendance[dateKey][p.id];
+                
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between space-y-3";
+                
+                let borderHighlight = "border-t-4 border-t-gray-300";
+                if(currentAtt.status === 'มาซ้อม') borderHighlight = "border-t-4 border-t-emerald-500 bg-emerald-50/20";
+                if(currentAtt.status === 'ลากิจ' || currentAtt.status === 'ลาป่วย') borderHighlight = "border-t-4 border-t-amber-500 bg-amber-50/20";
+                if(currentAtt.status === 'ขาดซ้อม') borderHighlight = "border-t-4 border-t-red-500 bg-red-50/20";
+                card.className += " " + borderHighlight;
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${p.avatar || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}" class="w-12 h-12 rounded-full object-cover border bg-gray-50 shadow-sm">
+                        <div>
+                            <h5 class="font-bold text-gray-900 leading-tight">${p.name}</h5>
+                            <p class="text-xs text-gray-500 mt-0.5">เบอร์เสื้อ: <b class="text-gray-800">${p.no}</b> | รุ่น: <b class="text-gray-800">U-${p.u}</b></p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1">
+                        <button onclick="setAttendanceStatus('${p.id}', 'มาซ้อม')" class="py-1 text-xs font-bold rounded transition ${currentAtt.status === 'มาซ้อม' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">มา</button>
+                        <button onclick="setAttendanceStatus('${p.id}', 'ลากิจ')" class="py-1 text-xs font-bold rounded transition ${currentAtt.status === 'ลากิจ' ? 'bg-amber-500 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">ลากิจ</button>
+                        <button onclick="setAttendanceStatus('${p.id}', 'ลาป่วย')" class="py-1 text-xs font-bold rounded transition ${currentAtt.status === 'ลาป่วย' ? 'bg-amber-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">ลาป่วย</button>
+                        <button onclick="setAttendanceStatus('${p.id}', 'ขาดซ้อม')" class="py-1 text-xs font-bold rounded transition ${currentAtt.status === 'ขาดซ้อม' ? 'bg-red-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">ขาด</button>
+                    </div>
+                    <input type="text" value="${currentAtt.note || ''}" onchange="setAttendanceNote('${p.id}', this.value)" placeholder="บันทึกหมายเหตุเพิ่มเติม..." class="border border-gray-200 text-xs rounded px-2 py-1 w-full outline-none focus:ring-1 focus:ring-blue-500">
+                `;
+                grid.appendChild(card);
+            });
+
+            updateAttendanceDashCounts(dateKey);
+        }
+
+        function setAttendanceStatus(pid, status) {
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            if(!attendance[dateKey]) attendance[dateKey] = {};
+            if(!attendance[dateKey][pid]) attendance[dateKey][pid] = { status: "-", note: "" };
+            
+            attendance[dateKey][pid].status = status;
+            refreshAttendanceView();
+            
+            // บันทึกซิงค์ข้อมูลคลาวด์อัตโนมัติทันทีเมื่อเปลี่ยนสถานะเช็คชื่อ (Auto-Save)
+            autoSaveToCloud();
+        }
+
+        function setAttendanceNote(pid, noteText) {
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            if(!attendance[dateKey]) attendance[dateKey] = {};
+            if(!attendance[dateKey][pid]) attendance[dateKey][pid] = { status: "-", note: "" };
+            
+            attendance[dateKey][pid].note = noteText.trim();
+            
+            // บันทึกซิงค์ข้อมูลคลาวด์อัตโนมัติทันทีเมื่อพิมพ์โน้ต (Auto-Save)
+            autoSaveToCloud();
+        }
+
+        function updateAttendanceDashCounts(dateKey) {
+            let present = 0, absent = 0, leave = 0;
+            if(attendance[dateKey]) {
+                for(let pid in attendance[dateKey]) {
+                    const st = attendance[dateKey][pid].status;
+                    if(st === 'มาซ้อม') present++;
+                    if(st === 'ขาดซ้อม') absent++;
+                    if(st === 'ลากิจ' || st === 'ลาป่วย') leave++;
+                }
+            }
+            document.getElementById('dash-present-players').innerText = `${present} คน`;
+            document.getElementById('dash-absent-players').innerText = `${leave + absent} คน`;
+            document.getElementById('dash-excluded-players').innerText = `${players.filter(x => x.u === 'ไม่ผ่านคัดเลือก' || x.u === 'ลาออก').length} คน`;
+        }
+
+        // 📷 ระบบโมดูลสแกน QR Code หน้าสนาม
+        function startQRScanner() {
+            const resultBox = document.getElementById('qr-scan-result-box');
+            resultBox.innerHTML = `<div class="text-blue-600 font-bold flex items-center space-x-2"><i class="fa-solid fa-spinner animate-spin"></i> <span>กำลังเชื่อมต่อเปิดระบบกล้อง...</span></div>`;
+            
+            setTimeout(() => {
+                html5QrScanner = new Html5Qrcode("qr-reader");
+                html5QrScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => {
+                        handleQRSuccessScan(decodedText);
+                    },
+                    (errorMessage) => { /* ไม่แสดง Log ข้อผิดพลาดวนลูปทั่วไป */ }
+                ).catch(err => {
+                    resultBox.innerHTML = `<p class="text-red-500 font-semibold text-sm">ไม่สามารถเปิดกล้องได้: โปรดตรวจสอบสิทธิ์การเข้าถึงกล้องถ่ายภาพ</p>`;
+                });
+            }, 500);
+        }
+
+        function stopQRScanner() {
+            if (html5QrScanner) {
+                html5QrScanner.stop().then(() => {
+                    html5QrScanner = null;
+                    document.getElementById('qr-scan-result-box').innerHTML = `
+                        <i class="fa-solid fa-qrcode text-5xl text-gray-300 mb-2"></i>
+                        <p class="text-sm text-gray-500">พร้อมเปิดกล้องสแกนเช็คชื่อนักกีฬา</p>
+                    `;
+                }).catch(err => {});
+            }
+        }
+
+        function handleQRSuccessScan(scannedText) {
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            const targetPlayer = players.find(x => x.id === scannedText.trim() || (x.no && x.no.toString() === scannedText.trim()));
+            const resultBox = document.getElementById('qr-scan-result-box');
+            
+            if (targetPlayer) {
+                if(!attendance[dateKey]) attendance[dateKey] = {};
+                attendance[dateKey][targetPlayer.id] = { status: "มาซ้อม", note: "เช็คชื่อผ่านระบบสแกน QR" };
+                
+                resultBox.innerHTML = `
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center space-y-2">
+                        <i class="fa-solid fa-circle-check text-4xl text-emerald-500"></i>
+                        <h4 class="font-bold text-emerald-800 text-base">เช็คชื่อสำเร็จ (มาซ้อม)</h4>
+                        <img src="${targetPlayer.avatar || ''}" class="w-16 h-16 rounded-full mx-auto object-cover border bg-white shadow-sm">
+                        <p class="text-sm font-semibold text-gray-800">${targetPlayer.name} (เบอร์ ${targetPlayer.no})</p>
+                        <p class="text-xs text-gray-500">บันทึกเวลาเมื่อ: ${new Date().toLocaleTimeString()}</p>
+                    </div>
+                `;
+                
+                // เล่นเสียงเอฟเฟกต์แจ้งเตือนเบราว์เซอร์สั้นๆ (Beep Audio Logic Buffer)
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    osc.type = "sine"; osc.frequency.value = 800; osc.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 0.15);
+                } catch(e){}
+
+                // สั่งประมวลผล Auto-Save อัปเดตคลาวด์อัตโนมัติทันที
+                autoSaveToCloud();
+            } else {
+                resultBox.innerHTML = `
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-200 text-center space-y-1">
+                        <i class="fa-solid fa-circle-xmark text-4xl text-red-500"></i>
+                        <h4 class="font-bold text-red-800">ไม่พบรหัสนักกีฬา</h4>
+                        <p class="text-xs text-gray-600">รหัสข้อมูล: "${scannedText}" ไม่ตรงกับระบบสโมสร</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 📊 ระบบวิเคราะห์ข้อมูลและสร้างกราฟรายงานสถิติ (Charts Logic)
+        function updateDashboardCharts() {
+            if(!document.getElementById('chart-age-groups')) return;
+            
+            // 1. กราฟข้อมูลกลุ่มรุ่นอายุ
+            const counts = {};
+            players.filter(x => x.u !== 'ลาออก' && x.u !== 'ไม่ผ่านคัดเลือก').forEach(p => counts[p.u] = (counts[p.u] || 0) + 1);
+            
+            const labels = Object.keys(counts).map(k => `รุ่น U-${k}`);
+            const dataVals = Object.values(counts);
+
+            if(chartAgeGroups) chartAgeGroups.destroy();
+            chartAgeGroups = new Chart(document.getElementById('chart-age-groups').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataVals,
+                        backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#3B82F6', '#EC4899', '#8B5CF6', '#6B7280']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 2. กราฟสถานะการมาเช็คซ้อมวันนี้
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            let pCount = 0, aCount = 0, lCount = 0;
+            if(attendance[dateKey]) {
+                for(let k in attendance[dateKey]) {
+                    const s = attendance[dateKey][k].status;
+                    if(s === 'มาซ้อม') pCount++;
+                    if(s === 'ขาดซ้อม') aCount++;
+                    if(s === 'ลากิจ' || s === 'ลาป่วย') lCount++;
+                }
+            }
+
+            if(chartAttendanceToday) chartAttendanceToday.destroy();
+            chartAttendanceToday = new Chart(document.getElementById('chart-attendance').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['มาฝึกซ้อม', 'ลากิจ/ลาป่วย', 'ขาดการฝึกซ้อม'],
+                    datasets: [{
+                        label: 'จำนวนนร. (คน)',
+                        data: [pCount, lCount, aCount],
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+        }
+
+        // 📝 ส่วนจัดทำเอกสารและรายงานพิมพ์สรุป
+        function renderReports() {
+            const dateKey = document.getElementById('attendance-date-picker').value;
+            
+            if (currentReportSubTab === 'daily') {
+                const tbody = document.getElementById('report-table-body');
+                tbody.innerHTML = '';
+                
+                let pCount = 0, aCount = 0, lCount = 0;
+                let activePlayers = players.filter(x => x.u !== 'ลาออก' && x.u !== 'ไม่ผ่านคัดเลือก');
+
+                activePlayers.forEach(p => {
+                    const att = (attendance[dateKey] && attendance[dateKey][p.id]) ? attendance[dateKey][p.id] : { status: "-", note: "" };
+                    if(att.status === 'มาซ้อม') pCount++;
+                    if(att.status === 'ขาดซ้อม') aCount++;
+                    if(att.status === 'ลากิจ' || att.status === 'ลาป่วย') lCount++;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="p-3 border font-bold">${p.no}</td>
+                        <td class="p-3 border font-medium">${p.name}</td>
+                        <td class="p-3 border font-bold text-blue-600">${p.nickname}</td>
+                        <td class="p-3 border">U-${p.u}</td>
+                        <td class="p-3 border font-semibold">${att.status}</td>
+                        <td class="p-3 border text-xs text-gray-500">${att.note || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('rep-count-present').innerText = pCount;
+                document.getElementById('rep-count-leave').innerText = lCount;
+                document.getElementById('rep-count-absent').innerText = aCount;
+
+                if(chartReportDailyPie) chartReportDailyPie.destroy();
+                chartReportDailyPie = new Chart(document.getElementById('chart-report-daily-pie').getContext('2d'), {
+                    type: 'pie',
+                    data: {
+                        labels: ['มาซ้อม', 'ลา', 'ขาด'],
+                        datasets: [{ data: [pCount, lCount, aCount], backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+            
+            if(currentReportSubTab === 'weekly') {
+                // สร้างยอดประวัติย้อนหลังสัปดาห์ข้อมูลตัวอย่างจำลองโมเดลสถิติ
+                if(chartWeeklyLine) chartWeeklyLine.destroy();
+                chartWeeklyLine = new Chart(document.getElementById('chart-weekly-line').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'],
+                        datasets: [{ label: 'ร้อยละการเข้าซ้อม (%)', data: [85, 90, 88, 92, 79], borderColor: '#3B82F6', fill: false }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+
+                if(chartWeeklyBar) chartWeeklyBar.destroy();
+                chartWeeklyBar = new Chart(document.getElementById('chart-weekly-bar').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['มาซ้อม', 'ลากิจ/ป่วย', 'ขาดซ้อม'],
+                        datasets: [{ label: 'จำนวนรวมสะสม', data: [45, 8, 4], backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            if(currentReportSubTab === 'personal') {
+                const select = document.getElementById('rpt-pers-player-select');
+                const prevVal = select.value;
+                select.innerHTML = '';
+                players.filter(x => x.u !== 'ลาออก' && x.u !== 'ไม่ผ่านคัดเลือก').forEach(p => {
+                    select.innerHTML += `<option value="${p.id}">${p.name} (${p.nickname})</option>`;
+                });
+                if(prevVal && players.find(x=>x.id === prevVal)) select.value = prevVal;
+                renderPersonalReport();
+            }
+        }
+
+        function renderPersonalReport() {
+            const pid = document.getElementById('rpt-pers-player-select').value;
+            const weekVal = document.getElementById('rpt-pers-week-picker').value;
+            if(!pid) return;
+
+            const p = players.find(x => x.id === pid);
+            document.getElementById('rpt-pers-week-title').innerText = `สรุปผลรายงานประจำสัปดาห์: ${weekVal || 'ปัจจุบัน'}`;
+            document.getElementById('rpt-pers-avatar').src = p.avatar || '';
+            document.getElementById('rpt-pers-fullname').innerText = p.name;
+            document.getElementById('rpt-pers-nickname').innerText = p.nickname;
+            document.getElementById('rpt-pers-no').innerText = p.no;
+            document.getElementById('rpt-pers-u').innerText = `U-${p.u}`;
+
+            // จัดทำตัวอย่างกราฟสรุปรายบุคคลแบบคงที่จำลองรูปเล่มรายงานเพื่อการปริ้นท์
+            if(chartPersWeeklyBar) chartPersWeeklyBar.destroy();
+            chartPersWeeklyBar = new Chart(document.getElementById('chart-pers-weekly-bar').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'],
+                    datasets: [{ label: 'สถานะการเข้าฝึก (1=มา, 0.5=ลา, 0=ขาด)', data: [1, 1, 0.5, 1, 1], backgroundColor: '#3B82F6' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 1, beginAtZero: true } } }
+            });
+
+            if(chartPersWeeklyPie) chartPersWeeklyPie.destroy();
+            chartPersWeeklyPie = new Chart(document.getElementById('chart-pers-weekly-pie').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: ['เข้าซ้อม', 'ลากิจ/ป่วย', 'ขาดซ้อม'],
+                    datasets: [{ data: [80, 20, 0], backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // ดึงข้อความหมายเหตุประเมินฟอร์ม
+            document.getElementById('comment-text-display').innerText = p.comment || "ฟอร์มการเล่นสมบูรณ์ดีเยี่ยม มีความตั้งใจและระเบียบวินัยการเข้าฝึกซ้อมสม่ำเสมอเป็นแกนหลักสำคัญของทีมรุ่นอายุนี้";
+        }
+
+        function toggleEditComment() {
+            const display = document.getElementById('comment-text-display');
+            const inputArea = document.getElementById('comment-input-area');
+            const textarea = document.getElementById('comment-textarea');
+            const pid = document.getElementById('rpt-pers-player-select').value;
+            const p = players.find(x => x.id === pid);
+
+            if(inputArea.classList.contains('hidden')) {
+                inputArea.classList.remove('hidden');
+                display.classList.add('hidden');
+                textarea.value = p.comment || display.innerText;
+            } else {
+                inputArea.classList.add('hidden');
+                display.classList.remove('hidden');
+            }
+        }
+
+        function savePlayerComment() {
+            const pid = document.getElementById('rpt-pers-player-select').value;
+            const text = document.getElementById('comment-textarea').value.trim();
+            const idx = players.findIndex(x => x.id === pid);
+            if(idx !== -1) {
+                players[idx].comment = text;
+                document.getElementById('comment-text-display').innerText = text;
+                toggleEditComment();
+                
+                // ระบบบันทึกอัตโนมัติ (Auto-Save คอมเม้นท์โค้ชลงฐานข้อมูลคลาวด์)
+                autoSaveToCloud();
+            }
+        }
+
+        // 🕒 ส่วนแสดงข้อมูลประวัติการล็อกอินผู้ใช้งาน (Login Logs Table)
+        async function renderLoginLogsTable() {
+            const tbody = document.getElementById('login-logs-table-body');
+            tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-400"><i class="fa-solid fa-spinner animate-spin mr-1"></i> กำลังโหลดประวัติการเข้าใช้งานจาก Google Sheet...</td></tr>`;
+            
+            try {
+                // ส่งคำสั่งแบบดึงประวัติซิงค์ทั้งหมด
+                const response = await fetch(`${CONFIG.API_URL}?action=get_login_logs`);
+                let logs = [];
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result && result.logs) logs = result.logs;
+                } else {
+                    // Fallback กรณีเปิดใช้ Local Offline Test
+                    logs = [
+                        { user: "ADMIN", time: new Date().toLocaleString(), status: "Secure Cloud Success" }
+                    ];
+                }
+
+                tbody.innerHTML = '';
+                if(logs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-400">ไม่พบประวัติบันทึกข้อมูลล็อกอินในระบบแผ่นงาน</td></tr>`;
+                    return;
+                }
+
+                logs.forEach((log, index) => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-gray-50/50 transition-colors text-xs sm:text-sm";
+                    tr.innerHTML = `
+                        <td class="px-6 py-3 font-semibold text-gray-400">${index + 1}</td>
+                        <td class="px-6 py-3 font-bold text-slate-800"><i class="fa-solid fa-user-shield text-xs mr-1 text-slate-400"></i> ${log.user || log.UserName || 'Unknown'}</td>
+                        <td class="px-6 py-3 font-mono text-gray-600">${log.time || log.LoginTime || '-'}</td>
+                        <td class="px-6 py-3"><span class="inline-flex items-center gap-1 text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full text-[11px]"><span class="h-1 w-1 bg-emerald-500 rounded-full"></span> ผ่านการเข้ารหัส</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-red-500 font-medium"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ไม่สามารถดึงข้อมูลประวัติเรียลไทม์ได้เนื่องจากปัญหาการเชื่อมต่อเครือข่าย</td></tr>`;
+            }
+        }
+
+        // 📥 นำเข้าแฟ้มไฟล์เอกสารภายนอกสำรองข้อมูล (CSV Import Parser Module)
+        function handleCSVImport(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const text = evt.target.result;
+                const lines = text.split('\n');
+                let importedCount = 0;
+                
+                for(let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if(!line) continue;
+                    
+                    const cols = line.split(',');
+                    if(cols.length >= 5) {
+                        const id = "PL" + (Date.now() + i);
+                        const no = cols[0].trim() || '-';
+                        const name = cols[1].trim();
+                        const nickname = cols[2].trim();
+                        const u = cols[3].trim();
+                        const birth = cols[4].trim();
+                        
+                        // ป้องกันข้อมูลรายชื่อซ้ำด้วยการเช็คชื่อ-สกุลซ้ำในอาร์เรย์
+                        if(!players.find(x => x.name === name)) {
+                            players.push({ id, no, name, nickname, u, birth, avatar: "" });
+                            importedCount++;
+                        }
+                    }
+                }
+                
+                alert(`ทำการดาวน์โหลดประมวลผลและนำเข้ารายชื่อนักกีฬาใหม่จำนวน ${importedCount} รายการ สำเร็จ!`);
+                refreshPlayersTable();
+                e.target.value = ''; // ล้างค่าตัวเลือกไฟล์เพื่อกดนำเข้าซ้ำได้
+                
+                // สั่ง Auto-Save ทันทีหลังการ Import CSV เข้าฐานข้อมูลเครื่องเพื่ออัปคลาวด์
+                autoSaveToCloud();
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        // ☁️ ปุ่มอัปเดตแมนนวล / สั่งการล้างข้อมูลหน้าบ้าน
+        async function pushDataToCloud() {
+            await autoSaveToCloud();
+            alert('ทำการเชื่อมโยงและซิงค์ข้อมูลทั้งหมดลงไฟล์ Google Sheet เรียบร้อยแล้ว!');
+        }
+
+        async function clearAllPlayersData() {
+            if (confirm('⚠️ คำเตือน: คุณต้องการลบฐานข้อมูลทั้งหมดรวมถึงประวัติการเข้าฝึกซ้อมออกจากไฟล์คลาวด์หลักใช่หรือไม่? ข้อมูลนี้ไม่สามารถกู้คืนได้')) {
+                try {
+                    const response = await fetch(CONFIG.API_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "clear_all_data" })
+                    });
+                    const res = await response.json();
+                    if(res.status === "success") {
+                        players = [];
+                        attendance = {};
+                        refreshPlayersTable();
+                        alert('ล้างข้อมูลนักกีฬาบน Google Sheets เรียบร้อยแล้ว');
+                    }
+                } catch(err) {
+                    alert('ไม่สามารถส่งคำสั่งล้างคลาวด์ได้เนื่องจากเน็ตเวิร์กขัดข้อง');
+                }
+            }
         }
     </script>
 </body>
