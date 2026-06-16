@@ -24,16 +24,13 @@
             #personal-report-pdf-area, #personal-report-pdf-area * { visibility: visible; }
             #print-report-area { position: absolute; left: 0; top: 0; width: 100%; }
             
-            /* ตั้งค่าหน้ากระดาษ A4 แนวตั้งสำหรับรายงานส่วนบุคคล */
             #personal-report-pdf-area { 
                 position: absolute; left: 0; top: 0; width: 210mm; min-height: 297mm; 
                 background: white !important; padding: 20mm !important; box-shadow: none !important;
             }
-            /* ซ่อนไอคอน Edit และปุ่มบันทึกเวลาสั่งพิมพ์ */
             .print-hide { display: none !important; }
         }
 
-        /* จำลองขนาดหน้าจอ A4 บนเบราว์เซอร์ */
         .a4-container {
             width: 210mm;
             min-height: 297mm;
@@ -417,7 +414,6 @@
         let chartWeeklyBar = null;
         let html5QrScanner = null;
 
-        // ตัวแปรเก็บกราฟและข้อความสำหรับ รายงานส่วนบุคคล
         let chartPersBar = null;
         let chartPersPie = null;
         let commentDb = JSON.parse(localStorage.getItem('playerComments') || '{}');
@@ -430,9 +426,37 @@
             attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
             specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
             
+            // ✨ ทำงานระบบส่งเวลาล็อกอินอัตโนมัติเมื่อเปิดเว็บบอร์ด
+            sendLoginTimeToCloud();
+
             switchTab('dashboard');
             refreshAllViews();
         });
+
+        // ✨ ฟังก์ชันสำหรับดักจับเวลาเข้าใช้งานเพื่อส่งข้อมูลเข้าแผ่นงานชีต 'logintime'
+        function sendLoginTimeToCloud() {
+            // สร้างเวลาปัจจุบันในรูปแบบภาษาไทย (วัน/เดือน/ปี ชม:นาที:วินาที)
+            const now = new Date();
+            const formattedTime = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
+            
+            // สามารถแก้ไขชื่อผู้ใช้เริ่มต้นที่นี่ หรือแมปจากค่าอื่นได้ตามต้องการ
+            const userName = "AC_Coach_Admin"; 
+
+            const payload = {
+                action: "log_login_time",
+                userName: userName,
+                loginTime: formattedTime
+            };
+
+            fetch(CONFIG.API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => console.log("Login time logged:", data))
+            .catch(err => console.error("Error logging login time:", err));
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(x => x.classList.add('hidden'));
@@ -484,7 +508,6 @@
                 document.getElementById('report-personal-section').classList.remove('hidden');
                 document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
                 
-                // ✨ แก้ไขระบบคำนวณสัปดาห์ปัจจุบันให้ตรงตามมาตรฐาน ISO-8601 เพื่อให้ปลดล็อกการเลือกสัปดาห์ย้อนหลัง
                 if(!document.getElementById('rpt-pers-week-picker').value) {
                     const now = new Date();
                     const target = new Date(now.valueOf());
@@ -501,7 +524,6 @@
                     document.getElementById('rpt-pers-week-picker').value = `${weekYear}-W${String(weekResult).padStart(2, '0')}`;
                 }
                 
-                // โหลดรายชื่อผู้เล่นลง Dropdown
                 const pSelect = document.getElementById('rpt-pers-player-select');
                 pSelect.innerHTML = '';
                 players.forEach(p => {
@@ -509,9 +531,11 @@
                         pSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.nickname})</option>`;
                     }
                 });
+                
                 renderPersonalReport();
             }
-    }
+        }
+
         function getSelectedDate() {
             return document.getElementById('attendance-date-picker').value;
         }
@@ -620,37 +644,28 @@
             }
         }
 
-        // ฟังก์ชันส่งสัญญานล้างฐานข้อมูลระบบทั้งหมด (ฝั่ง Google Sheets และ Local)
         async function clearAllPlayersData() {
             const userInput = prompt("⚠️ คำเตือน: คุณกำลังจะลบข้อมูลนักกีฬาและการเข้าซ้อมทั้งหมดออกจากระบบและ Google Sheet!\n\nกรุณาพิมพ์คำว่า confirm เพื่อยืนยันการทำรายการลบ:");
-            
-            if (userInput === null) return; // ยกเลิกหน้าต่าง
+            if (userInput === null) return;
             
             if (userInput.trim() === "confirm") {
                 showLoadingSpinner(true);
-                
-                const payload = {
-                    action: "clear_all_data"
-                };
-
+                const payload = { action: "clear_all_data" };
                 try {
                     const response = await fetch(CONFIG.API_URL, { 
                         method: "POST",
                         headers: { "Content-Type": "text/plain;charset=utf-8" },
                         body: JSON.stringify(payload)
                     });
-                    
                     if (response.ok) {
                         const result = await response.json();
                         if (result.status === "success") {
-                            // เคลียร์ข้อมูลถอนรากถอนโคนในหน่วยความจำเครื่องเบาว์เซอร์
                             players = [];
                             attendanceDb = {};
                             specialStatusDb = {};
                             commentDb = {};
                             localStorage.removeItem('playerComments');
                             saveToLocalStorage();
-                            
                             alert("🗑️ ลบฐานข้อมูลใน Google Sheet และระบบ LocalStorage เรียบร้อยแล้ว!");
                             refreshAllViews();
                         } else {
@@ -661,12 +676,12 @@
                     }
                 } catch (e) {
                     console.error("Clear Data Error:", e);
-                    alert("❌ ลบข้อมูลไม่สำเร็จ: การเชื่อมต่อขัดข้องหรือ URL สคริปต์ปลายทางไม่ถูกต้อง");
+                    alert("❌ ลบข้อมูลไม่สำเร็จ: การเชื่อมต่อขัดข้อง");
                 } finally {
                     showLoadingSpinner(false);
                 }
             } else {
-                alert("❌ คำค้นยืนยันไม่ถูกต้อง! ระบบได้ทำการยกเลิกคำสั่งลบความปลอดภัยเรียบร้อย");
+                alert("❌ คำค้นยืนยันไม่ถูกต้อง!");
             }
         }
 
@@ -1069,7 +1084,6 @@
 
         async function pushDataToCloud() {
             showLoadingSpinner(true);
-            
             const payload = {
                 action: "sync_all",
                 players: players,
@@ -1079,30 +1093,26 @@
             try {
                 const response = await fetch(CONFIG.API_URL, { 
                     method: "POST",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8" 
-                    },
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
-                
                 if (response.ok) {
                     const result = await response.json();
                     if (result.status === "success") {
                         updateCloudStatusUI(true);
                         alert("🎉 ซิงค์ข้อมูลนักกีฬาทั้งหมดขึ้น Google Sheets สำเร็จเรียบร้อยแล้ว!");
                     } else {
-                        console.error("Apps Script Error:", result.message);
                         updateCloudStatusUI(false);
                         alert("เกิดข้อผิดพลาดจากฝั่ง Google Sheet: " + result.message);
                     }
                 } else {
                     updateCloudStatusUI(false);
-                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ของ Google ได้ (Response Not OK)");
+                    alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ของ Google ได้");
                 }
             } catch (e) {
                 console.error("Cloud Sync Error:", e);
                 updateCloudStatusUI(false); 
-                alert("❌ บันทึกไม่สำเร็จ: ข้อมูลอาจจะยาวเกินไป หรือตั้งค่าสิทธิ์ Apps Script ไม่ถูกต้อง");
+                alert("❌ บันทึกไม่สำเร็จ: ข้อมูลอาจจะยาวเกินไป");
             } finally {
                 showLoadingSpinner(false);
             }
@@ -1137,18 +1147,12 @@
             const ctxAge = document.getElementById('chart-age-groups');
             if(ctxAge) {
                 if(chartInstanceAge) chartInstanceAge.destroy();
-
                 const desiredOrder = ["นักกีฬาใหม่", "12", "13", "14", "15", "16", "17", "18"];
                 const sortedLabels = desiredOrder.filter(key => uMap[key] !== undefined);
                 const sortedData = sortedLabels.map(key => uMap[key]);
-
                 const legendLabels = sortedLabels.map(key => {
                     const count = uMap[key];
-                    if (key === "นักกีฬาใหม่") {
-                        return `นักกีฬาใหม่  ${count} คน`;
-                    } else {
-                        return `U${key}  ${count} คน`;
-                    }
+                    return key === "นักกีฬาใหม่" ? `นักกีฬาใหม่  ${count} คน` : `U${key}  ${count} คน`;
                 });
 
                 chartInstanceAge = new Chart(ctxAge.getContext('2d'), {
@@ -1165,17 +1169,8 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                position: 'left', 
-                                align: 'center',  
-                                labels: {
-                                    boxWidth: 15, 
-                                    padding: 12,  
-                                    font: {
-                                        family: "'Kanit', sans-serif",
-                                        size: 13,
-                                        weight: 'normal'
-                                    }
-                                }
+                                position: 'left', align: 'center',  
+                                labels: { boxWidth: 15, padding: 12, font: { family: "'Kanit', sans-serif", size: 13 } }
                             }
                         }
                     }
@@ -1221,24 +1216,4 @@
             if(!p) return;
             document.getElementById('modal-title-text').innerText = "แก้ไขโปรไฟล์นักกีฬา";
             document.getElementById('edit-profile-pid').value = p.id;
-            document.getElementById('edit-profile-fullname').value = p.name || '';
-            document.getElementById('edit-profile-nickname').value = p.nickname || '';
-            document.getElementById('edit-profile-number').value = p.no === '-' ? '' : p.no;
-            document.getElementById('edit-profile-u').value = p.u || '12';
-            document.getElementById('edit-profile-birth').value = p.birth || '';
-            document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
-            document.getElementById('profile-modal').classList.remove('hidden');
-        }
-
-        function closeProfileEditModal() { document.getElementById('profile-modal').classList.add('hidden'); }
-        
-        function previewAvatarImage(e) {
-            const file = e.target.files[0];
-            if(!file) return;
-            const r = new FileReader();
-            r.onload = function(evt) { document.getElementById('edit-profile-preview').src = evt.target.result; }
-            r.readAsDataURL(file);
-        }
-    </script>
-</body>
-</html>
+            document.getElementById
