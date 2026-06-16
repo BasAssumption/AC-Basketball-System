@@ -656,9 +656,17 @@
             if (filterSelect) filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
             if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
             
-            Array.from(uSet).sort().forEach(u => {
-                if (filterSelect) filterSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
-                if (attSelect) attSelect.innerHTML += `<option value="${u}">รุ่น U${u}</option>`;
+            // 👑 แก้ไขการจัดเรียง Dropdown: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
+            const sortedUList = Array.from(uSet).sort((a, b) => {
+                if (a === 'นักกีฬาใหม่') return -1;
+                if (b === 'นักกีฬาใหม่') return 1;
+                return parseInt(a) - parseInt(b);
+            });
+
+            sortedUList.forEach(u => {
+                const labelText = u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `รุ่น U${u}`;
+                if (filterSelect) filterSelect.innerHTML += `<option value="${u}">${labelText}</option>`;
+                if (attSelect) attSelect.innerHTML += `<option value="${u}">${labelText}</option>`;
             });
             
             if (filterSelect) filterSelect.value = prevFilterVal;
@@ -676,7 +684,15 @@
             const search = document.getElementById('search-player-input').value.toLowerCase();
             const filterU = document.getElementById('filter-u-select').value;
 
-            players.forEach(p => {
+            // 👑 แก้ไขการจัดเรียงในตารางฐานข้อมูล: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
+            const sortedPlayers = [...players].sort((a, b) => {
+                if (a.u === b.u) return (a.no || '').localeCompare(b.no || ''); // ถ้า U เท่ากัน ให้เรียงตามเบอร์เสื้อ
+                if (a.u === 'นักกีฬาใหม่') return -1;
+                if (b.u === 'นักกีฬาใหม่') return 1;
+                return parseInt(a.u) - parseInt(b.u);
+            });
+
+            sortedPlayers.forEach(p => {
                 // 1. ตรวจสอบการกรองจำกัดสิทธิ์ข้อมูลหลัก
                 if (!isUserAllowedToSeeAge(p.u)) return;
 
@@ -698,6 +714,8 @@
                     badgeOverlay = `<span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-1 rounded shadow transform translate-x-1 -translate-y-1">ลาออก</span>`;
                 }
 
+                const uLabel = p.u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `U${p.u}`;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50/80 transition">
                         <td class="px-6 py-3.5 relative">
@@ -709,7 +727,7 @@
                         <td class="px-6 py-3.5 font-bold text-gray-700">#${p.no || '-'}</td>
                         <td class="px-6 py-3.5 font-semibold text-gray-800">${p.name}</td>
                         <td class="px-6 py-3.5 text-blue-600 font-bold">${p.nickname}</td>
-                        <td class="px-6 py-3.5"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">U${p.u}</span></td>
+                        <td class="px-6 py-3.5"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-xs font-bold">${uLabel}</span></td>
                         <td class="px-6 py-3.5 text-gray-500">${p.birth || "ไม่ระบุ"}</td>
                         <td class="px-6 py-3.5 text-right space-x-1 whitespace-nowrap">
                             <button onclick="openEditProfileModal('${p.id}')" class="text-blue-600 hover:bg-blue-50 p-1.5 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -720,8 +738,7 @@
                 `;
             });
         }
-
-        function refreshAttendanceView() {
+       function refreshAttendanceView() {
             const grid = document.getElementById('attendance-grid-layout');
             const reportTbody = document.getElementById('report-table-body');
             if(!grid || !reportTbody) return;
@@ -735,7 +752,15 @@
 
             let countPresent = 0, countLeave = 0, countAbsent = 0;
 
-            players.forEach(p => {
+            // 👑 แก้ไขการจัดเรียงหน้าเช็คชื่อและใบรายงาน: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
+            const sortedPlayers = [...players].sort((a, b) => {
+                if (a.u === b.u) return (a.no || '').localeCompare(b.no || '');
+                if (a.u === 'นักกีฬาใหม่') return -1;
+                if (b.u === 'นักกีฬาใหม่') return 1;
+                return parseInt(a.u) - parseInt(b.u);
+            });
+
+            sortedPlayers.forEach(p => {
                 // ตรวจสอบความปลอดภัย: เช็คระดับรุ่นอายุที่สามารถแก้ไขได้
                 if (!isUserAllowedToSeeAge(p.u)) return;
                 if(specialStatusDb[p.id]) return;
@@ -747,6 +772,7 @@
                 else if(currentAtt.status === '✕') countAbsent++;
 
                 const avatarImg = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+                const uLabel = p.u === 'นักกีฬาใหม่' ? 'นักกีฬาใหม่' : `รุ่น U${p.u}`;
 
                 grid.innerHTML += `
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between space-y-3">
@@ -754,7 +780,7 @@
                             <img src="${avatarImg}" class="w-12 h-12 rounded-full object-cover border">
                             <div>
                                 <h5 class="font-bold text-gray-800 text-base">${p.name} (${p.nickname})</h5>
-                                <p class="text-xs text-gray-400 font-bold">เบอร์เสื้อ: #${p.no} | รุ่น U${p.u}</p>
+                                <p class="text-xs text-gray-400 font-bold">เบอร์เสื้อ: #${p.no} | ${uLabel}</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-1 text-center">
@@ -776,7 +802,7 @@
                         <td class="p-3 border font-bold">#${p.no}</td>
                         <td class="p-3 border font-medium">${p.name}</td>
                         <td class="p-3 border text-blue-600 font-bold">${p.nickname}</td>
-                        <td class="p-3 border">U${p.u}</td>
+                        <td class="p-3 border">${uLabel}</td>
                         <td class="p-3 border">${statusLabel}</td>
                         <td class="p-3 border text-xs text-gray-500">${currentAtt.note||'-'}</td>
                     </tr>
@@ -797,7 +823,6 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
-
         function switchPlayerSubTab(mode) {
             currentPlayerTabMode = mode;
             const btnActive = document.getElementById('sub-player-btn-active');
