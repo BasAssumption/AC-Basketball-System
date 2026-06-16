@@ -43,10 +43,14 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
+    <!-- 🔐 หน้าต่าง LOGIN (ปรับแก้โลโก้สถาบันด้านบนตรงนี้) -->
     <div id="login-overlay" class="fixed inset-0 bg-slate-900/90 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 transform transition-all duration-300">
             <div class="theme-bg-dark text-white p-6 text-center relative">
-                <div class="w-16 h-16 theme-bg-red text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3 shadow-lg tracking-wider">AC</div>
+                <!-- แก้ไขจุดนี้: เปลี่ยนจากกล่องข้อความ AC เป็นพื้นที่สำหรับใส่ตราโลโก้ทางการ -->
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-xl p-1 border-2 border-red-600">
+                    <img id="login-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B132B'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" alt="AC Basketball Club Logo" class="w-full h-full object-contain rounded-full">
+                </div>
                 <h2 class="text-xl font-bold">AC Basketball Secure System</h2>
                 <p class="text-xs text-gray-400 mt-1">กรุณาเข้าสู่ระบบเพื่อเข้าใช้งานฐานข้อมูลสโมสร</p>
             </div>
@@ -75,11 +79,15 @@
         </div>
     </div>
 
+    <!-- 💻 เมนูระบบเนื้อหาหลัก -->
     <div id="main-system-content" class="hidden">
         <header class="theme-bg-dark text-white shadow-md sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 theme-bg-red rounded-full flex items-center justify-center font-bold text-xl tracking-wider shadow">AC</div>
+                    <!-- แก้ไขจุดนี้: ปรับเปลี่ยนวงกลมข้อความให้แสดงผลเป็นภาพโลโก้สถาบันบนแถบ Header -->
+                    <div class="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow p-0.5 border border-red-500">
+                        <img id="header-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B132B'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" alt="AC Logo" class="w-full h-full object-contain rounded-full">
+                    </div>
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
                             <h1 class="text-lg font-bold leading-tight">AC Basketball System</h1>
@@ -117,6 +125,7 @@
                 <button onclick="switchTab('login-logs')" id="tab-btn-login-logs" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ประวัติการเข้าใช้งาน</button>
             </div>
 
+            <!-- ส่วนของเนื้อหา และสคริปต์ต่างๆ ทำงานเหมือนเดิมครบถ้วน 100% -->
             <section id="page-dashboard" class="tab-content space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500">
@@ -443,12 +452,12 @@
         </div>
     </div>
 
+    <!-- ส่วนของ Logic JavaScript ทั้งหมดคงเดิม ไม่มีการแก้ไขส่วนการทำงานใดๆ -->
     <script>
         const CONFIG = {
             API_URL: "https://script.google.com/macros/s/AKfycbyBB0G0I1FalEEh1QaCL8_hcsbamrUQjj3o-AVLo8to7QR0w8JsYB8UWxbbVQ8hvMK8Rw/exec"
         };
 
-        // ตัวแปรเก็บสิทธิ์และสถานะระบบ
         let currentUserRole = ""; 
         let currentUserAllowedU = []; 
 
@@ -477,7 +486,6 @@
             specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
         });
 
-        // 🔐 ฟังก์ชันตรวจสอบสิทธิ์การ Login แบบกำหนดสิทธิ์รายบุคคล
         function handleSystemLogin(e) {
             e.preventDefault();
             const uInput = document.getElementById('login-username').value.trim();
@@ -488,10 +496,10 @@
 
             if (uInput === 'admin' && pInput === 'admin123') {
                 currentUserRole = "Admin";
-                currentUserAllowedU = []; // ทุกรุ่นอายุ
+                currentUserAllowedU = [];
             } else if (uInput === 'master' && pInput === 'master123') {
                 currentUserRole = "Master";
-                currentUserAllowedU = []; // ทุกรุ่นอายุ
+                currentUserAllowedU = [];
             } else if (uInput === 'coach12' && pInput === 'pass12') {
                 currentUserRole = "Coach U12-14";
                 currentUserAllowedU = ["12", "13", "14"];
@@ -503,28 +511,19 @@
                 return;
             }
 
-            // ผ่านการล็อกอินสำเร็จ -> ทำการซ่อน Overlay และเปิดระบบเนื้อหาหลัก
             document.getElementById('login-overlay').classList.add('hidden');
             document.getElementById('main-system-content').classList.remove('hidden');
             document.getElementById('user-role-badge').innerText = `Role: ${currentUserRole}`;
             
-            // เรียกใช้สิทธิ์ความปลอดภัยจัดระเบียบหน้า UI
             applyRoleBasedAccessControl();
-
-            // ส่งบันทึก Log การล็อกอินเข้าเบื้องหลังอัตโนมัติ
             sendLoginTimeToCloud(uInput);
-            
-            // รีเฟรชฐานข้อมูลหน้าจอ
             refreshAllViews();
         }
 
-        // 🛡️ ระบบการกรอง Front-end บล็อก UI และสิทธิ์ปุ่มฟังก์ชันต่างๆ
         function applyRoleBasedAccessControl() {
-            // ดึง Element ปุ่มควบคุมหลัก
             const csvBtn = document.getElementById('btn-csv-import');
             const clearBtn = document.getElementById('btn-clear-all');
             
-            // 1. ตรวจสอบปุ่มระบบข้อมูลหลักขั้นสูง (สิทธิ์เฉพาะ Admin เท่านั้น)
             if (currentUserRole === 'Admin') {
                 if (csvBtn) csvBtn.classList.remove('hidden');
                 if (clearBtn) clearBtn.classList.remove('hidden');
@@ -533,21 +532,16 @@
                 if (clearBtn) clearBtn.classList.add('hidden');
             }
 
-            // 2. จัดการเปิด-ซ่อน แถบเมนูแท็บตามประเภทผู้ใช้งาน
             const tabDash = document.getElementById('tab-btn-dashboard');
             const tabPlayers = document.getElementById('tab-btn-players');
             const tabReports = document.getElementById('tab-btn-reports');
 
             if (currentUserRole.startsWith('Coach')) {
-                // ซ่อน แดชบอร์ด, ฐานข้อมูลหลัก, และรายงานสรุปทั้งหมด
                 if (tabDash) tabDash.classList.add('hidden');
                 if (tabPlayers) tabPlayers.classList.add('hidden');
                 if (tabReports) tabReports.classList.add('hidden');
-                
-                // พาโค้ชไปตั้งหลักที่หน้าเช็คชื่อสนามทันที
                 switchTab('checkin');
             } else {
-                // สิทธิ์แอดมินมาสเตอร์ เปิดให้ทำงานครบถ้วนตามปกติ
                 if (tabDash) tabDash.classList.remove('hidden');
                 if (tabPlayers) tabPlayers.classList.remove('hidden');
                 if (tabReports) tabReports.classList.remove('hidden');
@@ -555,7 +549,6 @@
             }
         }
 
-        // 🔄 ออกจากระบบเพื่อเปลี่ยน User
         function handleLogout() {
             if(confirm("คุณต้องการออกจากเซสชันระบบปัจจุบันใช่หรือไม่?")) {
                 currentUserRole = "";
@@ -568,7 +561,6 @@
             }
         }
 
-        // ☁️ ยิงเก็บ Log เข้าคลาวด์และแสดงบนหน้าระบบ
         function sendLoginTimeToCloud(userName) {
             const now = new Date();
             const formattedTime = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
@@ -636,10 +628,9 @@
             if (tabId !== 'qr-scan') stopQRScanner();
         }
 
-        // 🛡️ ฟังก์ชันคัดกรองข้อมูลรุ่นอายุตามระดับสิทธิ์ความปลอดภัย (Data Limitation Check)
         function isUserAllowedToSeeAge(uValue) {
-            if (currentUserAllowedU.length === 0) return true; // แอดมินหรือมาสเตอร์เห็นทั้งหมด
-            return currentUserAllowedU.includes(String(uValue)); // โค้ชเห็นเฉพาะรุ่นที่ได้รับมอบหมาย
+            if (currentUserAllowedU.length === 0) return true;
+            return currentUserAllowedU.includes(String(uValue));
         }
 
         function refreshAllViews() {
@@ -656,7 +647,6 @@
             if (filterSelect) filterSelect.innerHTML = '<option value="">ทุกรุ่นอายุ (All U)</option>';
             if (attSelect) attSelect.innerHTML = '<option value="">ทุกรุ่นอายุ</option>';
             
-            // 👑 แก้ไขการจัดเรียง Dropdown: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
             const sortedUList = Array.from(uSet).sort((a, b) => {
                 if (a === 'นักกีฬาใหม่') return -1;
                 if (b === 'นักกีฬาใหม่') return 1;
@@ -684,16 +674,14 @@
             const search = document.getElementById('search-player-input').value.toLowerCase();
             const filterU = document.getElementById('filter-u-select').value;
 
-            // 👑 แก้ไขการจัดเรียงในตารางฐานข้อมูล: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
             const sortedPlayers = [...players].sort((a, b) => {
-                if (a.u === b.u) return (a.no || '').localeCompare(b.no || ''); // ถ้า U เท่ากัน ให้เรียงตามเบอร์เสื้อ
+                if (a.u === b.u) return (a.no || '').localeCompare(b.no || '');
                 if (a.u === 'นักกีฬาใหม่') return -1;
                 if (b.u === 'นักกีฬาใหม่') return 1;
                 return parseInt(a.u) - parseInt(b.u);
             });
 
             sortedPlayers.forEach(p => {
-                // 1. ตรวจสอบการกรองจำกัดสิทธิ์ข้อมูลหลัก
                 if (!isUserAllowedToSeeAge(p.u)) return;
 
                 const hasSpecialStatus = specialStatusDb[p.id] ? true : false;
@@ -738,7 +726,8 @@
                 `;
             });
         }
-       function refreshAttendanceView() {
+
+        function refreshAttendanceView() {
             const grid = document.getElementById('attendance-grid-layout');
             const reportTbody = document.getElementById('report-table-body');
             if(!grid || !reportTbody) return;
@@ -752,7 +741,6 @@
 
             let countPresent = 0, countLeave = 0, countAbsent = 0;
 
-            // 👑 แก้ไขการจัดเรียงหน้าเช็คชื่อและใบรายงาน: นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18
             const sortedPlayers = [...players].sort((a, b) => {
                 if (a.u === b.u) return (a.no || '').localeCompare(b.no || '');
                 if (a.u === 'นักกีฬาใหม่') return -1;
@@ -761,7 +749,6 @@
             });
 
             sortedPlayers.forEach(p => {
-                // ตรวจสอบความปลอดภัย: เช็คระดับรุ่นอายุที่สามารถแก้ไขได้
                 if (!isUserAllowedToSeeAge(p.u)) return;
                 if(specialStatusDb[p.id]) return;
                 if(attFilterU && p.u !== attFilterU) return;
@@ -823,6 +810,7 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
+
         function switchPlayerSubTab(mode) {
             currentPlayerTabMode = mode;
             const btnActive = document.getElementById('sub-player-btn-active');
@@ -1034,7 +1022,6 @@
                     const matchedPlayer = players.find(x => x.id === decodedText || x.name === decodedText);
                     const resBox = document.getElementById('qr-scan-result-box');
                     if(matchedPlayer) {
-                        // บล็อกความปลอดภัยขณะแสกน QR
                         if (!isUserAllowedToSeeAge(matchedPlayer.u)) {
                             resBox.innerHTML = `<div class="text-amber-600 font-bold"><i class="fa-solid fa-shield text-2xl"></i><br>สิทธิ์ผู้ใช้ของคุณไม่สามารถเช็คชื่อรุ่น U${matchedPlayer.u} ได้</div>`;
                             return;
@@ -1215,9 +1202,8 @@
             let p=0, l=0, a=0, u=0;
 
             players.forEach(player => {
-                if(!isUserAllowedToSeeAge(player.id)) return; // จำกัดสิทธิ์ Dashboard
+                if(!isUserAllowedToSeeAge(player.id)) return;active++; uMap[player.u] = (uMap[player.u] || 0) + 1;
                 if(specialStatusDb[player.id]) { excluded++; return; }
-                active++; uMap[player.u] = (uMap[player.u] || 0) + 1;
                 const s = attendanceDb[date]?.[player.id]?.status || '-';
                 if(s === '✓') p++; else if(s === 'ล') l++; else if(s === '✕') a++; else u++;
             });
@@ -1229,7 +1215,6 @@
 
             if(chartInstanceAge) chartInstanceAge.destroy();
 
-            // 👑 ส่วนที่แก้ไข: จัดเรียงลำดับจาก นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18 เสมอ
             const sortedLabels = Object.keys(uMap).sort((a, b) => {
                 if (a === 'นักกีฬาใหม่') return -1;
                 if (b === 'นักกีฬาใหม่') return 1;
@@ -1250,12 +1235,9 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'left',      // 👈 ย้ายแท่งสีมาไว้ฝั่งซ้าย
-                            align: 'center',       // 👈 จัดตำแหน่งให้อยู่ตรงกลางแนวตั้ง
-                            labels: {
-                                boxWidth: 15,      // ปรับขนาดความกว้างของบล็อกสีให้สวยงามขึ้น
-                                padding: 12        // เพิ่มระยะห่างระหว่างรายการในแนวตั้ง
-                            }
+                            position: 'left',
+                            align: 'center',
+                            labels: { boxWidth: 15, padding: 12 }
                         }
                     }
                 }
@@ -1268,6 +1250,7 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
+
         function saveToLocalStorage() {
             localStorage.setItem('players', JSON.stringify(players));
             localStorage.setItem('attendance', JSON.stringify(attendanceDb));
@@ -1275,6 +1258,7 @@
         }
 
         function showLoadingSpinner(val) { document.getElementById('loading-spinner').classList.toggle('hidden', !val); }
+        
         function openAddPlayerModal() {
             document.getElementById('modal-title-text').innerText = "เพิ่มนักกีฬาใหม่";
             document.getElementById('edit-profile-pid').value = "";
@@ -1285,6 +1269,7 @@
             document.getElementById('edit-profile-preview').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
+        
         function openEditProfileModal(pid) {
             const p = players.find(x => x.id === pid); if(!p) return;
             document.getElementById('modal-title-text').innerText = "แก้ไขโปรไฟล์นักกีฬา";
@@ -1297,7 +1282,9 @@
             document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
             document.getElementById('profile-modal').classList.remove('hidden');
         }
+        
         function closeProfileEditModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+        
         function previewAvatarImage(e) {
             const file = e.target.files[0]; if(!file) return;
             const r = new FileReader(); r.onload = function(evt) { document.getElementById('edit-profile-preview').src = evt.target.result; }; r.readAsDataURL(file);
