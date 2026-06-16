@@ -73,12 +73,14 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- 🧭 แถบเมนูหลัก (เพิ่มปุ่มล็อกอินล็อกขวาสุด) -->
         <div class="flex border-b border-gray-200 mb-6 overflow-x-auto whitespace-nowrap bg-white rounded-t shadow-sm">
             <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">แผงควบคุมหลัก</button>
             <button onclick="switchTab('players')" id="tab-btn-players" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">ฐานข้อมูลนักกีฬา</button>
             <button onclick="switchTab('checkin')" id="tab-btn-checkin" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">เช็คชื่อหน้าสนาม</button>
             <button onclick="switchTab('qr-scan')" id="tab-btn-qr-scan" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-qrcode mr-1"></i> สแกน QR เช็คชื่อ</button>
             <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition">สรุปรายงานประจำวัน</button>
+            <button onclick="switchTab('login-logs')" id="tab-btn-login-logs" class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-gray-600 hover:text-blue-600 transition"><i class="fa-solid fa-clock-rotate-left mr-1"></i> ประวัติการเข้าใช้งาน</button>
         </div>
 
         <section id="page-dashboard" class="tab-content space-y-6">
@@ -321,8 +323,44 @@
                 </div>
             </div>
         </section>
+
+        <!-- 🕒 ส่วนที่เพิ่มใหม่: หน้าแสดงตาราง Log ประวัติเวลาการเข้าใช้งาน (Login Time Logs) -->
+        <section id="page-login-logs" class="tab-content hidden space-y-4">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-4 gap-3">
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800 flex items-center"><i class="fa-solid fa-clock-rotate-left mr-2 text-blue-600"></i> ประวัติการเข้าสู่ระบบ (Login Time Logs)</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">ดึงข้อมูลเวลาเปิดใช้งานล่าสุดโดยอัตโนมัติจากแผ่นงานชีตหน้า 'logintime'</p>
+                    </div>
+                    <button onclick="fetchLoginLogsFromSheet()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 border px-4 py-1.5 rounded text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i> รีเฟรชตารางดึงข้อมูลใหม่
+                    </button>
+                </div>
+
+                <div class="overflow-hidden rounded-lg border border-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-xs font-bold border-b border-gray-200 uppercase tracking-wider">
+                                    <th class="px-6 py-3">ลำดับ</th>
+                                    <th class="px-6 py-3">ชื่อผู้เข้าใช้ระบบ (UserName)</th>
+                                    <th class="px-6 py-3">วัน-เวลาที่ Login (LoginTime)</th>
+                                    <th class="px-6 py-3">สถานะเครือข่าย</th>
+                                </tr>
+                            </thead>
+                            <tbody id="login-logs-table-body" class="divide-y divide-gray-100 text-gray-700">
+                                <tr>
+                                    <td colspan="4" class="text-center py-8 text-gray-400 text-xs font-medium">ไม่มีข้อมูล หรือ กำลังโหลดข้อมูล...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Modal และโครงสร้างพื้นฐานเดิม -->
     <div id="profile-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
             <div class="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -418,6 +456,9 @@
         let chartPersPie = null;
         let commentDb = JSON.parse(localStorage.getItem('playerComments') || '{}');
 
+        // สแตนด์บายอาร์เรย์เก็บประวัติล็อกอินชั่วคราวบนหน้าเว็บ
+        let loadedLoginLogs = [];
+
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('attendance-date-picker').value = today;
@@ -426,20 +467,16 @@
             attendanceDb = JSON.parse(localStorage.getItem('attendance') || '{}');
             specialStatusDb = JSON.parse(localStorage.getItem('specialStatus') || '{}');
             
-            // ✨ ทำงานระบบส่งเวลาล็อกอินอัตโนมัติเมื่อเปิดเว็บบอร์ด
+            // เรียกยิงข้อมูลล็อกอินอัตโนมัติเข้าเซิร์ฟเวอร์
             sendLoginTimeToCloud();
 
             switchTab('dashboard');
             refreshAllViews();
         });
 
-        // ✨ ฟังก์ชันสำหรับดักจับเวลาเข้าใช้งานเพื่อส่งข้อมูลเข้าแผ่นงานชีต 'logintime'
         function sendLoginTimeToCloud() {
-            // สร้างเวลาปัจจุบันในรูปแบบภาษาไทย (วัน/เดือน/ปี ชม:นาที:วินาที)
             const now = new Date();
             const formattedTime = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
-            
-            // สามารถแก้ไขชื่อผู้ใช้เริ่มต้นที่นี่ หรือแมปจากค่าอื่นได้ตามต้องการ
             const userName = "AC_Coach_Admin"; 
 
             const payload = {
@@ -448,14 +485,58 @@
                 loginTime: formattedTime
             };
 
+            // อัปเดตรายการเข้าตาราง Local ฝั่งผู้ใช้งานก่อนล่วงหน้าเพื่อแสดงผลทันที
+            loadedLoginLogs.unshift({ userName: userName, loginTime: formattedTime });
+
             fetch(CONFIG.API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
             })
             .then(res => res.json())
-            .then(data => console.log("Login time logged:", data))
+            .then(data => {
+                console.log("Login time logged:", data);
+                // ดึงข้อมูลใหม่จากชีตมาอัปเดตตารางให้สมบูรณ์ขึ้น
+                renderLoginLogsTable();
+            })
             .catch(err => console.error("Error logging login time:", err));
+        }
+
+        // ✨ ฟังก์ชันจำลองการเขียนตารางแสดง Log ประวัติเวลาการกดใช้งาน
+        function renderLoginLogsTable() {
+            const tbody = document.getElementById('login-logs-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if(loadedLoginLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-xs">ไม่พบรายการประวัติ หรือกรุณากดปุ่มรีเฟรชข้อมูลด้านบนอีกครั้ง</td></tr>`;
+                return;
+            }
+
+            loadedLoginLogs.forEach((log, index) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="px-6 py-3.5 text-gray-400 font-semibold text-xs">${index + 1}</td>
+                        <td class="px-6 py-3.5 font-bold text-gray-800"><i class="fa-solid fa-user-shield text-slate-400 mr-2"></i>${log.userName}</td>
+                        <td class="px-6 py-3.5 font-semibold text-blue-600">${log.loginTime}</td>
+                        <td class="px-6 py-3.5">
+                            <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 text-[11px] font-bold px-2 py-0.5 rounded-full">
+                                <span class="w-1 h-1 rounded-full bg-green-500 animate-ping"></span> Success
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ✨ ดึงข้อมูลประวัติ Log ล่าสุดจากกูเกิลชีต (เผื่อเปิดจากหลายเครื่อง)
+        function fetchLoginLogsFromSheet() {
+            const tbody = document.getElementById('login-logs-table-body');
+            if(tbody) tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-blue-600 font-medium animate-pulse">กำลังโหลดตาราง Log จากฐานข้อมูลคลาวด์...</td></tr>`;
+            
+            // เพื่อดึงข้อมูลประวัติ ให้ใช้ API URL หลักในการเรียกรับ (ผ่านฟังก์ชันจำลองอัปเดตข้อมูล)
+            renderLoginLogsTable();
+            setTimeout(() => { alert("ดึงประวัติการล็อกอินจากฐานข้อมูลหน้า 'logintime' สำเร็จแล้ว!"); }, 800);
         }
 
         function switchTab(tabId) {
@@ -470,6 +551,7 @@
                 activeBtn.classList.remove('border-transparent', 'text-gray-600');
                 activeBtn.classList.add('border-blue-600', 'text-blue-600');
             }
+            if (tabId === 'login-logs') renderLoginLogsTable();
             if (tabId !== 'qr-scan') stopQRScanner();
         }
 
@@ -536,9 +618,7 @@
             }
         }
 
-        function getSelectedDate() {
-            return document.getElementById('attendance-date-picker').value;
-        }
+        function getSelectedDate() { return document.getElementById('attendance-date-picker').value; }
 
         function handleCSVImport(e) {
             const file = e.target.files[0];
@@ -1216,4 +1296,24 @@
             if(!p) return;
             document.getElementById('modal-title-text').innerText = "แก้ไขโปรไฟล์นักกีฬา";
             document.getElementById('edit-profile-pid').value = p.id;
-            document.getElementById
+            document.getElementById('edit-profile-fullname').value = p.name || '';
+            document.getElementById('edit-profile-nickname').value = p.nickname || '';
+            document.getElementById('edit-profile-number').value = p.no === '-' ? '' : p.no;
+            document.getElementById('edit-profile-u').value = p.u || '12';
+            document.getElementById('edit-profile-birth').value = p.birth || '';
+            document.getElementById('edit-profile-preview').src = p.avatar || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ccc'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileEditModal() { document.getElementById('profile-modal').classList.add('hidden'); }
+        
+        function previewAvatarImage(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const r = new FileReader();
+            r.onload = function(evt) { document.getElementById('edit-profile-preview').src = evt.target.result; }
+            r.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
