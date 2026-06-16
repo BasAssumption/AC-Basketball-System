@@ -484,13 +484,21 @@
                 document.getElementById('report-personal-section').classList.remove('hidden');
                 document.getElementById('sub-btn-personal').className = "px-4 py-2 rounded font-semibold text-sm transition bg-blue-600 text-white";
                 
-                // ตั้งค่าเริ่มต้นของกล่องระบุสัปดาห์ปัจจุบัน
+                // ✨ แก้ไขระบบคำนวณสัปดาห์ปัจจุบันให้ตรงตามมาตรฐาน ISO-8601 เพื่อให้ปลดล็อกการเลือกสัปดาห์ย้อนหลัง
                 if(!document.getElementById('rpt-pers-week-picker').value) {
                     const now = new Date();
-                    const oneJan = new Date(now.getFullYear(), 0, 1);
-                    const numberOfDays = Math.floor((now - oneJan) / (24 * 60 * 60 * 1000));
-                    const weekResult = Math.ceil(( numberOfDays + oneJan.getDay() + 1) / 7);
-                    document.getElementById('rpt-pers-week-picker').value = `${now.getFullYear()}-W${String(weekResult).padStart(2, '0')}`;
+                    const target = new Date(now.valueOf());
+                    const dayNr = (now.getDay() + 6) % 7;
+                    target.setDate(target.getDate() - dayNr + 3);
+                    const firstThursday = target.valueOf();
+                    target.setMonth(0, 1);
+                    if (target.getDay() !== 4) {
+                        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+                    }
+                    const weekResult = 1 + Math.ceil((firstThursday - target) / 604800000);
+                    const weekYear = new Date(firstThursday).getFullYear();
+                    
+                    document.getElementById('rpt-pers-week-picker').value = `${weekYear}-W${String(weekResult).padStart(2, '0')}`;
                 }
                 
                 // โหลดรายชื่อผู้เล่นลง Dropdown
@@ -501,11 +509,9 @@
                         pSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.nickname})</option>`;
                     }
                 });
-                
                 renderPersonalReport();
             }
-        }
-
+    }
         function getSelectedDate() {
             return document.getElementById('attendance-date-picker').value;
         }
