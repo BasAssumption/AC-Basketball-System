@@ -1203,11 +1203,37 @@
             document.getElementById('dash-excluded-players').innerText = excluded + " คน";
 
             if(chartInstanceAge) chartInstanceAge.destroy();
-            const sortedLabels = Object.keys(uMap).sort();
+
+            // 👑 ส่วนที่แก้ไข: จัดเรียงลำดับจาก นักกีฬาใหม่ -> U12 -> U13 -> ... -> U18 เสมอ
+            const sortedLabels = Object.keys(uMap).sort((a, b) => {
+                if (a === 'นักกีฬาใหม่') return -1;
+                if (b === 'นักกีฬาใหม่') return 1;
+                return parseInt(a) - parseInt(b);
+            });
+
             chartInstanceAge = new Chart(document.getElementById('chart-age-groups').getContext('2d'), {
                 type: 'pie',
-                data: { labels: sortedLabels.map(k => `U${k} (${uMap[k]} คน)`), datasets: [{ data: sortedLabels.map(k => uMap[k]), backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'] }] },
-                options: { responsive: true, maintainAspectRatio: false }
+                data: { 
+                    labels: sortedLabels.map(k => k === 'นักกีฬาใหม่' ? `นักกีฬาใหม่ (${uMap[k]} คน)` : `U${k} (${uMap[k]} คน)`), 
+                    datasets: [{ 
+                        data: sortedLabels.map(k => uMap[k]), 
+                        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1', '#14B8A6'] 
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'left',      // 👈 ย้ายแท่งสีมาไว้ฝั่งซ้าย
+                            align: 'center',       // 👈 จัดตำแหน่งให้อยู่ตรงกลางแนวตั้ง
+                            labels: {
+                                boxWidth: 15,      // ปรับขนาดความกว้างของบล็อกสีให้สวยงามขึ้น
+                                padding: 12        // เพิ่มระยะห่างระหว่างรายการในแนวตั้ง
+                            }
+                        }
+                    }
+                }
             });
 
             if(chartInstanceAtt) chartInstanceAtt.destroy();
@@ -1217,7 +1243,6 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
-
         function saveToLocalStorage() {
             localStorage.setItem('players', JSON.stringify(players));
             localStorage.setItem('attendance', JSON.stringify(attendanceDb));
